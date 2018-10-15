@@ -1,6 +1,0 @@
-framework module Pods_WMUITests {
-  umbrella header "Pods-WMUITests-umbrella.h"
-
-  export *
-  module * { export * }
-}
