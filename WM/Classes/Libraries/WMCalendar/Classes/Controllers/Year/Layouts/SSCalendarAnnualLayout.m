@@ -41,8 +41,8 @@
 }
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath{
-    NSInteger nbColumns = self.nbColumns != -1 ? self.nbColumns : (int)(self.collectionView.frame.size.width / self.itemSize.width);
-    NSInteger nbLines = self.nbLines != -1 ? self.nbLines : (int)(self.collectionView.frame.size.height / self.itemSize.height);
+    NSInteger nbColumns = 3;
+    NSInteger nbLines = 4;
     
     NSInteger idxPage = (int)indexPath.row/(nbColumns * nbLines);
     

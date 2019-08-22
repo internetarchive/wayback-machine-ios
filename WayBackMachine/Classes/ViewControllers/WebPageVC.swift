@@ -11,9 +11,11 @@ import AVFoundation
 import WebKit
 import MBProgressHUD
 
-class SavePageViewController: UIViewController, WKUIDelegate, WKNavigationDelegate, MBProgressHUDDelegate {
+class WebPageVC: UIViewController, WKUIDelegate, WKNavigationDelegate, MBProgressHUDDelegate {
 
     @IBOutlet weak var containerView: UIView!
+    @IBOutlet weak var navBarHeight: NSLayoutConstraint!
+    
     var webView: WKWebView?
     var progressHUD: MBProgressHUD?
     var url:String = ""
@@ -34,6 +36,8 @@ class SavePageViewController: UIViewController, WKUIDelegate, WKNavigationDelega
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        WMGlobal.adjustNavBarHeight(constraint: navBarHeight)
         
         if (!url.isEmpty) {
             self.progressHUD = MBProgressHUD(view: self.view)
@@ -118,35 +122,29 @@ class SavePageViewController: UIViewController, WKUIDelegate, WKNavigationDelega
             
             guard let url = webView.url?.absoluteString else { return }
             do {
-                let regex = try NSRegularExpression(pattern: "https:\\/\\/web.archive.org\\/web\\/(.*?)\\/(.*)", options: [])
+                let regex = try NSRegularExpression(pattern: "http[s]?:\\/\\/web.archive.org\\/web\\/(.*?)\\/(.*)", options: [])
                 let results = regex.matches(in: url, range: NSRange(url.startIndex..., in: url))
                 
-                guard results.count != 0 else {return}
+                guard results.count != 0 else {
+                    return
+                }
                 
-                let snapshotUrlRange = results[0].rangeAt(2)
-                let snapshotRange = results[0].rangeAt(1)
+                let snapshotUrlRange = results[0].range(at: 2)
+                let snapshotRange = results[0].range(at: 1)
                 
                 guard
                 let snapshotUrl = url.slicing(from: snapshotUrlRange.location, length: snapshotUrlRange.length),
-                    let snapshot = url.slicing(from: snapshotRange.location, length: snapshotRange.length) else { return }
+                    let snapshot = url.slicing(from: snapshotRange.location, length: snapshotRange.length) else {
+                        return
+                }
                 
                 WMAPIManager.sharedManager.saveToMyWebArchive(url: snapshotUrl, snapshot: snapshot, logged_in_user: logged_in_user, logged_in_sig: logged_in_sig) { (success) in
-
+                    print(success)
                 }
             } catch {
                 print("Invalid regex")
             }
         }
     }
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

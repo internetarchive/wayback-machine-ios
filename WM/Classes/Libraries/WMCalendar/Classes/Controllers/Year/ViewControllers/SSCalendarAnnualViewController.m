@@ -57,12 +57,12 @@
     [[UIBarButtonItem appearanceWhenContainedInInstancesOfClasses:@[[UINavigationBar class]]] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor], NSForegroundColorAttributeName,nil] forState:UIControlStateNormal];
     
     // Back button
-    UIView* leftButtonView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 110, 50)];
+    UIView* leftButtonView = [[UIView alloc]initWithFrame:CGRectMake(-36, -3, 110, 50)];
     
     UIButton* leftButton = [UIButton buttonWithType:UIButtonTypeSystem];
     leftButton.backgroundColor = [UIColor clearColor];
     leftButton.frame = leftButtonView.frame;
-    [leftButton setImage:[self imageWithImage:[UIImage imageNamed:@"icon_back.png"] convertToSize:CGSizeMake(25, 22)] forState:UIControlStateNormal];
+    [leftButton setImage:[self imageWithImage:[UIImage imageNamed:@"back.png"] convertToSize:CGSizeMake(22, 23)] forState:UIControlStateNormal];
     [leftButton setTitle:@"Back" forState:UIControlStateNormal];
     leftButton.titleLabel.font = [UIFont systemFontOfSize:17.0];
     leftButton.tintColor = [UIColor whiteColor];
@@ -71,11 +71,8 @@
     [leftButton addTarget:self action:@selector(backAction:) forControlEvents:UIControlEventTouchUpInside];
     [leftButtonView addSubview:leftButton];
     UIBarButtonItem* leftBarButton = [[UIBarButtonItem alloc]initWithCustomView:leftButtonView];
-
-    UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-    negativeSpacer.width = -36;
     
-    [self.navigationItem setLeftBarButtonItems:@[negativeSpacer, leftBarButton] animated:NO];
+    [self.navigationItem setLeftBarButtonItems:@[leftBarButton] animated:NO];
     _yearView.hidden = YES;
 }
 

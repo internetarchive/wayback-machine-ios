@@ -15,6 +15,7 @@ class SignupVC: WMBaseVC, UITextFieldDelegate {
     @IBOutlet weak var txtEmail: SkyFloatingLabelTextField!
     @IBOutlet weak var txtPassword: SkyFloatingLabelTextField!
     @IBOutlet weak var txtConfirm: SkyFloatingLabelTextField!
+    @IBOutlet weak var navBarHeight: NSLayoutConstraint!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,9 +24,15 @@ class SignupVC: WMBaseVC, UITextFieldDelegate {
         txtEmail.delegate = self
         txtPassword.delegate = self
         txtConfirm.delegate = self
+        
+        WMGlobal.adjustNavBarHeight(constraint: navBarHeight)
     }
     
     // MARK: - Actions
+    
+    @IBAction func onBackPressed(_ sender: Any) {
+        self.navigationController?.popViewController(animated: true)
+    }
     
     @IBAction func onSignupPressed(_ sender: Any) {
         if self.txtUsername.text!.isEmpty {

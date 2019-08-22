@@ -265,7 +265,7 @@ class UploadVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCont
                 
                 let videoPlayer = AVPlayer(url: fileURL!)
                 let playerLayer = AVPlayerLayer(player: videoPlayer)
-                playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+                playerLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
                 videoPreview.layer.addSublayer(playerLayer)
                 playerLayer.frame = videoPreview.layer.bounds
                 videoPlayer.play()
@@ -275,7 +275,7 @@ class UploadVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCont
         dismiss(animated: true, completion: nil)
     }
     
-    func keyboardWillShow(notification: NSNotification) {
+    @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             if scrollView.contentInset.bottom == 0 {
                 scrollView.contentInset.bottom = keyboardSize.height
@@ -285,14 +285,14 @@ class UploadVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCont
         }
     }
     
-    func keyboardWillHide(notification: NSNotification) {
+    @objc func keyboardWillHide(notification: NSNotification) {
         if scrollView.contentInset.bottom > 0 {
             scrollView.contentInset.bottom = 0
             scrollView.contentOffset.y = 0
         }
     }
     
-    func dismissKeyboard() {
+    @objc func dismissKeyboard() {
         view.endEditing(true)
     }
     

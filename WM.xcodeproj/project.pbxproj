@@ -9,12 +9,9 @@
 /* Begin PBXBuildFile section */
 		51021910C2771C1B5628B0FE /* Pods_WM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 191CBDD6548A18A9D46816D7 /* Pods_WM.framework */; };
 		7CDAEBB3561E1D09F43DE150 /* Pods_WayBackMachine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60726BBF076E0E23487F9522 /* Pods_WayBackMachine.framework */; };
-		80F9AEA207588A3D03D4CD9D /* Pods_WMUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EBF0BCA82BC0F8DE462E351 /* Pods_WMUITests.framework */; };
 		84182D2A1E406B23005AC4B6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84182D291E406B23005AC4B6 /* AppDelegate.swift */; };
 		84182D2F1E406B23005AC4B6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84182D2D1E406B23005AC4B6 /* Main.storyboard */; };
 		84182D341E406B23005AC4B6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84182D321E406B23005AC4B6 /* LaunchScreen.storyboard */; };
-		84182D3F1E406B23005AC4B6 /* WMTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84182D3E1E406B23005AC4B6 /* WMTests.swift */; };
-		84182D4A1E406B23005AC4B6 /* WMUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84182D491E406B23005AC4B6 /* WMUITests.swift */; };
 		84182D611E406B38005AC4B6 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84182D5F1E406B38005AC4B6 /* MainInterface.storyboard */; };
 		84182D651E406B38005AC4B6 /* WayBackMachine.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 84182D5B1E406B38005AC4B6 /* WayBackMachine.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		8459A2A421706118002B0AC3 /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8459A2A321706118002B0AC3 /* ProfileVC.swift */; };
@@ -86,29 +83,13 @@
 		84B78D62216E9C1C0064555C /* WebPageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B78D25216E9C1C0064555C /* WebPageVC.swift */; };
 		84B78D63216E9C1C0064555C /* WMButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B78D28216E9C1C0064555C /* WMButton.swift */; };
 		84B78D64216E9C1C0064555C /* WMImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B78D29216E9C1C0064555C /* WMImageView.swift */; };
-		84B78D6B216E9C350064555C /* SavePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B78D68216E9C350064555C /* SavePageViewController.swift */; };
-		84B78D6C216E9C350064555C /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B78D69216E9C350064555C /* ShareViewController.swift */; };
-		84B78D6D216E9C350064555C /* SuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B78D6A216E9C350064555C /* SuccessViewController.swift */; };
-		AEB7B55724D63A1503928426 /* Pods_WMTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F43162BF7EF4EEDE135ACF2 /* Pods_WMTests.framework */; };
+		84B78D6B216E9C350064555C /* WebPageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B78D68216E9C350064555C /* WebPageVC.swift */; };
+		84B78D6C216E9C350064555C /* ArchiveVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B78D69216E9C350064555C /* ArchiveVC.swift */; };
 		D9E695041EF10099007E7551 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D9E695031EF10099007E7551 /* Assets.xcassets */; };
 		D9E695051EF10237007E7551 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D9E695031EF10099007E7551 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		84182D3B1E406B23005AC4B6 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 84182D1E1E406B23005AC4B6 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 84182D251E406B23005AC4B6;
-			remoteInfo = WM;
-		};
-		84182D461E406B23005AC4B6 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 84182D1E1E406B23005AC4B6 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 84182D251E406B23005AC4B6;
-			remoteInfo = WM;
-		};
 		84182D631E406B38005AC4B6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 84182D1E1E406B23005AC4B6 /* Project object */;
@@ -147,12 +128,6 @@
 		84182D2E1E406B23005AC4B6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		84182D331E406B23005AC4B6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		84182D351E406B23005AC4B6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		84182D3A1E406B23005AC4B6 /* WMTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WMTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		84182D3E1E406B23005AC4B6 /* WMTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WMTests.swift; sourceTree = "<group>"; };
-		84182D401E406B23005AC4B6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		84182D451E406B23005AC4B6 /* WMUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WMUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		84182D491E406B23005AC4B6 /* WMUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WMUITests.swift; sourceTree = "<group>"; };
-		84182D4B1E406B23005AC4B6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		84182D5B1E406B38005AC4B6 /* WayBackMachine.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = WayBackMachine.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		84182D601E406B38005AC4B6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		84182D621E406B38005AC4B6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -256,9 +231,8 @@
 		84B78D25216E9C1C0064555C /* WebPageVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebPageVC.swift; sourceTree = "<group>"; };
 		84B78D28216E9C1C0064555C /* WMButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WMButton.swift; sourceTree = "<group>"; };
 		84B78D29216E9C1C0064555C /* WMImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WMImageView.swift; sourceTree = "<group>"; };
-		84B78D68216E9C350064555C /* SavePageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SavePageViewController.swift; sourceTree = "<group>"; };
-		84B78D69216E9C350064555C /* ShareViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
-		84B78D6A216E9C350064555C /* SuccessViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuccessViewController.swift; sourceTree = "<group>"; };
+		84B78D68216E9C350064555C /* WebPageVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebPageVC.swift; sourceTree = "<group>"; };
+		84B78D69216E9C350064555C /* ArchiveVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArchiveVC.swift; sourceTree = "<group>"; };
 		89D88856FD532D6BFF913203 /* Pods-WayBackMachine.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WayBackMachine.release.xcconfig"; path = "Pods/Target Support Files/Pods-WayBackMachine/Pods-WayBackMachine.release.xcconfig"; sourceTree = "<group>"; };
 		A3F078DE272FCBC36C039CE2 /* Pods-WM.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WM.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WM/Pods-WM.debug.xcconfig"; sourceTree = "<group>"; };
 		C3D439EE1F8FEC7500B50A33 /* WM-Swift.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WM-Swift.h"; sourceTree = "<group>"; };
@@ -275,22 +249,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				51021910C2771C1B5628B0FE /* Pods_WM.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		84182D371E406B23005AC4B6 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				AEB7B55724D63A1503928426 /* Pods_WMTests.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		84182D421E406B23005AC4B6 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				80F9AEA207588A3D03D4CD9D /* Pods_WMUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -335,8 +293,6 @@
 			isa = PBXGroup;
 			children = (
 				84182D281E406B23005AC4B6 /* WM */,
-				84182D3D1E406B23005AC4B6 /* WMTests */,
-				84182D481E406B23005AC4B6 /* WMUITests */,
 				84182D5C1E406B38005AC4B6 /* WayBackMachine */,
 				84182D271E406B23005AC4B6 /* Products */,
 				42B143E111AB8B5D197BD349 /* Pods */,
@@ -348,8 +304,6 @@
 			isa = PBXGroup;
 			children = (
 				84182D261E406B23005AC4B6 /* WM.app */,
-				84182D3A1E406B23005AC4B6 /* WMTests.xctest */,
-				84182D451E406B23005AC4B6 /* WMUITests.xctest */,
 				84182D5B1E406B38005AC4B6 /* WayBackMachine.appex */,
 			);
 			name = Products;
@@ -369,24 +323,6 @@
 				84B78CAE216E9C1C0064555C /* Classes */,
 			);
 			path = WM;
-			sourceTree = "<group>";
-		};
-		84182D3D1E406B23005AC4B6 /* WMTests */ = {
-			isa = PBXGroup;
-			children = (
-				84182D3E1E406B23005AC4B6 /* WMTests.swift */,
-				84182D401E406B23005AC4B6 /* Info.plist */,
-			);
-			path = WMTests;
-			sourceTree = "<group>";
-		};
-		84182D481E406B23005AC4B6 /* WMUITests */ = {
-			isa = PBXGroup;
-			children = (
-				84182D491E406B23005AC4B6 /* WMUITests.swift */,
-				84182D4B1E406B23005AC4B6 /* Info.plist */,
-			);
-			path = WMUITests;
 			sourceTree = "<group>";
 		};
 		84182D5C1E406B38005AC4B6 /* WayBackMachine */ = {
@@ -711,8 +647,8 @@
 		84B78D18216E9C1C0064555C /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				84B78D19216E9C1C0064555C /* AboutViewController.swift */,
 				84B78D1A216E9C1C0064555C /* Base */,
+				84B78D19216E9C1C0064555C /* AboutViewController.swift */,
 				84B78D1C216E9C1C0064555C /* EnableExtensionViewController.swift */,
 				84B78D1D216E9C1C0064555C /* FirstContentViewController.swift */,
 				84B78D1E216E9C1C0064555C /* HelpViewController.swift */,
@@ -767,9 +703,8 @@
 			isa = PBXGroup;
 			children = (
 				84B78D67216E9C350064555C /* Base */,
-				84B78D68216E9C350064555C /* SavePageViewController.swift */,
-				84B78D69216E9C350064555C /* ShareViewController.swift */,
-				84B78D6A216E9C350064555C /* SuccessViewController.swift */,
+				84B78D68216E9C350064555C /* WebPageVC.swift */,
+				84B78D69216E9C350064555C /* ArchiveVC.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -804,44 +739,6 @@
 			productName = WM;
 			productReference = 84182D261E406B23005AC4B6 /* WM.app */;
 			productType = "com.apple.product-type.application";
-		};
-		84182D391E406B23005AC4B6 /* WMTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 84182D511E406B23005AC4B6 /* Build configuration list for PBXNativeTarget "WMTests" */;
-			buildPhases = (
-				D09BD083842C477944D8D3DB /* [CP] Check Pods Manifest.lock */,
-				84182D361E406B23005AC4B6 /* Sources */,
-				84182D371E406B23005AC4B6 /* Frameworks */,
-				84182D381E406B23005AC4B6 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				84182D3C1E406B23005AC4B6 /* PBXTargetDependency */,
-			);
-			name = WMTests;
-			productName = WMTests;
-			productReference = 84182D3A1E406B23005AC4B6 /* WMTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		84182D441E406B23005AC4B6 /* WMUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 84182D541E406B23005AC4B6 /* Build configuration list for PBXNativeTarget "WMUITests" */;
-			buildPhases = (
-				0458657D9C625F3E8CF214A3 /* [CP] Check Pods Manifest.lock */,
-				84182D411E406B23005AC4B6 /* Sources */,
-				84182D421E406B23005AC4B6 /* Frameworks */,
-				84182D431E406B23005AC4B6 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				84182D471E406B23005AC4B6 /* PBXTargetDependency */,
-			);
-			name = WMUITests;
-			productName = WMUITests;
-			productReference = 84182D451E406B23005AC4B6 /* WMUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 		84182D5A1E406B38005AC4B6 /* WayBackMachine */ = {
 			isa = PBXNativeTarget;
@@ -881,17 +778,6 @@
 							};
 						};
 					};
-					84182D391E406B23005AC4B6 = {
-						CreatedOnToolsVersion = 8.2;
-						ProvisioningStyle = Automatic;
-						TestTargetID = 84182D251E406B23005AC4B6;
-					};
-					84182D441E406B23005AC4B6 = {
-						CreatedOnToolsVersion = 8.2;
-						DevelopmentTeam = ZSFX78H3ZT;
-						ProvisioningStyle = Automatic;
-						TestTargetID = 84182D251E406B23005AC4B6;
-					};
 					84182D5A1E406B38005AC4B6 = {
 						CreatedOnToolsVersion = 8.2;
 						DevelopmentTeam = ZSFX78H3ZT;
@@ -912,6 +798,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -921,8 +808,6 @@
 			projectRoot = "";
 			targets = (
 				84182D251E406B23005AC4B6 /* WM */,
-				84182D391E406B23005AC4B6 /* WMTests */,
-				84182D441E406B23005AC4B6 /* WMUITests */,
 				84182D5A1E406B38005AC4B6 /* WayBackMachine */,
 			);
 		};
@@ -948,20 +833,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		84182D381E406B23005AC4B6 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		84182D431E406B23005AC4B6 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		84182D591E406B38005AC4B6 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -974,24 +845,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0458657D9C625F3E8CF214A3 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-WMUITests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
 		52B8258C50C0A7BE58AE6A09 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1022,24 +875,6 @@
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-WayBackMachine-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		D09BD083842C477944D8D3DB /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-WMTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1140,48 +975,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		84182D361E406B23005AC4B6 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				84182D3F1E406B23005AC4B6 /* WMTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		84182D411E406B23005AC4B6 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				84182D4A1E406B23005AC4B6 /* WMUITests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		84182D571E406B38005AC4B6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				8466589F216EA610009EB3AD /* StringExtensions.swift in Sources */,
-				84B78D6C216E9C350064555C /* ShareViewController.swift in Sources */,
+				84B78D6C216E9C350064555C /* ArchiveVC.swift in Sources */,
 				846658A1216EA939009EB3AD /* WMGlobal.swift in Sources */,
-				84B78D6D216E9C350064555C /* SuccessViewController.swift in Sources */,
 				846658A2216EA950009EB3AD /* WMAPIManager.swift in Sources */,
-				84B78D6B216E9C350064555C /* SavePageViewController.swift in Sources */,
+				84B78D6B216E9C350064555C /* WebPageVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		84182D3C1E406B23005AC4B6 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 84182D251E406B23005AC4B6 /* WM */;
-			targetProxy = 84182D3B1E406B23005AC4B6 /* PBXContainerItemProxy */;
-		};
-		84182D471E406B23005AC4B6 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 84182D251E406B23005AC4B6 /* WM */;
-			targetProxy = 84182D461E406B23005AC4B6 /* PBXContainerItemProxy */;
-		};
 		84182D641E406B38005AC4B6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 84182D5A1E406B38005AC4B6 /* WayBackMachine */;
@@ -1319,8 +1127,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = WM/WM.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Brewster Kahle (HNGENJQ86N)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Golden Eagle (UUB8A37GVA)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Golden Eagle (UUB8A37GVA)";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = ZSFX78H3ZT;
@@ -1330,9 +1138,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.mobile.waybackmachine;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "8d1eb4d9-cbfd-4f44-8024-49b65037c880";
-				PROVISIONING_PROFILE_SPECIFIER = WaybackMachineApp_dev0827;
+				PROVISIONING_PROFILE_SPECIFIER = WaybackMachineApp_dev730_2020;
 				SWIFT_OBJC_BRIDGING_HEADER = "WM/WM-BridgingHeader.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -1346,7 +1154,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = WM/WM.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Internet Archive (ZSFX78H3ZT)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Internet Archive (ZSFX78H3ZT)";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = ZSFX78H3ZT;
@@ -1356,77 +1164,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.mobile.waybackmachine;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "a08214e7-ca14-45c3-b551-ec74d37fdb36";
-				PROVISIONING_PROFILE_SPECIFIER = WayBackMachineApp_prod0827;
+				PROVISIONING_PROFILE_SPECIFIER = WayBackMachineApp_prod730_2020;
 				SWIFT_OBJC_BRIDGING_HEADER = "WM/WM-BridgingHeader.h";
-				SWIFT_VERSION = 3.0;
-			};
-			name = Release;
-		};
-		84182D521E406B23005AC4B6 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = DEFA5BD8169AD0A18D567841 /* Pods-WMTests.debug.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = WMTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.waybackmachine.WMTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WM.app/WM";
-			};
-			name = Debug;
-		};
-		84182D531E406B23005AC4B6 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 087BEA49746AFB1BD99C4A18 /* Pods-WMTests.release.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = WMTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.waybackmachine.WMTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WM.app/WM";
-			};
-			name = Release;
-		};
-		84182D551E406B23005AC4B6 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4810A574F3D110BBC377BEB0 /* Pods-WMUITests.debug.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				DEVELOPMENT_TEAM = ZSFX78H3ZT;
-				INFOPLIST_FILE = WMUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.waybackmachine.WMUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
-				TEST_TARGET_NAME = WM;
-			};
-			name = Debug;
-		};
-		84182D561E406B23005AC4B6 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5B26462A10B64F0D85209B16 /* Pods-WMUITests.release.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				DEVELOPMENT_TEAM = ZSFX78H3ZT;
-				INFOPLIST_FILE = WMUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.waybackmachine.WMUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
-				TEST_TARGET_NAME = WM;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
@@ -1445,10 +1185,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.mobile.waybackmachine.extension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "20877c9b-fb43-43be-99ad-926e93a5427d";
-				PROVISIONING_PROFILE_SPECIFIER = WaybackMachineExtension_dev0827;
+				PROVISIONING_PROFILE_SPECIFIER = WaybackMachineExtension_dev730_2020;
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -1457,7 +1197,7 @@
 			baseConfigurationReference = 89D88856FD532D6BFF913203 /* Pods-WayBackMachine.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = WayBackMachine/WayBackMachine.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Internet Archive (ZSFX78H3ZT)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = ZSFX78H3ZT;
@@ -1467,10 +1207,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.mobile.waybackmachine.extension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "855c8b36-f331-4702-9faa-6c3686f8184d";
-				PROVISIONING_PROFILE_SPECIFIER = WaybackMachineExtension_prod0827;
+				PROVISIONING_PROFILE_SPECIFIER = WaybackMachineExtension_prod730_2020;
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
@@ -1491,24 +1231,6 @@
 			buildConfigurations = (
 				84182D4F1E406B23005AC4B6 /* Debug */,
 				84182D501E406B23005AC4B6 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		84182D511E406B23005AC4B6 /* Build configuration list for PBXNativeTarget "WMTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				84182D521E406B23005AC4B6 /* Debug */,
-				84182D531E406B23005AC4B6 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		84182D541E406B23005AC4B6 /* Build configuration list for PBXNativeTarget "WMUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				84182D551E406B23005AC4B6 /* Debug */,
-				84182D561E406B23005AC4B6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

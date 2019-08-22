@@ -11,9 +11,12 @@ import UIKit
 class ForgotVC: WMBaseVC {
 
     @IBOutlet weak var txtEmail: SkyFloatingLabelTextField!
+    @IBOutlet weak var navBarHeight: NSLayoutConstraint!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        WMGlobal.adjustNavBarHeight(constraint: navBarHeight)
     }
     
     @IBAction func onBackPressed(_ sender: Any) {

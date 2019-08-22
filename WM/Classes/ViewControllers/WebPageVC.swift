@@ -15,14 +15,18 @@ open class WebPageVC: UIViewController, WKUIDelegate, WKNavigationDelegate, MBPr
 
     
     @IBOutlet weak var containerView: UIView!
+    @IBOutlet weak var navBarHeight: NSLayoutConstraint!
+    
     var webView: WKWebView?
     var progressHUD: MBProgressHUD?
-    open var url: String = ""
+    @objc open var url: String = ""
     let webStorage = WKWebsiteDataStore.default()
     let version = Bundle.main.infoDictionary!["CFBundleShortVersionString"]
     
     override open func loadView() {
         super.loadView()
+        
+        WMGlobal.adjustNavBarHeight(constraint: navBarHeight)
         
         let webConfiguration = WKWebViewConfiguration()
         webView = WKWebView(frame: .zero, configuration: webConfiguration)

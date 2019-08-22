@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -27,8 +27,8 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstAttribute="bottom" secondItem="jYC-oD-hpf" secondAttribute="bottom" id="8mT-1E-7SY"/>
                             <constraint firstAttribute="trailing" secondItem="jYC-oD-hpf" secondAttribute="trailing" id="ErZ-E1-NAh"/>
-                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="jYC-oD-hpf" secondAttribute="bottom" id="LB8-JM-rMe"/>
                             <constraint firstItem="jYC-oD-hpf" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="ORh-cQ-BK7"/>
                             <constraint firstItem="jYC-oD-hpf" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="m6u-8L-bQX"/>
                         </constraints>

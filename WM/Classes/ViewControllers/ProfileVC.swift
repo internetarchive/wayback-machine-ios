@@ -17,8 +17,10 @@ class ProfileVC: WMBaseVC {
         super.viewDidLoad()
         
         if let userData = WMGlobal.getUserData(),
-            let screenname = userData["screenname"] as? String {
+            let screenname = userData["screenname"] as? String,
+            let addToMyWebArchive = userData["add-to-my-web-archive"] as? Bool {
             self.lblDescription.text = self.lblDescription.text! + screenname
+            self.switchMyWebArchive.isOn = addToMyWebArchive
         }
         
     }
@@ -44,8 +46,7 @@ class ProfileVC: WMBaseVC {
             "add-to-my-web-archive" : false
         ])
         
-        let welcomeVC = self.storyboard?.instantiateViewController(withIdentifier: "WelcomeVC") as! WelcomeVC
-        self.present(welcomeVC, animated: false, completion: nil)
+        self.tabBarController?.dismiss(animated: false, completion: nil)
     }
     
 }

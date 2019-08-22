@@ -13,13 +13,21 @@ class LoginVC: WMBaseVC, UITextFieldDelegate {
 
     @IBOutlet weak var txtEmail: SkyFloatingLabelTextField!
     @IBOutlet weak var txtPassword: SkyFloatingLabelTextField!
+    @IBOutlet weak var btnCheck: UIButton!
+    @IBOutlet weak var navBarHeight: NSLayoutConstraint!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        WMGlobal.adjustNavBarHeight(constraint: navBarHeight)
     }
     
     @IBAction func onBackPressed(_ sender: Any) {
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    @IBAction func onCheckPressed(_ sender: Any) {
+        btnCheck.isSelected = !btnCheck.isSelected
     }
     
     @IBAction func onLoginPressed(_ sender: Any) {
@@ -66,11 +74,13 @@ class LoginVC: WMBaseVC, UITextFieldDelegate {
                                         "logged-in-sig"     : loggedInSig,
                                         "s3accesskey"       : key!["s3accesskey"],
                                         "s3secretkey"       : key!["s3secretkey"],
-                                        "add-to-my-web-archive" : false
+                                        "add-to-my-web-archive" : self.btnCheck.isSelected
                                     ])
                                     
                                     let tabbarVC = self.storyboard?.instantiateViewController(withIdentifier: "TabbarVC") as! UITabBarController
-                                    self.present(tabbarVC, animated: true, completion: nil)
+                                    self.present(tabbarVC, animated: true, completion: {
+                                        self.navigationController?.popToRootViewController(animated: false)
+                                    })
                                 }
                                 
                                 MBProgressHUD.hide(for: self.view, animated: true)

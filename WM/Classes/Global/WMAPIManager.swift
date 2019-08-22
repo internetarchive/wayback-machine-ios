@@ -17,7 +17,7 @@ class WMAPIManager: NSObject {
     let MY_WEB_ARCHIVE_URL      = "https://web.archive.org/__wb/web-archive/"
     let WEB_LOGIN_URL           = "https://archive.org/account/login.php"
     let UPLOAD_BASE_URL         = "https://s3.us.archive.org"
-    let SPN2_URL                = "http://web-beta.archive.org/save/"
+    let SPN2_URL                = "https://web-beta.archive.org/save/"
     let API_CREATE              = "?op=create"
     let API_LOGIN               = "?op=authenticate"
     let API_INFO                = "?op=info"
@@ -32,7 +32,7 @@ class WMAPIManager: NSObject {
     
     // GET
     private func SendDataToSparkLine(params: [String: Any], completion: @escaping ([String: Any]?) -> Void) {
-        Alamofire.request(SPARKLINE_URL, method: .get, parameters: params, encoding: URLEncoding.default, headers: HEADERS).validate(contentType: ["application/json"]).responseJSON{ (response) in
+        Alamofire.request(SPARKLINE_URL, method: .get, parameters: params, headers: HEADERS).responseJSON{ (response) in
             
             switch response.result {
             case .success:
@@ -55,8 +55,8 @@ class WMAPIManager: NSObject {
         parameters["secret"]    = SECRET
         parameters["version"]   = VERSION
         
-        Alamofire.request(BASE_URL + operation, method: .post, parameters: parameters, encoding: URLEncoding.default, headers: HEADERS).validate(contentType: ["application/json"]).responseJSON{ (response) in
-            
+        Alamofire.request(BASE_URL + operation, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: HEADERS).responseJSON { (response) in
+
             switch response.result {
             case .success:
                 if let json = response.result.value {
@@ -64,7 +64,7 @@ class WMAPIManager: NSObject {
                 }
             case .failure:
                 completion(nil)
-                
+
             }
         }
     }
@@ -202,20 +202,26 @@ class WMAPIManager: NSObject {
             "tags" : []
             ] as [String : Any]
         
+        var headers = ["Content-Type": "application/json"]
+        
+        for (key, value) in HEADERS {
+            headers[key] = value
+        }
+        
         Alamofire.request(MY_WEB_ARCHIVE_URL, method: .post,
                           parameters: param,
                           encoding: JSONEncoding.default,
-                          headers: ["Content-Type": "application/json"]).responseJSON{ (response) in
+                          headers: headers).responseJSON{ (response) in
             
             switch response.result {
-            case .success:
+            case .success( _):
                 if let json = response.result.value as? [String: Any],
                     let success = json["success"] as? Bool {
                     completion(success)
                 } else {
                     completion(false)
                 }
-            case .failure:
+            case .failure( _):
                 completion(false)
             }
         }
@@ -290,62 +296,73 @@ class WMAPIManager: NSObject {
         Alamofire.SessionManager.default.session.configuration.httpCookieStorage?.setCookie(logged_in_sig)
         
         let param = ["url" : url]
+        var headers = ["Accept": "application/json"]
+        
+        for (key, value) in HEADERS {
+            headers[key] = value
+        }
         
         Alamofire.request(SPN2_URL, method: .post,
                           parameters: param,
-                          encoding: JSONEncoding.default,
-                          headers: ["Accept": "application/json"])
+                          headers: headers)
             .responseJSON{ (response) in
                             
                 switch response.result {
-                case .success:
+                case .success(let data):
                     if let json = response.result.value as? [String: Any],
                         let job_id = json["job_id"] as? String {
                         completion(job_id)
                     } else {
                         completion(nil)
                     }
-                case .failure:
+                case .failure(let error):
+                    print(error.localizedDescription)
                     completion(nil)
             }
         }
     }
     
-    func request_capture_status(job_id: String, logged_in_user: HTTPCookie, logged_in_sig: HTTPCookie, completion: @escaping (String?, Int?) -> Void) {
+    func request_capture_status(job_id: String, logged_in_user: HTTPCookie, logged_in_sig: HTTPCookie, completion: @escaping (String?, String?) -> Void) {
         
         Alamofire.SessionManager.default.session.configuration.httpCookieStorage?.setCookie(logged_in_user)
         Alamofire.SessionManager.default.session.configuration.httpCookieStorage?.setCookie(logged_in_sig)
         
         let param = ["job_id" : job_id]
+        var headers = ["Accept": "application/json"]
         
-        Alamofire.request(SPN2_URL, method: .post,
+        for (key, value) in HEADERS {
+            headers[key] = value
+        }
+        
+        Alamofire.request("\(SPN2_URL)status/", method: .post,
                           parameters: param,
-                          encoding: JSONEncoding.default,
-                          headers: ["Accept": "application/json"])
+                          headers: headers)
             .responseJSON{ (response) in
                 
                 switch response.result {
-                case .success:
+                case .success(let data):
                     if let json = response.result.value as? [String: Any],
                         let status = json["status"] as? String {
                         
                         if status == "pending" {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 10, execute: {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
                                 self.request_capture_status(job_id: job_id, logged_in_user: logged_in_user, logged_in_sig: logged_in_sig, completion: completion)
                             })
                         } else {
                             if let timestamp = json["timestamp"] as? String,
                                 let original_url = json["original_url"] as? String {
-                                completion("http://web.archive.org/web/\(timestamp)/\(original_url)", response.response?.statusCode)
+                                completion("http://web.archive.org/web/\(timestamp)/\(original_url)", nil)
+                            } else if let errorMessage = json["message"] as? String {
+                                completion(nil, errorMessage)
                             } else {
-                                completion(nil, response.response?.statusCode)
+                                completion(nil, json["status"] as? String)
                             }
                         }
                     } else {
-                        completion(nil, response.response?.statusCode)
+                        completion(nil, "Error serializing JSON: \(String(describing: response.result.value))")
                     }
-                case .failure:
-                    completion(nil, response.response?.statusCode)
+                case .failure(let error):
+                    completion(nil, error.localizedDescription)
                 }
         }
     }

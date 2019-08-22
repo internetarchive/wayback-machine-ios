@@ -1,5 +1,5 @@
 //
-//  ShareViewController.swift
+//  ArchiveVC.swift
 //  WayBackMachine
 //
 //  Created by Admin on 31/01/17.
@@ -13,7 +13,7 @@ import MobileCoreServices
 import MBProgressHUD
 import FRHyperLabel
 
-class ShareViewController: UIViewController, UIImagePickerControllerDelegate, UIPopoverControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate{
+class ArchiveVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate{
 
     @IBOutlet weak var shareView: UIView!
     @IBOutlet weak var urlTextField: UITextField!
@@ -123,7 +123,7 @@ class ShareViewController: UIViewController, UIImagePickerControllerDelegate, UI
         
     }
     
-    func processResult(_ result: Any) -> Void {
+    @objc func processResult(_ result: Any) -> Void {
         let result = result as! [String: Any]
         let data = result["data"]
         let contentType = result["contentType"] as! String
@@ -155,7 +155,7 @@ class ShareViewController: UIViewController, UIImagePickerControllerDelegate, UI
                 self.mediaType = "video"
                 let videoPlayer = AVPlayer(url: url as URL)
                 let playerLayer = AVPlayerLayer(player: videoPlayer)
-                playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+                playerLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
                 self.videoPreview.layer.addSublayer(playerLayer)
                 playerLayer.frame = self.videoPreview.layer.bounds
                 videoPlayer.play()
@@ -193,43 +193,82 @@ class ShareViewController: UIViewController, UIImagePickerControllerDelegate, UI
         return true
     }
     
-    func dismissKeyboard() {
+    @objc func dismissKeyboard() {
         view.endEditing(true)
     }
     
     //- MARK: Actions
     @IBAction func _onOK(_ sender: Any) {
-        let savePageViewController = self.storyboard?.instantiateViewController(withIdentifier: "SavePageViewController") as! SavePageViewController
-        savePageViewController.url = self.serverURLForSavePage + self.urlTextField.text!
+        let webPageVC = self.storyboard?.instantiateViewController(withIdentifier: "WebPageVC") as! WebPageVC
         
         if btnCheck.isSelected {
-            savePageViewController.saveToMyWebArchive = true
+            webPageVC.saveToMyWebArchive = true
         }
         
-        if WMGlobal.isLoggedIn(), let userData = WMGlobal.getUserData() {
-            WMAPIManager
-                .sharedManager
-                .getCookieData(email: userData["email"] as! String,
-                            password: userData["password"] as! String,
-                            completion: { (cookieData) in
-                                
-                let loggedInSig = cookieData["logged-in-sig"] as! HTTPCookie
-                let loggedInUser = cookieData["logged-in-user"] as! HTTPCookie
-                var tmpData = userData
-                                                        
-                tmpData["logged-in-sig"] = loggedInSig
-                tmpData["logged-in-user"] = loggedInUser
-                WMGlobal.saveUserData(userData: tmpData)
-                                                        
-                DispatchQueue.main.async {
-                    self.present(savePageViewController, animated: true, completion: nil)
+        if let userData = WMGlobal.getUserData(),
+            let email = userData["email"] as? String,
+            let password = userData["password"] as? String {
+            
+            MBProgressHUD.showAdded(to: self.view, animated: true)
+            
+            WMAPIManager.sharedManager.login(email: email, password: password) { (data) in
+                guard let data = data, let success = data["success"] as? Bool, success == true else {
+                    WMGlobal.showAlert(title: "", message: "You need to login through Wayback Machine app.", target: self)
+                    MBProgressHUD.hide(for: self.view, animated: true)
+                    return
                 }
+                
+                WMAPIManager
+                    .sharedManager
+                    .getCookieData(email: email,
+                                   password: password,
+                                   completion: { (cookieData) in
+                                    
+                    let loggedInSig = cookieData["logged-in-sig"] as! HTTPCookie
+                    let loggedInUser = cookieData["logged-in-user"] as! HTTPCookie
+                    var tmpData = userData
+                    
+                    tmpData["logged-in-sig"] = loggedInSig
+                    tmpData["logged-in-user"] = loggedInUser
+                    WMGlobal.saveUserData(userData: tmpData)
+                    
+                    WMAPIManager.sharedManager.checkURLBlocked(url: self.urlTextField.text!, completion: { (isBlocked) in
+                        
+                        if isBlocked {
+                            WMGlobal.showAlert(title: "Error", message: "That site's robots.txt policy requests we not archive it.", target: self)
+                            MBProgressHUD.hide(for: self.view, animated: true)
+                            return
+                        }
+                        
+                        if let userData = WMGlobal.getUserData(),
+                            let loggedInUser = userData["logged-in-user"] as? HTTPCookie,
+                            let loggedInSig = userData["logged-in-sig"] as? HTTPCookie {
+                            WMAPIManager.sharedManager.request_capture(url: self.urlTextField.text!, logged_in_user: loggedInUser, logged_in_sig: loggedInSig, completion: { (job_id) in
+                                if job_id == nil {
+                                    MBProgressHUD.hide(for: self.view, animated: true)
+                                    return
+                                }
                                 
-            })
-        } else {
-            DispatchQueue.main.async {
-                self.present(savePageViewController, animated: true, completion: nil)
+                                WMAPIManager.sharedManager.request_capture_status(job_id: job_id!, logged_in_user: loggedInUser, logged_in_sig: loggedInSig, completion: { (url, error) in
+                                    if url == nil {
+                                        MBProgressHUD.hide(for: self.view, animated: true)
+                                        WMGlobal.showAlert(title: "Error", message: "\(error!)", target: self)
+                                    } else {
+                                        MBProgressHUD.hide(for: self.view, animated: true)
+                                        webPageVC.url = url!
+                                        DispatchQueue.main.async {
+                                            self.present(webPageVC, animated: true, completion: nil)
+                                        }
+                                    }
+                                })
+                            })
+                        }
+                    })
+                })
             }
+            
+        } else {
+            WMGlobal.showAlert(title: "", message: "You need to login through Wayback Machine app.", target: self)
         }
     }
     
@@ -345,7 +384,7 @@ class ShareViewController: UIViewController, UIImagePickerControllerDelegate, UI
         self.present(alert, animated: true, completion: nil)
     }
     
-    func keyboardWillShow(notification: NSNotification) {
+    @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             if scrollView.contentInset.bottom == 0 {
                 scrollView.contentInset.bottom = keyboardSize.height
@@ -355,7 +394,7 @@ class ShareViewController: UIViewController, UIImagePickerControllerDelegate, UI
         }
     }
     
-    func keyboardWillHide(notification: NSNotification) {
+    @objc func keyboardWillHide(notification: NSNotification) {
         if scrollView.contentInset.bottom > 0 {
             scrollView.contentInset.bottom = 0
             scrollView.contentOffset.y = 0
@@ -363,12 +402,12 @@ class ShareViewController: UIViewController, UIImagePickerControllerDelegate, UI
     }
 }
 
-extension ShareViewController: UITextViewDelegate {
+extension ArchiveVC: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
-        let savePageVC = self.storyboard?.instantiateViewController(withIdentifier: "SavePageViewController") as! SavePageViewController
-        savePageVC.url = URL.absoluteString
+        let webPageVC = self.storyboard?.instantiateViewController(withIdentifier: "WebPageVC") as! WebPageVC
+        webPageVC.url = URL.absoluteString
         dismiss(animated: true, completion: {
-            self.present(savePageVC, animated: true, completion: nil)
+            self.present(webPageVC, animated: true, completion: nil)
         })
         return false
     }
