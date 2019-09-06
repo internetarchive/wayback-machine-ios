@@ -17,7 +17,6 @@ class ArchiveVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCon
 
     @IBOutlet weak var shareView: UIView!
     @IBOutlet weak var urlTextField: UITextField!
-    @IBOutlet weak var logoImageView: UIImageView!
     @IBOutlet weak var btnCancel: UIButton!
     @IBOutlet weak var btnSave: UIButton!
     
@@ -30,13 +29,10 @@ class ArchiveVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCon
     @IBOutlet weak var imgPreview: UIImageView!
     @IBOutlet weak var videoPreview: UIView!
     @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet weak var btnCheck: UIButton!
-    @IBOutlet weak var containerForCheck: UIView!
     
     var fileURL: URL?
     var fileData: Data?
     var mediaType: String?
-    let serverURLForSavePage = "https://web.archive.org/save/"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,13 +41,6 @@ class ArchiveVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCon
         shareView.layer.cornerRadius = 10
         urlTextField.isUserInteractionEnabled = false
         urlTextField.textAlignment = .center
-        logoImageView.image = UIImage(named: "icon_logo")
-        logoImageView.contentMode = .center
-        logoImageView.layer.cornerRadius = logoImageView.frame.width / 2
-        logoImageView.layer.masksToBounds = true
-        logoImageView.layer.borderWidth = 3
-        logoImageView.layer.borderColor = UIColor.white.cgColor
-        logoImageView.isHidden = true
         btnSave.layer.cornerRadius = 10
         btnCancel.layer.cornerRadius = 10
         
@@ -67,16 +56,6 @@ class ArchiveVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCon
         
         shareView.isHidden = true
         uploadView.isHidden = true
-        
-        if WMGlobal.isLoggedIn(), let userData = WMGlobal.getUserData() {
-            btnCheck.isSelected = false
-            if let addToMyWebArchive = userData["add-to-my-web-archive"] {
-                btnCheck.isSelected = addToMyWebArchive as! Bool
-            }
-            containerForCheck.isHidden = false
-        } else {
-            containerForCheck.isHidden = true
-        }
         
         if let inputItem = self.extensionContext?.inputItems.first as? NSExtensionItem,
             let attachmentsKeys = inputItem.userInfo?[NSExtensionItemAttachmentsKey] as? [NSItemProvider] {
@@ -199,12 +178,6 @@ class ArchiveVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCon
     
     //- MARK: Actions
     @IBAction func _onOK(_ sender: Any) {
-        let webPageVC = self.storyboard?.instantiateViewController(withIdentifier: "WebPageVC") as! WebPageVC
-        
-        if btnCheck.isSelected {
-            webPageVC.saveToMyWebArchive = true
-        }
-        
         if let userData = WMGlobal.getUserData(),
             let email = userData["email"] as? String,
             let password = userData["password"] as? String {
@@ -255,9 +228,11 @@ class ArchiveVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCon
                                         WMGlobal.showAlert(title: "Error", message: "\(error!)", target: self)
                                     } else {
                                         MBProgressHUD.hide(for: self.view, animated: true)
-                                        webPageVC.url = url!
+                                        let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+                                        let shareVC = storyBoard.instantiateViewController(withIdentifier: "ShareVC") as! ShareVC
+                                        shareVC.url = url!
                                         DispatchQueue.main.async {
-                                            self.present(webPageVC, animated: true, completion: nil)
+                                            self.present(shareVC, animated: true, completion: nil)
                                         }
                                     }
                                 })
@@ -274,10 +249,6 @@ class ArchiveVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCon
     
     @IBAction func _onCancel(_ sender: Any) {
         exit(0)
-    }
-    
-    @IBAction func onPressedCheck(_ sender: Any) {
-        btnCheck.isSelected = !btnCheck.isSelected
     }
     
     @IBAction func _onUpload(_ sender: Any) {

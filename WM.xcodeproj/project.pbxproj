@@ -14,6 +14,7 @@
 		84182D341E406B23005AC4B6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84182D321E406B23005AC4B6 /* LaunchScreen.storyboard */; };
 		84182D611E406B38005AC4B6 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84182D5F1E406B38005AC4B6 /* MainInterface.storyboard */; };
 		84182D651E406B38005AC4B6 /* WayBackMachine.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 84182D5B1E406B38005AC4B6 /* WayBackMachine.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		8422298623224C500008CCBB /* WMButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B78D28216E9C1C0064555C /* WMButton.swift */; };
 		8459A2A421706118002B0AC3 /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8459A2A321706118002B0AC3 /* ProfileVC.swift */; };
 		8466589F216EA610009EB3AD /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B78CB1216E9C1C0064555C /* StringExtensions.swift */; };
 		846658A0216EA6F2009EB3AD /* WMGlobal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B78CB4216E9C1C0064555C /* WMGlobal.swift */; };
@@ -27,6 +28,10 @@
 		846658B2216F2E42009EB3AD /* SkyFloatingLabelTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846658AF216F2E42009EB3AD /* SkyFloatingLabelTextField.swift */; };
 		846658B4216F2E42009EB3AD /* SkyFloatingLabelTextFieldWithIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846658B0216F2E42009EB3AD /* SkyFloatingLabelTextFieldWithIcon.swift */; };
 		846658B6216F2E42009EB3AD /* UITextField+fixCaretPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846658B1216F2E42009EB3AD /* UITextField+fixCaretPosition.swift */; };
+		849DFA88232156EF0084CDD0 /* ShareVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849DFA87232156EF0084CDD0 /* ShareVC.swift */; };
+		849DFA8923215F140084CDD0 /* WebPageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B78D25216E9C1C0064555C /* WebPageVC.swift */; };
+		849DFA8A23215F230084CDD0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84182D2D1E406B23005AC4B6 /* Main.storyboard */; };
+		849DFA9023222CA90084CDD0 /* ShareVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849DFA87232156EF0084CDD0 /* ShareVC.swift */; };
 		84B78D2A216E9C1C0064555C /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B78CB1216E9C1C0064555C /* StringExtensions.swift */; };
 		84B78D2B216E9C1C0064555C /* WMAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B78CB2216E9C1C0064555C /* WMAPIManager.swift */; };
 		84B78D2C216E9C1C0064555C /* WMConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B78CB3216E9C1C0064555C /* WMConstants.swift */; };
@@ -83,7 +88,6 @@
 		84B78D62216E9C1C0064555C /* WebPageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B78D25216E9C1C0064555C /* WebPageVC.swift */; };
 		84B78D63216E9C1C0064555C /* WMButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B78D28216E9C1C0064555C /* WMButton.swift */; };
 		84B78D64216E9C1C0064555C /* WMImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B78D29216E9C1C0064555C /* WMImageView.swift */; };
-		84B78D6B216E9C350064555C /* WebPageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B78D68216E9C350064555C /* WebPageVC.swift */; };
 		84B78D6C216E9C350064555C /* ArchiveVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B78D69216E9C350064555C /* ArchiveVC.swift */; };
 		D9E695041EF10099007E7551 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D9E695031EF10099007E7551 /* Assets.xcassets */; };
 		D9E695051EF10237007E7551 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D9E695031EF10099007E7551 /* Assets.xcassets */; };
@@ -140,6 +144,7 @@
 		846658AF216F2E42009EB3AD /* SkyFloatingLabelTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SkyFloatingLabelTextField.swift; sourceTree = "<group>"; };
 		846658B0216F2E42009EB3AD /* SkyFloatingLabelTextFieldWithIcon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SkyFloatingLabelTextFieldWithIcon.swift; sourceTree = "<group>"; };
 		846658B1216F2E42009EB3AD /* UITextField+fixCaretPosition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITextField+fixCaretPosition.swift"; sourceTree = "<group>"; };
+		849DFA87232156EF0084CDD0 /* ShareVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareVC.swift; sourceTree = "<group>"; };
 		84B78CB1216E9C1C0064555C /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		84B78CB2216E9C1C0064555C /* WMAPIManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WMAPIManager.swift; sourceTree = "<group>"; };
 		84B78CB3216E9C1C0064555C /* WMConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WMConstants.swift; sourceTree = "<group>"; };
@@ -231,7 +236,6 @@
 		84B78D25216E9C1C0064555C /* WebPageVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebPageVC.swift; sourceTree = "<group>"; };
 		84B78D28216E9C1C0064555C /* WMButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WMButton.swift; sourceTree = "<group>"; };
 		84B78D29216E9C1C0064555C /* WMImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WMImageView.swift; sourceTree = "<group>"; };
-		84B78D68216E9C350064555C /* WebPageVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebPageVC.swift; sourceTree = "<group>"; };
 		84B78D69216E9C350064555C /* ArchiveVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArchiveVC.swift; sourceTree = "<group>"; };
 		89D88856FD532D6BFF913203 /* Pods-WayBackMachine.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WayBackMachine.release.xcconfig"; path = "Pods/Target Support Files/Pods-WayBackMachine/Pods-WayBackMachine.release.xcconfig"; sourceTree = "<group>"; };
 		A3F078DE272FCBC36C039CE2 /* Pods-WM.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WM.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WM/Pods-WM.debug.xcconfig"; sourceTree = "<group>"; };
@@ -657,6 +661,7 @@
 				84B78D23216E9C1C0064555C /* ThirdContentViewController.swift */,
 				84B78D24216E9C1C0064555C /* UploadVC.swift */,
 				84B78D25216E9C1C0064555C /* WebPageVC.swift */,
+				849DFA87232156EF0084CDD0 /* ShareVC.swift */,
 				846658A3216EAA1A009EB3AD /* WelcomeVC.swift */,
 				846658A5216EAA31009EB3AD /* SignupVC.swift */,
 				846658A7216EAA4D009EB3AD /* LoginVC.swift */,
@@ -703,7 +708,6 @@
 			isa = PBXGroup;
 			children = (
 				84B78D67216E9C350064555C /* Base */,
-				84B78D68216E9C350064555C /* WebPageVC.swift */,
 				84B78D69216E9C350064555C /* ArchiveVC.swift */,
 			);
 			path = ViewControllers;
@@ -837,6 +841,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				849DFA8A23215F230084CDD0 /* Main.storyboard in Resources */,
 				D9E695051EF10237007E7551 /* Assets.xcassets in Resources */,
 				84182D611E406B38005AC4B6 /* MainInterface.storyboard in Resources */,
 			);
@@ -926,6 +931,7 @@
 				84B78D61216E9C1C0064555C /* UploadVC.swift in Sources */,
 				84B78D5B216E9C1C0064555C /* HelpViewController.swift in Sources */,
 				84B78D62216E9C1C0064555C /* WebPageVC.swift in Sources */,
+				849DFA88232156EF0084CDD0 /* ShareVC.swift in Sources */,
 				846658B6216F2E42009EB3AD /* UITextField+fixCaretPosition.swift in Sources */,
 				84B78D2A216E9C1C0064555C /* StringExtensions.swift in Sources */,
 				84B78D58216E9C1C0064555C /* WMBaseVC.swift in Sources */,
@@ -980,10 +986,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				8466589F216EA610009EB3AD /* StringExtensions.swift in Sources */,
+				8422298623224C500008CCBB /* WMButton.swift in Sources */,
 				84B78D6C216E9C350064555C /* ArchiveVC.swift in Sources */,
+				849DFA9023222CA90084CDD0 /* ShareVC.swift in Sources */,
 				846658A1216EA939009EB3AD /* WMGlobal.swift in Sources */,
 				846658A2216EA950009EB3AD /* WMAPIManager.swift in Sources */,
-				84B78D6B216E9C350064555C /* WebPageVC.swift in Sources */,
+				849DFA8923215F140084CDD0 /* WebPageVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1179,9 +1187,14 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = ZSFX78H3ZT;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"COCOAPODS=1",
+					"$(inherited)",
+				);
 				INFOPLIST_FILE = WayBackMachine/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" -DEXTENSION";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mobile.waybackmachine.extension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "20877c9b-fb43-43be-99ad-926e93a5427d";
@@ -1201,9 +1214,14 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = ZSFX78H3ZT;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+				);
 				INFOPLIST_FILE = WayBackMachine/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" -DEXTENSION";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mobile.waybackmachine.extension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "855c8b36-f331-4702-9faa-6c3686f8184d";
