@@ -15,7 +15,7 @@ class WMAPIManager: NSObject {
     let BASE_URL                = "https://archive.org/services/xauthn/"
     let SPARKLINE_URL           = "https://web.archive.org/__wb/sparkline"
     let MY_WEB_ARCHIVE_URL      = "https://web.archive.org/__wb/web-archive/"
-    let WEB_LOGIN_URL           = "https://archive.org/account/login.php"
+    let WEB_BASE_URL            = "https://archive.org"
     let UPLOAD_BASE_URL         = "https://s3.us.archive.org"
     let SPN2_URL                = "https://web-beta.archive.org/save/"
     let API_CREATE              = "?op=create"
@@ -82,6 +82,23 @@ class WMAPIManager: NSObject {
         ], operation: API_LOGIN, completion: completion)
     }
     
+    func resetPassword(email: String, completion: @escaping (Bool) -> Void) {
+        let params = [
+            "email": email,
+            "action": "Send Reset Password Email"
+        ]
+        
+        Alamofire.request(WEB_BASE_URL + "/account/forgot-password", method: .post, parameters: params)
+            .responseString{ (response) in
+            switch response.result {
+            case .success:
+                completion(true)
+            case .failure:
+                completion(false)
+            }
+        }
+    }
+    
     // Get Account Info
     func getAccountInfo(email: String, completion: @escaping ([String: Any]?) -> Void) {
         SendDataToService(params: ["email": email], operation: API_INFO, completion: completion)
@@ -110,7 +127,7 @@ class WMAPIManager: NSObject {
         
         var cookieData = [String: Any]()
         
-        Alamofire.request(WEB_LOGIN_URL, method: .post, parameters: params, encoding: URLEncoding.default, headers: ["Content-Type": "application/x-www-form-urlencoded"]).responseString{ (response) in
+        Alamofire.request(WEB_BASE_URL + "/account/login", method: .post, parameters: params, encoding: URLEncoding.default, headers: ["Content-Type": "application/x-www-form-urlencoded"]).responseString{ (response) in
             
             switch response.result {
                 case .success:

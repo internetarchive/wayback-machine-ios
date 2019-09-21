@@ -13,9 +13,20 @@ import MBProgressHUD
 open class ShareVC: UIViewController {
 
     
+    @IBOutlet weak var btnAdd: WMButton!
     @IBOutlet weak var navBarHeight: NSLayoutConstraint!
     @objc open var url: String = ""
     
+    open override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        if let userData = WMGlobal.getUserData(),
+            let addToMyWebArchive = userData["add-to-my-web-archive"] as? Bool,
+            addToMyWebArchive == true {
+            btnAdd.isHidden = true
+            self.saveToMyWebArchive(showAlert: false)
+        }
+    }
     
     override open func loadView() {
         super.loadView()
@@ -33,6 +44,23 @@ open class ShareVC: UIViewController {
     }
     
     @IBAction func _onSaveToMyArchive(_ sender: Any) {
+        self.saveToMyWebArchive(showAlert: true)
+    }
+    
+    @IBAction func _onShare(_ sender: Any) {
+        displayShareSheet(url: url)
+    }
+    
+    @IBAction func _onBack(_ sender: Any) {
+#if EXTENSION
+        self.extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
+        exit(0)
+#else
+        self.dismiss(animated: true, completion: nil)
+#endif
+    }
+    
+    func saveToMyWebArchive(showAlert: Bool) {
         if let userData = WMGlobal.getUserData(),
             let logged_in_user = userData["logged-in-user"] as? HTTPCookie,
             let logged_in_sig = userData["logged-in-sig"] as? HTTPCookie {
@@ -57,7 +85,7 @@ open class ShareVC: UIViewController {
                 MBProgressHUD.showAdded(to: self.view, animated: true)
                 WMAPIManager.sharedManager.saveToMyWebArchive(url: snapshotUrl, snapshot: snapshot, logged_in_user: logged_in_user, logged_in_sig: logged_in_sig) { (success) in
                     MBProgressHUD.hide(for: self.view, animated: true)
-                    if (success) {
+                    if (success && showAlert) {
                         WMGlobal.showAlert(title: "Success", message: "The page has been saved to your web archive successfully.", target: self)
                     }
                 }
@@ -65,19 +93,6 @@ open class ShareVC: UIViewController {
                 print("Invalid regex")
             }
         }
-    }
-    
-    @IBAction func _onShare(_ sender: Any) {
-        displayShareSheet(url: url)
-    }
-    
-    @IBAction func _onBack(_ sender: Any) {
-#if EXTENSION
-        self.extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
-        exit(0)
-#else
-        self.dismiss(animated: true, completion: nil)
-#endif
     }
     
     func displayShareSheet(url: String) {
