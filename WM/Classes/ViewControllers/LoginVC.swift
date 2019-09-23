@@ -78,10 +78,10 @@ class LoginVC: WMBaseVC, UITextFieldDelegate {
                                     ])
                                     
                                     let tabbarVC = self.storyboard?.instantiateViewController(withIdentifier: "TabbarVC") as! UITabBarController
+                                    tabbarVC.modalPresentationStyle = .fullScreen
                                     self.present(tabbarVC, animated: true, completion: {
                                         self.navigationController?.popToRootViewController(animated: false)
-                                    })
-                                }
+                                    })                                }
                                 
                                 MBProgressHUD.hide(for: self.view, animated: true)
                             })

@@ -27,6 +27,7 @@ class WelcomeVC: WMBaseVC {
                 }
                 
                 let tabbarVC = self.storyboard?.instantiateViewController(withIdentifier: "TabbarVC") as! UITabBarController
+                tabbarVC.modalPresentationStyle = .fullScreen
                 self.present(tabbarVC, animated: true, completion: nil)
             }
         } else {
