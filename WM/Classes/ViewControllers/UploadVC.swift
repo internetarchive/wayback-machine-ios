@@ -26,6 +26,7 @@ class UploadVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCont
     var fileURL: URL?
     var fileData: Data?
     var mediaType: String?
+    var placerholderLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,9 +34,20 @@ class UploadVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCont
         // Do any additional setup after loading the view.
         picker.delegate = self
         
-        txtDescription.layer.borderWidth = 1
+        txtDescription.layer.borderWidth = 0.5
         txtDescription.layer.cornerRadius = 5
-        txtDescription.layer.borderColor = UIColor(red: 0.92, green: 0.92, blue: 0.92, alpha: 1.0).cgColor
+        txtDescription.layer.borderColor = UIColor.lightGray.cgColor
+        txtDescription.backgroundColor = UIColor.white
+        txtDescription.delegate = self
+        placerholderLabel = UILabel()
+        placerholderLabel.text = "Description"
+        placerholderLabel.sizeToFit()
+        placerholderLabel.font = placerholderLabel.font.withSize(14)
+        txtDescription.addSubview(placerholderLabel)
+        placerholderLabel.frame.origin = CGPoint(x:5, y: (txtDescription.font?.pointSize)! / 2)
+        placerholderLabel.textColor = UIColor.lightGray
+        placerholderLabel.isHidden = !txtDescription.text.isEmpty
+        
         
         preview.layer.borderWidth = 1
         preview.layer.cornerRadius = 5
@@ -170,6 +182,7 @@ class UploadVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCont
     private func clearFields() -> Void {
         txtTitle.text = ""
         txtDescription.text = ""
+        placerholderLabel.isHidden = !txtDescription.text.isEmpty
         txtSubjectTags.text = ""
         fileURL = nil
         fileData = nil
@@ -200,7 +213,7 @@ class UploadVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCont
         var txtMessageRect = CGRect(x: 13.0, y: 67, width: customViewWidth - 26, height: 200)
         
         let txtMessageContent = UITextView(frame: txtMessageRect)
-        txtMessageContent.font = UIFont.systemFont(ofSize: 15.0)
+        txtMessageContent.font = UIFont.systemFont(ofSize: 14.0)
         txtMessageContent.textAlignment = .center
         txtMessageContent.isEditable = false
         txtMessageContent.dataDetectorTypes = [
@@ -213,6 +226,7 @@ class UploadVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCont
         txtMessageContent.sizeToFit()
         txtMessageRect.size.height = txtMessageContent.frame.height
         txtMessageContent.frame = txtMessageRect
+        txtMessageContent.backgroundColor = UIColor.clear
 
         customView.addSubview(txtMessageContent)
         customView.frame.size.height = txtMessageRect.maxY + 20
@@ -313,9 +327,14 @@ extension UploadVC: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
         let webpageVC = self.storyboard?.instantiateViewController(withIdentifier: "WebPageVC") as! WebPageVC
         webpageVC.url = URL.absoluteString
+        webpageVC.modalPresentationStyle = .fullScreen
         dismiss(animated: true, completion: {
             self.present(webpageVC, animated: true, completion: nil)
         })
         return false
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        placerholderLabel.isHidden = !textView.text.isEmpty
     }
 }
