@@ -101,6 +101,7 @@
 
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     WebPageVC *webpageVC = (WebPageVC *)[storyboard instantiateViewControllerWithIdentifier:@"WebPageVC"];
+    webpageVC.modalPresentationStyle = UIModalPresentationFullScreen;
     webpageVC.url = event.desc;
     
     UIViewController *topMostVC = [self topMostController];

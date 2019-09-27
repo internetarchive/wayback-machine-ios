@@ -41,6 +41,7 @@ class AboutViewController: UIViewController, MFMailComposeViewControllerDelegate
                 let composeVC = MFMailComposeViewController()
                 composeVC.mailComposeDelegate = self as MFMailComposeViewControllerDelegate
                 composeVC.setToRecipients(["info@archive.org"])
+                composeVC.modalPresentationStyle = .fullScreen
                 self.present(composeVC, animated: true, completion: nil)
             }
         }

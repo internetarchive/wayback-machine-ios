@@ -111,7 +111,7 @@
                                                     <constraint firstAttribute="height" constant="40" id="UJ4-Pa-GqB"/>
                                                 </constraints>
                                                 <color key="textColor" red="0.40000000600000002" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="URL"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -1191,7 +1191,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GUk-0u-5dg" customClass="SkyFloatingLabelTextField" customModule="WM" customModuleProvider="target">
-                                        <rect key="frame" x="82" y="251" width="250" height="39"/>
+                                        <rect key="frame" x="82" y="251" width="250" height="34"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="250" id="Ldn-dq-Di2"/>
                                         </constraints>
@@ -1216,7 +1216,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vqX-vR-LDt">
-                                        <rect key="frame" x="132" y="336" width="150" height="35"/>
+                                        <rect key="frame" x="132" y="331" width="150" height="35"/>
                                         <color key="backgroundColor" red="0.66274509800000003" green="0.17254901959999999" blue="0.19215686269999999" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="35" id="bia-zN-FKw"/>
@@ -1235,14 +1235,14 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n0O-Wa-Y8V">
-                                        <rect key="frame" x="262" y="435.5" width="48" height="30"/>
+                                        <rect key="frame" x="262" y="430.5" width="48" height="30"/>
                                         <state key="normal" title="Signup"/>
                                         <connections>
                                             <segue destination="bJ3-6A-t0B" kind="show" id="Jhz-ia-Cmp"/>
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Need an account?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sGR-7o-K3Z">
-                                        <rect key="frame" x="108" y="440" width="139" height="21"/>
+                                        <rect key="frame" x="108" y="435" width="139" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>

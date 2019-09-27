@@ -37,6 +37,7 @@ open class ShareVC: UIViewController {
     @IBAction func _onViewPage(_ sender: Any) {
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
         let webPageVC = storyBoard.instantiateViewController(withIdentifier: "WebPageVC") as! WebPageVC
+        webPageVC.modalPresentationStyle = .fullScreen
         webPageVC.url = url
         DispatchQueue.main.async {
             self.present(webPageVC, animated: true, completion: nil)

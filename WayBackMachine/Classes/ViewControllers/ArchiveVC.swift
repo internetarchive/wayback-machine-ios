@@ -230,6 +230,7 @@ class ArchiveVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCon
                                         MBProgressHUD.hide(for: self.view, animated: true)
                                         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
                                         let shareVC = storyBoard.instantiateViewController(withIdentifier: "ShareVC") as! ShareVC
+                                        shareVC.modalPresentationStyle = .fullScreen
                                         shareVC.url = url!
                                         DispatchQueue.main.async {
                                             self.present(shareVC, animated: true, completion: nil)
@@ -342,6 +343,7 @@ class ArchiveVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCon
         txtMessageContent.sizeToFit()
         txtMessageRect.size.height = txtMessageContent.frame.height
         txtMessageContent.frame = txtMessageRect
+        txtMessageContent.backgroundColor = UIColor.clear
         
         customView.addSubview(txtMessageContent)
         customView.frame.size.height = txtMessageRect.maxY + 20
@@ -377,6 +379,7 @@ extension ArchiveVC: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
         let webPageVC = self.storyboard?.instantiateViewController(withIdentifier: "WebPageVC") as! WebPageVC
         webPageVC.url = URL.absoluteString
+        webPageVC.modalPresentationStyle = .fullScreen
         dismiss(animated: true, completion: {
             self.present(webPageVC, animated: true, completion: nil)
         })
