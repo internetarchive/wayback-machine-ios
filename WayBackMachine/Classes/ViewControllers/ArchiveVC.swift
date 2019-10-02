@@ -33,6 +33,7 @@ class ArchiveVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCon
     var fileURL: URL?
     var fileData: Data?
     var mediaType: String?
+    var placeholderLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,17 +42,36 @@ class ArchiveVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCon
         shareView.layer.cornerRadius = 10
         urlTextField.isUserInteractionEnabled = false
         urlTextField.textAlignment = .center
+        urlTextField.layer.borderWidth = 0.5
+        urlTextField.layer.borderColor = UIColor.lightGray.cgColor
+        txtTitle.layer.borderWidth = 0.5
+        txtTitle.layer.borderColor = UIColor.lightGray.cgColor
+        txtSubjectTags.layer.borderWidth = 0.5
+        txtSubjectTags.layer.borderColor = UIColor.lightGray.cgColor
         btnSave.layer.cornerRadius = 10
         btnCancel.layer.cornerRadius = 10
         
         uploadView.layer.cornerRadius = 10
         innerView.layer.cornerRadius = 10
-        txtDescription.layer.borderWidth = 1
+        
+        txtDescription.layer.borderWidth = 0.5
         txtDescription.layer.cornerRadius = 5
-        txtDescription.layer.borderColor = UIColor(red: 0.92, green: 0.92, blue: 0.92, alpha: 1.0).cgColor
-        preview.layer.borderWidth = 1
+        txtDescription.layer.borderColor = UIColor.lightGray.cgColor
+        txtDescription.backgroundColor = UIColor.white
+        txtDescription.delegate = self
+        placeholderLabel = UILabel()
+        placeholderLabel.text = "Description"
+        placeholderLabel.sizeToFit()
+        placeholderLabel.font = placeholderLabel.font.withSize(14)
+        txtDescription.addSubview(placeholderLabel)
+        placeholderLabel.frame.origin = CGPoint(x:5, y: (txtDescription.font?.pointSize)! / 2)
+        placeholderLabel.textColor = UIColor.lightGray
+        placeholderLabel.isHidden = !txtDescription.text.isEmpty
+        
+        preview.layer.borderWidth = 0.5
         preview.layer.cornerRadius = 5
-        preview.layer.borderColor = UIColor(red: 0.92, green: 0.92, blue: 0.92, alpha: 1.0).cgColor
+        preview.layer.borderColor = UIColor.lightGray.cgColor
+        
         videoPreview.layer.cornerRadius = 5
         
         shareView.isHidden = true
@@ -146,6 +166,7 @@ class ArchiveVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCon
     private func clearFields() -> Void {
         txtTitle.text = ""
         txtDescription.text = ""
+        placeholderLabel.isHidden = !txtDescription.text.isEmpty
         txtSubjectTags.text = ""
         fileURL = nil
         fileData = nil
@@ -384,5 +405,9 @@ extension ArchiveVC: UITextViewDelegate {
             self.present(webPageVC, animated: true, completion: nil)
         })
         return false
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        placeholderLabel.isHidden = !textView.text.isEmpty
     }
 }

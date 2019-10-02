@@ -26,7 +26,7 @@ class UploadVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCont
     var fileURL: URL?
     var fileData: Data?
     var mediaType: String?
-    var placerholderLabel: UILabel!
+    var placeholderLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,19 +39,19 @@ class UploadVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCont
         txtDescription.layer.borderColor = UIColor.lightGray.cgColor
         txtDescription.backgroundColor = UIColor.white
         txtDescription.delegate = self
-        placerholderLabel = UILabel()
-        placerholderLabel.text = "Description"
-        placerholderLabel.sizeToFit()
-        placerholderLabel.font = placerholderLabel.font.withSize(14)
-        txtDescription.addSubview(placerholderLabel)
-        placerholderLabel.frame.origin = CGPoint(x:5, y: (txtDescription.font?.pointSize)! / 2)
-        placerholderLabel.textColor = UIColor.lightGray
-        placerholderLabel.isHidden = !txtDescription.text.isEmpty
+        placeholderLabel = UILabel()
+        placeholderLabel.text = "Description"
+        placeholderLabel.sizeToFit()
+        placeholderLabel.font = placeholderLabel.font.withSize(14)
+        txtDescription.addSubview(placeholderLabel)
+        placeholderLabel.frame.origin = CGPoint(x:5, y: (txtDescription.font?.pointSize)! / 2)
+        placeholderLabel.textColor = UIColor.lightGray
+        placeholderLabel.isHidden = !txtDescription.text.isEmpty
         
         
         preview.layer.borderWidth = 1
         preview.layer.cornerRadius = 5
-        preview.layer.borderColor = UIColor(red: 0.92, green: 0.92, blue: 0.92, alpha: 1.0).cgColor
+        preview.layer.borderColor = UIColor.lightGray.cgColor
         
         videoPreview.layer.cornerRadius = 5
         
@@ -182,7 +182,7 @@ class UploadVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCont
     private func clearFields() -> Void {
         txtTitle.text = ""
         txtDescription.text = ""
-        placerholderLabel.isHidden = !txtDescription.text.isEmpty
+        placeholderLabel.isHidden = !txtDescription.text.isEmpty
         txtSubjectTags.text = ""
         fileURL = nil
         fileData = nil
@@ -335,6 +335,6 @@ extension UploadVC: UITextViewDelegate {
     }
     
     func textViewDidChange(_ textView: UITextView) {
-        placerholderLabel.isHidden = !textView.text.isEmpty
+        placeholderLabel.isHidden = !textView.text.isEmpty
     }
 }
