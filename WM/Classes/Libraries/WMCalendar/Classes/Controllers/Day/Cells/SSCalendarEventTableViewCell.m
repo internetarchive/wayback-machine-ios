@@ -95,7 +95,10 @@
         descriptionLabel.font = [SSCalendarEventTableViewCell descriptionFont];
         locationLabel.font = [SSCalendarEventTableViewCell locationFont];
         
-        locationLabel.textColor = [UIColor colorWithHexString:COLOR_TEXT_LIGHT];
+        timeLabel.textColor = [UIColor colorWithHexString:@"666666"];
+        nameLabel.textColor = [UIColor colorWithHexString:@"666666"];
+        descriptionLabel.textColor = [UIColor colorWithHexString:@"666666"];
+        locationLabel.textColor = [UIColor colorWithHexString:@"666666"];
         
         nameLabel.numberOfLines = descriptionLabel.numberOfLines = 0;
         
@@ -103,6 +106,7 @@
         [self.contentView addSubview:nameLabel];
         [self.contentView addSubview:descriptionLabel];
         [self.contentView addSubview:locationLabel];
+        self.backgroundColor = UIColor.whiteColor;
         
         timeLabel.backgroundColor = nameLabel.backgroundColor = descriptionLabel.backgroundColor = locationLabel.backgroundColor = [UIColor clearColor];
     }

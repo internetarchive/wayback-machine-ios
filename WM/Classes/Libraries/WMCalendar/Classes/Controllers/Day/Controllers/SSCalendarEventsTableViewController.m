@@ -22,6 +22,7 @@
     if (self)
     {
         self.tableView = tableView;
+        self.tableView.backgroundColor = UIColor.whiteColor;
     }
     return self;
 }
