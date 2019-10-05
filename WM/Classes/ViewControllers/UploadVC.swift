@@ -49,7 +49,7 @@ class UploadVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCont
         placeholderLabel.isHidden = !txtDescription.text.isEmpty
         
         
-        preview.layer.borderWidth = 1
+        preview.layer.borderWidth = 0.5
         preview.layer.cornerRadius = 5
         preview.layer.borderColor = UIColor.lightGray.cgColor
         
