@@ -775,7 +775,7 @@
 					84182D251E406B23005AC4B6 = {
 						CreatedOnToolsVersion = 8.2;
 						DevelopmentTeam = ZSFX78H3ZT;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
@@ -892,7 +892,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-WM/Pods-WM-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-WM/Pods-WM-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/FRHyperLabel/FRHyperLabel.framework",
 				"${BUILT_PRODUCTS_DIR}/IQKeyboardManagerSwift/IQKeyboardManagerSwift.framework",
@@ -909,7 +909,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-WM/Pods-WM-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-WM/Pods-WM-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1135,9 +1135,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = WM/WM.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Golden Eagle (UUB8A37GVA)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Golden Eagle (UUB8A37GVA)";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 80;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = ZSFX78H3ZT;
@@ -1148,7 +1148,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.mobile.waybackmachine;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "8d1eb4d9-cbfd-4f44-8024-49b65037c880";
-				PROVISIONING_PROFILE_SPECIFIER = WaybackMachineApp_dev730_2020;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "WM/WM-BridgingHeader.h";
 				SWIFT_VERSION = 4.0;
 			};
@@ -1163,9 +1163,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = WM/WM.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Internet Archive (ZSFX78H3ZT)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Internet Archive (ZSFX78H3ZT)";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 80;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = ZSFX78H3ZT;
@@ -1176,7 +1176,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.mobile.waybackmachine;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "a08214e7-ca14-45c3-b551-ec74d37fdb36";
-				PROVISIONING_PROFILE_SPECIFIER = WayBackMachineApp_prod730_2020;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "WM/WM-BridgingHeader.h";
 				SWIFT_VERSION = 4.0;
 			};
