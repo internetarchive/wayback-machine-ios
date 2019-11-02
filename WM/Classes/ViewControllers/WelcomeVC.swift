@@ -22,7 +22,7 @@ class WelcomeVC: WMBaseVC {
             WMAPIManager.sharedManager.login(email: email, password: password) { (data) in
                 MBProgressHUD.hide(for: self.view, animated: true)
                 guard let data = data, let success = data["success"] as? Bool, success == true else {
-                    self.gotoLoginVC()
+                    //self.gotoLoginVC()
                     return
                 }
                 
@@ -31,7 +31,7 @@ class WelcomeVC: WMBaseVC {
                 self.present(tabbarVC, animated: true, completion: nil)
             }
         } else {
-            gotoLoginVC()
+            //gotoLoginVC()
         }
     }
     
