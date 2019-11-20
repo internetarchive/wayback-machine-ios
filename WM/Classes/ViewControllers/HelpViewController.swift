@@ -36,10 +36,10 @@ class HelpViewController: UIViewController, UIPageViewControllerDataSource, UIPa
         }
         
         pageViewController = pageController
-        addChildViewController(pageViewController!)
+        addChild(pageViewController!)
         
         self.view.insertSubview(pageController.view, belowSubview: self.controlView)
-        pageViewController!.didMove(toParentViewController: self)
+        pageViewController!.didMove(toParent: self)
     }
     
     private func getContentViewController(identifier : String) -> UIViewController {
@@ -47,7 +47,7 @@ class HelpViewController: UIViewController, UIPageViewControllerDataSource, UIPa
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        guard let viewControllerIndex = contentViewControllers.index(of: viewController) else {
+        guard let viewControllerIndex = contentViewControllers.firstIndex(of: viewController) else {
             return nil
         }
         let nextIndex = viewControllerIndex + 1
@@ -61,7 +61,7 @@ class HelpViewController: UIViewController, UIPageViewControllerDataSource, UIPa
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        guard let viewControllerIndex = contentViewControllers.index(of: viewController) else {
+        guard let viewControllerIndex = contentViewControllers.firstIndex(of: viewController) else {
             return nil
         }
         let previousIndex = viewControllerIndex - 1
@@ -79,7 +79,7 @@ class HelpViewController: UIViewController, UIPageViewControllerDataSource, UIPa
     }
     
     func presentationIndex(for pageViewController: UIPageViewController) -> Int {
-        guard let firstPageControllerView = pageViewController.viewControllers?.first, let firstPageControllerViewIndex = contentViewControllers.index(of: firstPageControllerView) else {
+        guard let firstPageControllerView = pageViewController.viewControllers?.first, let firstPageControllerViewIndex = contentViewControllers.firstIndex(of: firstPageControllerView) else {
             return 0;
         }
         
@@ -97,7 +97,7 @@ class HelpViewController: UIViewController, UIPageViewControllerDataSource, UIPa
         {
             return
         }
-        let currentPageIndex = self.contentViewControllers.index(of: pageViewController.viewControllers![0])!
+        let currentPageIndex = self.contentViewControllers.firstIndex(of: pageViewController.viewControllers![0])!
         pageControl.currentPage = currentPageIndex
     }
 }

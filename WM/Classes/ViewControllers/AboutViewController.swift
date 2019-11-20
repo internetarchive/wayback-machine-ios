@@ -27,10 +27,10 @@ class AboutViewController: UIViewController, MFMailComposeViewControllerDelegate
 
         txtVersion.text = txtVersion.text! + (version as! String)
         let strSupport = txtSupport.text!
-        let attributes = [NSAttributedStringKey.foregroundColor: UIColor.black, NSAttributedStringKey.font: UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)]
+        let attributes = [NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body)]
         
         let attributedString =  NSMutableAttributedString(attributedString: NSAttributedString(string: strSupport, attributes: attributes))
-        attributedString.addAttribute(NSAttributedStringKey.font, value: UIFont.preferredFont(forTextStyle: UIFontTextStyle.body), range: NSRange(location: strSupport.characters.count - 17,length: 17))
+        attributedString.addAttribute(NSAttributedString.Key.font, value: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body), range: NSRange(location: strSupport.count - 17,length: 17))
         
         txtSupport.attributedText = attributedString
         txtSupport.textColor = UIColor(red: 0.4, green: 0.4, blue: 0.4, alpha: 1.0)
