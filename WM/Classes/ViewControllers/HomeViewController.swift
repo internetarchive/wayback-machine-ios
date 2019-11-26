@@ -265,11 +265,11 @@ class HomeViewController: UIViewController, UITextFieldDelegate, MBProgressHUDDe
                         let archive = [
                             "originalURL" : archives[i][1] as! String,
                             "archivedURL" : "https://web.archive.org/web/" + timestamp + "/" + (archives[i][1] as! String),
-                            "year" : Int(timestamp.substring(with: timestamp.startIndex..<timestamp.index(timestamp.startIndex, offsetBy: 4)))!,
-                            "month" : Int(timestamp.substring(with: timestamp.index(timestamp.startIndex, offsetBy: 4)..<timestamp.index(timestamp.startIndex, offsetBy: 6)))!,
-                            "day" : Int(timestamp.substring(with: timestamp.index(timestamp.startIndex, offsetBy: 6)..<timestamp.index(timestamp.startIndex, offsetBy: 8)))!,
-                            "hour" : timestamp.substring(with: timestamp.index(timestamp.startIndex, offsetBy: 8)..<timestamp.index(timestamp.startIndex, offsetBy: 10)),
-                            "minute" : timestamp.substring(with: timestamp.index(timestamp.startIndex, offsetBy: 10)..<timestamp.index(timestamp.startIndex, offsetBy: 12))
+                            "year"   : Int(timestamp.slicing(from: 0, length: 4) ?? "1900") ?? 1900,
+                            "month"  : Int(timestamp.slicing(from: 4, length: 2) ?? "01") ?? 1,
+                            "day"    : Int(timestamp.slicing(from: 6, length: 2) ?? "01") ?? 1,
+                            "hour"   : Int(timestamp.slicing(from: 8, length: 2) ?? "00") ?? 0,
+                            "minute" : Int(timestamp.slicing(from:10, length: 2) ?? "00") ?? 0
                         ] as [String : Any]
                         ret.append(archive)
                     }
@@ -352,27 +352,25 @@ class HomeViewController: UIViewController, UITextFieldDelegate, MBProgressHUDDe
     }
     
     func getWaybackUrlFromResponse(response: [String: Any], completionHandler: @escaping (String?, Int) -> Void) {
-        let results = response["results"] as Any
-        let results_first = ((response["results"] as? [Any])?[0])
-        let archived_snapshots = (results_first as? [String: Any])?["archived_snapshots"]
-        let closest = (archived_snapshots as? [String: Any])?["closest"]
-        let available = (closest as? [String: Any])? ["available"] as? Bool
-        let status = (closest as? [String: Any])? ["status"] as? String
-        let url = (closest as? [String: Any])? ["url"] as? String
-        
-        if (results != nil &&
-            results_first != nil &&
-            archived_snapshots != nil &&
-            closest != nil &&
-            available != nil &&
-            available == true &&
-            status == "200" &&
-            isValidSnapshotUrl(url: url)) {
-            completionHandler(url, 100)
-        }  else {
-            completionHandler(url, 102)
+
+        // JSON format:
+        // "results" : [ { "archived_snapshots": { "closest": { "available": true, "status": "200", "url": "http:..." } } } ]
+
+        if let results = response["results"] as? [[String: Any]],
+           let archivedSnapshots = results.first?["archived_snapshots"] as? [String: Any],
+           let closest = archivedSnapshots["closest"] as? [String: Any],
+           let available = closest["available"] as? Bool,
+           let status = closest["status"] as? String,
+           let url = closest["url"] as? String
+        {
+            if (available == true) && (status == "200") && isValidSnapshotUrl(url: url) {
+                completionHandler(url, 100)  // success
+            } else {
+                completionHandler(url, 102)  // cannot find archived page
+            }
+        } else {
+            completionHandler(nil, 102)  // cannot find archived page
         }
-        
     }
     
     func isValidSnapshotUrl(url: String?) -> Bool {

@@ -46,10 +46,9 @@
 {
     //UITableViewHeaderFooterView
     [[UITableViewHeaderFooterView appearance] setTintColor:[UIColor colorWithHexString:COLOR_BACKGROUND_OFF_WHITE]];
-    [[UILabel appearanceWhenContainedIn:[UITableViewHeaderFooterView class], nil] setFont:
-    [SSStyles boldFontOfSize:15.0f]];
-    [[UILabel appearanceWhenContainedIn:[UITableViewHeaderFooterView class], nil] setTextColor:[UIColor colorWithHexString:@"777777"]];
-    [[UILabel appearanceWhenContainedIn:[UITableViewHeaderFooterView class], nil] setShadowOffset:CGSizeZero];
+    [[UILabel appearanceWhenContainedInInstancesOfClasses:@[[UITableViewHeaderFooterView class]]] setFont:[SSStyles boldFontOfSize:15.0f]];
+    [[UILabel appearanceWhenContainedInInstancesOfClasses:@[[UITableViewHeaderFooterView class]]] setTextColor:[UIColor colorWithHexString:@"777777"]];
+    [[UILabel appearanceWhenContainedInInstancesOfClasses:@[[UITableViewHeaderFooterView class]]] setShadowOffset:CGSizeZero];
 }
 
 

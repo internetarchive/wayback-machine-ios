@@ -325,7 +325,7 @@ class WMAPIManager: NSObject {
             .responseJSON{ (response) in
                             
                 switch response.result {
-                case .success(let data):
+                case .success:
                     if let json = response.result.value as? [String: Any],
                         let job_id = json["job_id"] as? String {
                         completion(job_id)
@@ -357,7 +357,7 @@ class WMAPIManager: NSObject {
             .responseJSON{ (response) in
                 
                 switch response.result {
-                case .success(let data):
+                case .success:
                     if let json = response.result.value as? [String: Any],
                         let status = json["status"] as? String {
                         
