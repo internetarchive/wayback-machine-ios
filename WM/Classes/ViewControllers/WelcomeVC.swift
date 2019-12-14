@@ -26,9 +26,10 @@ class WelcomeVC: WMBaseVC {
                     return
                 }
                 
-                let tabbarVC = self.storyboard?.instantiateViewController(withIdentifier: "TabbarVC") as! UITabBarController
-                tabbarVC.modalPresentationStyle = .fullScreen
-                self.present(tabbarVC, animated: true, completion: nil)
+                if let tabbarVC = self.storyboard?.instantiateViewController(withIdentifier: "TabbarVC") as? UITabBarController {
+                    tabbarVC.modalPresentationStyle = .fullScreen
+                    self.present(tabbarVC, animated: true, completion: nil)
+                }
             }
         } else {
             //gotoLoginVC()
@@ -36,17 +37,19 @@ class WelcomeVC: WMBaseVC {
     }
     
     func gotoLoginVC() {
-        let loginVC = self.storyboard?.instantiateViewController(withIdentifier: "LoginVC") as! LoginVC
-        self.navigationController?.pushViewController(loginVC, animated: true)
+        if let loginVC = self.storyboard?.instantiateViewController(withIdentifier: "LoginVC") as? LoginVC {
+            self.navigationController?.pushViewController(loginVC, animated: true)
+        }
     }
 
     // MARK: - Actions
     
     
     @IBAction func onSupportPressed(_ sender: Any) {
-        let aboutVC = self.storyboard?.instantiateViewController(withIdentifier: "AboutVC") as! AboutViewController
-        aboutVC.shouldShowNavbar = true
-        self.navigationController?.pushViewController(aboutVC, animated: true)
+        if let aboutVC = self.storyboard?.instantiateViewController(withIdentifier: "AboutVC") as? AboutViewController {
+            aboutVC.shouldShowNavbar = true
+            self.navigationController?.pushViewController(aboutVC, animated: true)
+        }
     }
     
 }

@@ -1,5 +1,6 @@
 ## Wayback Machine iOS App
 
+https://github.com/internetarchive/wayback-machine-ios
 
 ### Install Dependencies
 
@@ -17,6 +18,6 @@ Try editing **Podfile** and remove or comment out targets 'WMTests' and 'WMUITes
 
 #### *IQKeyboardManager* framework not compiling?
 
-Try this quick fix:
+Try this quick fix in XCode:
 
 Pods > IQKeyboardManagerSwift (dropdown) > Build Settings > Build Options > Require Only App-Extension-Safe API > Set to NO

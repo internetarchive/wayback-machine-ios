@@ -39,7 +39,7 @@ class HelpViewController: UIViewController, UIPageViewControllerDataSource, UIPa
         addChild(pageViewController!)
         
         self.view.insertSubview(pageController.view, belowSubview: self.controlView)
-        pageViewController!.didMove(toParent: self)
+        pageViewController?.didMove(toParent: self)
     }
     
     private func getContentViewController(identifier : String) -> UIViewController {
@@ -97,7 +97,8 @@ class HelpViewController: UIViewController, UIPageViewControllerDataSource, UIPa
         {
             return
         }
-        let currentPageIndex = self.contentViewControllers.firstIndex(of: pageViewController.viewControllers![0])!
-        pageControl.currentPage = currentPageIndex
+        if let currentPageIndex = self.contentViewControllers.firstIndex(of: pageViewController.viewControllers![0]) {
+            pageControl.currentPage = currentPageIndex
+        }
     }
 }

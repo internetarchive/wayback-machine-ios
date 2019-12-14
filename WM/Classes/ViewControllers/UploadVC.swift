@@ -80,15 +80,16 @@ class UploadVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCont
         if !validateFields() {
             return
         }
-
-        let userData = WMGlobal.getUserData()
-        let identifier = "\(userData!["screenname"] as! String)_\(String(format: "%d", Int(NSDate().timeIntervalSince1970)))"
-        let s3accesskey = userData!["s3accesskey"]!
-        let s3secretkey = userData!["s3secretkey"]!
-        let title = txtTitle.text
-        let description = txtDescription.text
-        let subjectTags = txtSubjectTags.text
-        let filename = "\(identifier).\(fileURL!.pathExtension)"
+        guard let userData = WMGlobal.getUserData(), let fileUrl = fileURL else {
+            return
+        }
+        let identifier = (userData["screenname"] as? String ?? "") + "_" + String(format: "%d", Int(NSDate().timeIntervalSince1970))
+        let s3accesskey = userData["s3accesskey"] as? String ?? ""
+        let s3secretkey = userData["s3secretkey"] as? String ?? ""
+        let title = txtTitle.text ?? ""
+        let description = txtDescription.text ?? ""
+        let subjectTags = txtSubjectTags.text ?? ""
+        let filename = "\(identifier).\(fileUrl.pathExtension)"
         let startTime = Date()
         MBProgressHUD.showAdded(to: self.view, animated: true)
         
@@ -101,7 +102,7 @@ class UploadVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCont
             "mediatype" : mediaType,
             "s3accesskey" : s3accesskey,
             "s3secretkey" : s3secretkey,
-            "data" : (fileData != nil) ? fileData : fileURL
+            "data" : (fileData != nil) ? fileData! : fileUrl
         ]) { (success, uploadedFileSize) in
             let endTime = Date()
             let interval = endTime.timeIntervalSince(startTime)
@@ -109,7 +110,7 @@ class UploadVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCont
             let dcf = DateComponentsFormatter()
             dcf.allowedUnits = [.minute, .second]
             dcf.unitsStyle = .brief
-            let duration = dcf.string(from: TimeInterval(interval))!
+            let duration = dcf.string(from: TimeInterval(interval)) ?? ""
 
             let bcf = ByteCountFormatter()
             bcf.allowedUnits = [.useMB]
@@ -120,7 +121,7 @@ class UploadVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCont
             MBProgressHUD.hide(for: self.view, animated: true)
 
             if success {
-                self.showSuccessAlert(filesize: "\(filesize)", duration: duration, uploadedURL: "https://archive.org/details/\(identifier)")
+                self.showSuccessAlert(filesize: filesize, duration: duration, uploadedURL: "https://archive.org/details/\(identifier)")
             } else {
                 WMGlobal.showAlert(title: "Uploading failed", message: "", target: self)
             }
@@ -169,10 +170,10 @@ class UploadVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCont
             WMGlobal.showAlert(title: "Description is required", message: "", target: self)
             return false
         } else if txtSubjectTags.text == "" {
-            WMGlobal.showAlert(title: "Subject Tags is required", message: "", target: self)
+            WMGlobal.showAlert(title: "Subject Tags are required", message: "", target: self)
             return false
         } else if fileURL == nil {
-            WMGlobal.showAlert(title: "You need to attach photo or video", message: "", target: self)
+            WMGlobal.showAlert(title: "Please attach a photo or video", message: "", target: self)
             return false
         }
         
@@ -244,20 +245,22 @@ class UploadVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCont
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-// Local variable inserted by Swift 4.2 migrator.
-let info = convertFromUIImagePickerControllerInfoKeyDictionary(info)
+
+        // Local variable inserted by Swift 4.2 migrator.
+        let info = convertFromUIImagePickerControllerInfoKeyDictionary(info)
 
         if let type = info[convertFromUIImagePickerControllerInfoKey(UIImagePickerController.InfoKey.mediaType)] as? String {
             if type == "public.image" {
                 
-                let chosenImage = info[convertFromUIImagePickerControllerInfoKey(UIImagePickerController.InfoKey.originalImage)] as! UIImage
-                imgPreview.contentMode = .scaleAspectFit
-                imgPreview.image = chosenImage
-                imgPreview.isHidden = false
-                videoPreview.isHidden = true
-                mediaType = "image"
-                fileData = chosenImage.jpegData(compressionQuality: 0.5)
-                
+                if let chosenImage = info[convertFromUIImagePickerControllerInfoKey(UIImagePickerController.InfoKey.originalImage)] as? UIImage {
+                    imgPreview.contentMode = .scaleAspectFit
+                    imgPreview.image = chosenImage
+                    imgPreview.isHidden = false
+                    videoPreview.isHidden = true
+                    mediaType = "image"
+                    fileData = chosenImage.jpegData(compressionQuality: 0.5)
+                }
+
                 if #available(iOS 11.0, *) {
                     fileURL = info[convertFromUIImagePickerControllerInfoKey(UIImagePickerController.InfoKey.imageURL)] as? URL
                 } else {
@@ -271,21 +274,21 @@ let info = convertFromUIImagePickerControllerInfoKeyDictionary(info)
                     
                 }
             }
-            
-            if type == "public.movie" {
+            else if type == "public.movie" {
                 imgPreview.isHidden = true
                 videoPreview.isHidden = false
-                
+
                 fileURL = info[convertFromUIImagePickerControllerInfoKey(UIImagePickerController.InfoKey.mediaURL)] as? URL
-                mediaType = "video"
-                fileData = nil
-                
-                let videoPlayer = AVPlayer(url: fileURL!)
-                let playerLayer = AVPlayerLayer(player: videoPlayer)
-                playerLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
-                videoPreview.layer.addSublayer(playerLayer)
-                playerLayer.frame = videoPreview.layer.bounds
-                videoPlayer.play()
+                if let fileUrl = fileURL {
+                    mediaType = "video"
+                    fileData = nil
+                    let videoPlayer = AVPlayer(url: fileUrl)
+                    let playerLayer = AVPlayerLayer(player: videoPlayer)
+                    playerLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
+                    videoPreview.layer.addSublayer(playerLayer)
+                    playerLayer.frame = videoPreview.layer.bounds
+                    videoPlayer.play()
+                }
             }
         }
         
@@ -298,7 +301,6 @@ let info = convertFromUIImagePickerControllerInfoKeyDictionary(info)
                 scrollView.contentInset.bottom = keyboardSize.height
                 scrollView.contentOffset.y = keyboardSize.height
             }
-            
         }
     }
     
@@ -323,31 +325,31 @@ let info = convertFromUIImagePickerControllerInfoKeyDictionary(info)
     }
     */
 
+    // Helper function inserted by Swift 4.2 migrator.
+    fileprivate func convertFromUIImagePickerControllerInfoKeyDictionary(_ input: [UIImagePickerController.InfoKey: Any]) -> [String: Any] {
+        return Dictionary(uniqueKeysWithValues: input.map {key, value in (key.rawValue, value)})
+    }
+
+    // Helper function inserted by Swift 4.2 migrator.
+    fileprivate func convertFromUIImagePickerControllerInfoKey(_ input: UIImagePickerController.InfoKey) -> String {
+        return input.rawValue
+    }
 }
 
 extension UploadVC: UITextViewDelegate {
     
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
-        let webpageVC = self.storyboard?.instantiateViewController(withIdentifier: "WebPageVC") as! WebPageVC
-        webpageVC.url = URL.absoluteString
-        webpageVC.modalPresentationStyle = .fullScreen
-        dismiss(animated: true, completion: {
-            self.present(webpageVC, animated: true, completion: nil)
-        })
+        if let webpageVC = self.storyboard?.instantiateViewController(withIdentifier: "WebPageVC") as? WebPageVC {
+            webpageVC.url = URL.absoluteString
+            webpageVC.modalPresentationStyle = .fullScreen
+            dismiss(animated: true, completion: {
+                self.present(webpageVC, animated: true, completion: nil)
+            })
+        }
         return false
     }
     
     func textViewDidChange(_ textView: UITextView) {
         placeholderLabel.isHidden = !textView.text.isEmpty
     }
-}
-
-// Helper function inserted by Swift 4.2 migrator.
-fileprivate func convertFromUIImagePickerControllerInfoKeyDictionary(_ input: [UIImagePickerController.InfoKey: Any]) -> [String: Any] {
-	return Dictionary(uniqueKeysWithValues: input.map {key, value in (key.rawValue, value)})
-}
-
-// Helper function inserted by Swift 4.2 migrator.
-fileprivate func convertFromUIImagePickerControllerInfoKey(_ input: UIImagePickerController.InfoKey) -> String {
-	return input.rawValue
 }

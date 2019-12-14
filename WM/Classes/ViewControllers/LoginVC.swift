@@ -31,40 +31,43 @@ class LoginVC: WMBaseVC, UITextFieldDelegate {
     }
     
     @IBAction func onLoginPressed(_ sender: Any) {
-        if self.txtEmail.text!.isEmpty {
+        if !(self.txtEmail.text?.isEmail ?? false) {
             self.txtEmail.errorMessage = "Email is required"
             return
-        } else if self.txtPassword.text!.isEmpty {
+        } else if self.txtPassword.text?.trimmed.isEmpty ?? true {
             self.txtPassword.errorMessage = "Password is required"
             return
         }
         
-        login(email: self.txtEmail.text!, password: self.txtPassword.text!)
+        login(email: self.txtEmail.text ?? "", password: self.txtPassword.text ?? "")
     }
     
     func login(email: String, password: String) {
         MBProgressHUD.showAdded(to: self.view, animated: true)
-        WMAPIManager.sharedManager.login(email: email, password: password, completion: {(data) in
-            if data == nil {
+        WMAPIManager.sharedManager.login(email: email, password: password, completion: {(data1) in
+            guard let data1 = data1 else {
                 MBProgressHUD.hide(for: self.view, animated: true)
                 WMGlobal.showAlert(title: "", message: "Server error", target: self)
-            } else {
-                let success = data!["success"] as! Bool
-                
-                if (success) {
-                    WMAPIManager.sharedManager.getAccountInfo(email: email, completion: { (data) in
+                return
+            }
+                if (data1["success"] as? Bool) ?? false {
+                    WMAPIManager.sharedManager.getAccountInfo(email: email, completion: { (data2) in
                         
                         WMAPIManager.sharedManager.getCookieData(email: email, password: password, completion: { (cookieData) in
                             
-                            let loggedInSig = cookieData["logged-in-sig"] as! HTTPCookie
-                            let loggedInUser = cookieData["logged-in-user"] as! HTTPCookie
+                            guard let loggedInSig = cookieData["logged-in-sig"] as? HTTPCookie,
+                                let loggedInUser = cookieData["logged-in-user"] as? HTTPCookie else {
+                                    MBProgressHUD.hide(for: self.view, animated: true)
+                                    WMGlobal.showAlert(title: "", message: "Server error", target: self)
+                                    return
+                            }
                             
                             WMAPIManager.sharedManager.getIAS3Keys(params: ["logged-in-sig": loggedInSig.value, "logged-in-user": loggedInUser.value], completion: { (key) in
                                 
-                                if key != nil {
-                                    let values = data!["values"] as! [String: Any]
-                                    let screenname = values["screenname"] as! String
-                                    
+                                if let key = key, let data2 = data2,
+                                   let values = data2["values"] as? [String: Any],
+                                   let screenname = values["screenname"] as? String
+                                {
                                     WMGlobal.saveUserData(userData: [
                                         "email"             : email,
                                         "password"          : password,
@@ -72,35 +75,39 @@ class LoginVC: WMBaseVC, UITextFieldDelegate {
                                         "logged-in"         : true,
                                         "logged-in-user"    : loggedInUser,
                                         "logged-in-sig"     : loggedInSig,
-                                        "s3accesskey"       : key!["s3accesskey"],
-                                        "s3secretkey"       : key!["s3secretkey"],
+                                        "s3accesskey"       : key["s3accesskey"],
+                                        "s3secretkey"       : key["s3secretkey"],
                                         "add-to-my-web-archive" : self.btnCheck.isSelected
                                     ])
                                     
-                                    let tabbarVC = self.storyboard?.instantiateViewController(withIdentifier: "TabbarVC") as! UITabBarController
+                                  if let tabbarVC = self.storyboard?.instantiateViewController(withIdentifier: "TabbarVC") as? UITabBarController {
                                     tabbarVC.modalPresentationStyle = .fullScreen
                                     self.present(tabbarVC, animated: true, completion: {
-                                        self.navigationController?.popToRootViewController(animated: false)
-                                    })                                }
-                                
+                                      self.navigationController?.popToRootViewController(animated: false)
+                                    })
+                                  }
+                                }
                                 MBProgressHUD.hide(for: self.view, animated: true)
                             })
                         })
                     })
                 } else {
                     MBProgressHUD.hide(for: self.view, animated: true)
-                    
-                    let values = data!["values"] as! [String: Any]
-                    let reason = values["reason"] as! String
-                    if reason == WMConstants.errors[301] {
-                        WMGlobal.showAlert(title: "", message: "Incorrect password!", target: self)
-                    } else if reason == WMConstants.errors[302] {
-                        WMGlobal.showAlert(title: "", message: "Account not found", target: self)
-                    } else if reason == WMConstants.errors[303] {
-                        WMGlobal.showAlert(title: "", message: "Account is not verified", target: self)
+                    if let values = data1["values"] as? [String: Any],
+                       let reason = values["reason"] as? String
+                    {
+                        if reason == WMConstants.errors[301] {
+                            WMGlobal.showAlert(title: "", message: "Incorrect password!", target: self)
+                        } else if reason == WMConstants.errors[302] {
+                            WMGlobal.showAlert(title: "", message: "Account not found", target: self)
+                        } else if reason == WMConstants.errors[303] {
+                            WMGlobal.showAlert(title: "", message: "Account is not verified", target: self)
+                        }
+                    } else {
+                        WMGlobal.showAlert(title: "", message: "Unknown error", target: self)
                     }
                 }
-            }
+
         })
     }
     

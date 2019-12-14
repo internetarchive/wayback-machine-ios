@@ -177,13 +177,13 @@ class WMAPIManager: NSObject {
         let cookiePropsLoggedInSig: [HTTPCookiePropertyKey: Any] = [
             HTTPCookiePropertyKey.name: "logged-in-sig",
             HTTPCookiePropertyKey.path: "/",
-            HTTPCookiePropertyKey.value: params["logged-in-sig"]!,
+            HTTPCookiePropertyKey.value: params["logged-in-sig"] ?? "",
             HTTPCookiePropertyKey.domain: ".archive.org"
         ]
         let cookiePropsLoggedInUser: [HTTPCookiePropertyKey: Any] = [
             HTTPCookiePropertyKey.name: "logged-in-user",
             HTTPCookiePropertyKey.path: "/",
-            HTTPCookiePropertyKey.value: params["logged-in-user"]!,
+            HTTPCookiePropertyKey.value: params["logged-in-user"] ?? "",
             HTTPCookiePropertyKey.domain: ".archive.org"
         ]
 
@@ -245,14 +245,14 @@ class WMAPIManager: NSObject {
     }
     
     func SendDataToBucket(params: [String: Any?], completion: @escaping (Bool, Int64) -> Void) {
-        let identifier = params["identifier"] as! String
-        let title      = params["title"] as! String
-        let description = params["description"] as! String
-        let subjectTags = params["tags"] as! String
-        let filename   = params["filename"] as! String
-        let mediatype  = params["mediatype"] as! String
-        let s3accesskey = params["s3accesskey"] as! String
-        let s3secretkey = params["s3secretkey"] as! String
+        let identifier  = params["identifier"]  as? String ?? ""
+        let title       = params["title"]       as? String ?? ""
+        let description = params["description"] as? String ?? ""
+        let subjectTags = params["tags"]        as? String ?? ""
+        let filename    = params["filename"]    as? String ?? ""
+        let mediatype   = params["mediatype"]   as? String ?? ""
+        let s3accesskey = params["s3accesskey"] as? String ?? ""
+        let s3secretkey = params["s3secretkey"] as? String ?? ""
         var uploaded: Int64 = 0
         
         var headers = [
@@ -284,7 +284,7 @@ class WMAPIManager: NSObject {
             completion(false, uploaded)
         }
 
-        uploadRequest!
+        uploadRequest?
             .uploadProgress {(progress) in
                 uploaded = progress.completedUnitCount
                 let total = progress.totalUnitCount

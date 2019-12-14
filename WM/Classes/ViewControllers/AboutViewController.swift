@@ -18,15 +18,15 @@ class AboutViewController: UIViewController, MFMailComposeViewControllerDelegate
     @IBOutlet weak var navBarHeight: NSLayoutConstraint!
     
     var shouldShowNavbar: Bool = false
-    let version = Bundle.main.infoDictionary!["CFBundleShortVersionString"]
+    let version = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as? String ?? ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         WMGlobal.adjustNavBarHeight(constraint: navBarHeight)
 
-        txtVersion.text = txtVersion.text! + (version as! String)
-        let strSupport = txtSupport.text!
+        txtVersion.text = (txtVersion.text ?? "") + version
+        let strSupport = txtSupport.text ?? ""
         let attributes = [NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body)]
         
         let attributedString =  NSMutableAttributedString(attributedString: NSAttributedString(string: strSupport, attributes: attributes))

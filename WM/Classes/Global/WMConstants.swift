@@ -24,4 +24,5 @@ class WMConstants {
         303: "account_not_verified"
         //-- Codes for Register
     ]
+    static let unknown = "Unknown Error"
 }

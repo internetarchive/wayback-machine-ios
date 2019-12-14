@@ -12,7 +12,6 @@ import WebKit
 import MBProgressHUD
 
 open class WebPageVC: UIViewController, WKUIDelegate, WKNavigationDelegate, MBProgressHUDDelegate {
-
     
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var navBarHeight: NSLayoutConstraint!
@@ -35,7 +34,9 @@ open class WebPageVC: UIViewController, WKUIDelegate, WKNavigationDelegate, MBPr
     
     override open func viewDidAppear(_ animated: Bool) {
         webView?.frame = containerView.bounds
-        self.containerView.addSubview(webView!)
+        if let webView = webView {
+            self.containerView.addSubview(webView)
+        }
     }
     
     override open func viewDidLoad() {
