@@ -46,7 +46,7 @@ class ProfileVC: WMBaseVC {
             "s3secretkey"       : nil,
             "add-to-my-web-archive" : false
         ])
-        
+        WMAPIManager.sharedManager.logout()
         self.tabBarController?.dismiss(animated: false, completion: nil)
     }
     

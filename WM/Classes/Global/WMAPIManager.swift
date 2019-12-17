@@ -59,8 +59,8 @@ class WMAPIManager: NSObject {
 
             switch response.result {
             case .success:
-                if let json = response.result.value {
-                    completion(json as? [String: Any])
+                if let json = response.result.value as? [String: Any] {
+                    completion(json)
                 }
             case .failure:
                 completion(nil)
@@ -81,7 +81,12 @@ class WMAPIManager: NSObject {
             "password"  : password
         ], operation: API_LOGIN, completion: completion)
     }
-    
+
+    // Clear cookies on Logout
+    func logout() {
+        Alamofire.SessionManager.default.session.configuration.httpCookieStorage?.removeCookies(since: Date.distantPast)
+    }
+
     func resetPassword(email: String, completion: @escaping (Bool) -> Void) {
         let params = [
             "email": email,
