@@ -64,7 +64,7 @@ open class WebPageVC: UIViewController, WKUIDelegate, WKNavigationDelegate, MBPr
             (activityType, completed, returnedItems, err) -> Void in
             
             if (completed) {
-                self.displayShareSheet(url: url)
+                // don't do anything
             }
         }
         
