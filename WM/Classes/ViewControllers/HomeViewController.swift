@@ -233,8 +233,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate, MBProgressHUDDe
         if archives.isEmpty { return }
         for archive in archives {
             if let year = archive["year"] as? Int, let month = archive["month"] as? Int,
-              let day = archive["day"] as? Int, let hour = archive["hour"] as? String,
-              let minute = archive["minute"] as? String, let archivedURL = archive["archivedURL"] as? String {
+              let day = archive["day"] as? Int, let hour = archive["hour"] as? Int,
+              let minute = archive["minute"] as? Int, let archivedURL = archive["archivedURL"] as? String {
                 events.append(generateCapture(year: year, month: month, day: day, hour: hour, minute: minute, archivedURL: archivedURL))
             }
         }
@@ -296,10 +296,10 @@ class HomeViewController: UIViewController, UITextFieldDelegate, MBProgressHUDDe
         task.resume()
     }
     
-    func generateCapture(year: Int, month: Int, day: Int, hour: String, minute: String, archivedURL: String) -> SSEvent {
+    func generateCapture(year: Int, month: Int, day: Int, hour: Int, minute: Int, archivedURL: String) -> SSEvent {
         let event = SSEvent()
         event.startDate = SSCalendarUtils.date(withYear: year, month: month, day: day)
-        event.startTime = hour + ":" + minute
+        event.startTime = String(format: "%2d:%2d", hour, minute)
         event.name = "Archive"
         event.desc = archivedURL
         
