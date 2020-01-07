@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		51021910C2771C1B5628B0FE /* Pods_WM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 191CBDD6548A18A9D46816D7 /* Pods_WM.framework */; };
-		7CDAEBB3561E1D09F43DE150 /* Pods_WayBackMachine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60726BBF076E0E23487F9522 /* Pods_WayBackMachine.framework */; };
+		7CDAEBB3561E1D09F43DE150 /* Pods_WayBackMachine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60726BBF076E0E23487F9522 /* Pods_WayBackMachine.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		84182D2A1E406B23005AC4B6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84182D291E406B23005AC4B6 /* AppDelegate.swift */; };
 		84182D2F1E406B23005AC4B6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84182D2D1E406B23005AC4B6 /* Main.storyboard */; };
 		84182D341E406B23005AC4B6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84182D321E406B23005AC4B6 /* LaunchScreen.storyboard */; };
@@ -769,12 +769,13 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0820;
-				LastUpgradeCheck = 0820;
+				LastUpgradeCheck = 1030;
 				ORGANIZATIONNAME = Admin;
 				TargetAttributes = {
 					84182D251E406B23005AC4B6 = {
 						CreatedOnToolsVersion = 8.2;
 						DevelopmentTeam = ZSFX78H3ZT;
+						LastSwiftMigration = 1030;
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
@@ -785,6 +786,7 @@
 					84182D5A1E406B38005AC4B6 = {
 						CreatedOnToolsVersion = 8.2;
 						DevelopmentTeam = ZSFX78H3ZT;
+						LastSwiftMigration = 1030;
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
@@ -799,10 +801,9 @@
 			};
 			buildConfigurationList = 84182D211E406B23005AC4B6 /* Build configuration list for PBXProject "WM" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				en,
 				Base,
 			);
@@ -892,7 +893,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-WM/Pods-WM-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-WM/Pods-WM-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/FRHyperLabel/FRHyperLabel.framework",
 				"${BUILT_PRODUCTS_DIR}/IQKeyboardManagerSwift/IQKeyboardManagerSwift.framework",
@@ -909,7 +910,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-WM/Pods-WM-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-WM/Pods-WM-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1037,26 +1038,36 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = ZSFX78H3ZT;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -1087,26 +1098,36 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = ZSFX78H3ZT;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -1133,24 +1154,23 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				APPLICATION_EXTENSION_API_ONLY = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = WM/WM.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Golden Eagle (UUB8A37GVA)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Golden Eagle (UUB8A37GVA)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 80;
+				CURRENT_PROJECT_VERSION = 81;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = ZSFX78H3ZT;
 				INFOPLIST_FILE = WM/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.9.2;
+				MARKETING_VERSION = 2.9.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mobile.waybackmachine;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "8d1eb4d9-cbfd-4f44-8024-49b65037c880";
-				PROVISIONING_PROFILE_SPECIFIER = WaybackMachineApp_dev730_2020;
+				PROVISIONING_PROFILE_SPECIFIER = "WMApp_dev_profile_2019-12-13";
 				SWIFT_OBJC_BRIDGING_HEADER = "WM/WM-BridgingHeader.h";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -1161,24 +1181,23 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				APPLICATION_EXTENSION_API_ONLY = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = WM/WM.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Internet Archive (ZSFX78H3ZT)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Internet Archive (ZSFX78H3ZT)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 80;
+				CURRENT_PROJECT_VERSION = 81;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = ZSFX78H3ZT;
 				INFOPLIST_FILE = WM/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.9.2;
+				MARKETING_VERSION = 2.9.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mobile.waybackmachine;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "a08214e7-ca14-45c3-b551-ec74d37fdb36";
-				PROVISIONING_PROFILE_SPECIFIER = WayBackMachineApp_prod730_2020;
+				PROVISIONING_PROFILE_SPECIFIER = "WMApp_dev_profile_2019-12-13";
 				SWIFT_OBJC_BRIDGING_HEADER = "WM/WM-BridgingHeader.h";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -1187,10 +1206,10 @@
 			baseConfigurationReference = 25688761A8FDA47972E9008C /* Pods-WayBackMachine.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = WayBackMachine/WayBackMachine.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Internet Archive (ZSFX78H3ZT)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 80;
+				CURRENT_PROJECT_VERSION = 81;
 				DEVELOPMENT_TEAM = ZSFX78H3ZT;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"COCOAPODS=1",
@@ -1199,15 +1218,15 @@
 				INFOPLIST_FILE = WayBackMachine/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				MARKETING_VERSION = 2.9.2;
+				MARKETING_VERSION = 2.9.3;
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" -DEXTENSION";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mobile.waybackmachine.extension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "20877c9b-fb43-43be-99ad-926e93a5427d";
-				PROVISIONING_PROFILE_SPECIFIER = WaybackMachineExtension_dev730_2020;
+				PROVISIONING_PROFILE_SPECIFIER = "WMExt_dev_profile_2019-12-13";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -1217,9 +1236,9 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = WayBackMachine/WayBackMachine.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 80;
+				CURRENT_PROJECT_VERSION = 81;
 				DEVELOPMENT_TEAM = ZSFX78H3ZT;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -1228,15 +1247,15 @@
 				INFOPLIST_FILE = WayBackMachine/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				MARKETING_VERSION = 2.9.2;
+				MARKETING_VERSION = 2.9.3;
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" -DEXTENSION";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mobile.waybackmachine.extension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "855c8b36-f331-4702-9faa-6c3686f8184d";
-				PROVISIONING_PROFILE_SPECIFIER = WaybackMachineExtension_prod730_2020;
+				PROVISIONING_PROFILE_SPECIFIER = "WMExt_dev_profile_2019-12-13";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

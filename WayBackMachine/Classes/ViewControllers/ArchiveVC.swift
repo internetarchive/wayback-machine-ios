@@ -100,9 +100,9 @@ class ArchiveVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCon
                 return;
             }
             
-            itemProvider!.loadItem(forTypeIdentifier: contentType, options: nil, completionHandler: {(result, error) in
-                if error == nil {
-                    self.performSelector(onMainThread: #selector(self.processResult(_:)), with: ["data": result!, "contentType": contentType], waitUntilDone: false)
+            itemProvider?.loadItem(forTypeIdentifier: contentType, options: nil, completionHandler: {(result, error) in
+                if let result = result, error == nil {
+                    self.performSelector(onMainThread: #selector(self.processResult(_:)), with: ["data": result, "contentType": contentType], waitUntilDone: false)
                 } else {
                     let errorAlert = UIAlertController(title: "", message: "Error occured when grab url.", preferredStyle: .alert)
                     errorAlert.addAction(UIAlertAction(title: "OK", style: .default) {action in
@@ -117,17 +117,18 @@ class ArchiveVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCon
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
     }
-    
+
     @objc func processResult(_ result: Any) -> Void {
-        let result = result as! [String: Any]
-        let data = result["data"]
-        let contentType = result["contentType"] as! String
-        let url = data as! URL
-        
+
+      if let result = result as? [String: Any],
+         let data = result["data"],
+         let contentType = result["contentType"] as? String,
+         let url = data as? URL
+      {
         DispatchQueue.main.async {
             if contentType == kUTTypeURL as String {
                 self.shareView.isHidden = false
@@ -137,7 +138,7 @@ class ArchiveVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCon
                 self.imgPreview.isHidden = false
                 self.videoPreview.isHidden = true
                 do {
-                    let fileData = try Data(contentsOf: url as URL)
+                    let fileData = try Data(contentsOf: url)
                     self.fileURL = url
                     self.mediaType = "image"
                     self.imgPreview.image = UIImage(data: fileData)
@@ -158,9 +159,9 @@ class ArchiveVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCon
                 self.videoPreview.layer.addSublayer(playerLayer)
                 playerLayer.frame = self.videoPreview.layer.bounds
                 videoPlayer.play()
-                
             }
         }
+      }
     }
     
     private func clearFields() -> Void {
@@ -218,8 +219,8 @@ class ArchiveVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCon
                                    password: password,
                                    completion: { (cookieData) in
                                     
-                    let loggedInSig = cookieData["logged-in-sig"] as! HTTPCookie
-                    let loggedInUser = cookieData["logged-in-user"] as! HTTPCookie
+                    guard let loggedInSig = cookieData["logged-in-sig"] as? HTTPCookie else { return }
+                    guard let loggedInUser = cookieData["logged-in-user"] as? HTTPCookie else { return }
                     var tmpData = userData
                     
                     tmpData["logged-in-sig"] = loggedInSig
@@ -246,15 +247,16 @@ class ArchiveVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCon
                                 WMAPIManager.sharedManager.request_capture_status(job_id: job_id!, logged_in_user: loggedInUser, logged_in_sig: loggedInSig, completion: { (url, error) in
                                     if url == nil {
                                         MBProgressHUD.hide(for: self.view, animated: true)
-                                        WMGlobal.showAlert(title: "Error", message: "\(error!)", target: self)
+                                        WMGlobal.showAlert(title: "Error", message: (error ?? ""), target: self)
                                     } else {
                                         MBProgressHUD.hide(for: self.view, animated: true)
                                         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-                                        let shareVC = storyBoard.instantiateViewController(withIdentifier: "ShareVC") as! ShareVC
-                                        shareVC.modalPresentationStyle = .fullScreen
-                                        shareVC.url = url!
-                                        DispatchQueue.main.async {
-                                            self.present(shareVC, animated: true, completion: nil)
+                                        if let shareVC = storyBoard.instantiateViewController(withIdentifier: "ShareVC") as? ShareVC {
+                                            shareVC.modalPresentationStyle = .fullScreen
+                                            shareVC.url = url ?? ""
+                                            DispatchQueue.main.async {
+                                                self.present(shareVC, animated: true, completion: nil)
+                                            }
                                         }
                                     }
                                 })
@@ -277,15 +279,16 @@ class ArchiveVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCon
         if !validateFields() {
             return
         }
-        
-        let userData = WMGlobal.getUserData()
-        let identifier = "\(userData!["screenname"] as! String)_\(String(format: "%d", Int(NSDate().timeIntervalSince1970)))"
-        let s3accesskey = userData!["s3accesskey"]!
-        let s3secretkey = userData!["s3secretkey"]!
-        let title = txtTitle.text
-        let description = txtDescription.text
-        let subjectTags = txtSubjectTags.text
-        let filename = "\(identifier).\(fileURL!.pathExtension)"
+        guard let userData = WMGlobal.getUserData(), let fileUrl = fileURL else {
+            return
+        }
+        let identifier = (userData["screenname"] as? String ?? "") + "_" + String(format: "%d", Int(NSDate().timeIntervalSince1970))
+        let s3accesskey = userData["s3accesskey"] as? String ?? ""
+        let s3secretkey = userData["s3secretkey"] as? String ?? ""
+        let title = txtTitle.text ?? ""
+        let description = txtDescription.text ?? ""
+        let subjectTags = txtSubjectTags.text ?? ""
+        let filename = "\(identifier).\(fileUrl.pathExtension)"
         let startTime = Date()
         MBProgressHUD.showAdded(to: self.view, animated: true)
         
@@ -298,7 +301,7 @@ class ArchiveVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCon
             "mediatype" : mediaType,
             "s3accesskey" : s3accesskey,
             "s3secretkey" : s3secretkey,
-            "data" : (fileData != nil) ? fileData : fileURL
+            "data" : (fileData != nil) ? fileData! : fileUrl
         ]) { (success, uploadedFileSize) in
             let endTime = Date()
             let interval = endTime.timeIntervalSince(startTime)
@@ -306,7 +309,7 @@ class ArchiveVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCon
             let dcf = DateComponentsFormatter()
             dcf.allowedUnits = [.minute, .second]
             dcf.unitsStyle = .brief
-            let duration = dcf.string(from: TimeInterval(interval))!
+            let duration = dcf.string(from: TimeInterval(interval)) ?? ""
             
             let bcf = ByteCountFormatter()
             bcf.allowedUnits = [.useMB]
@@ -379,7 +382,7 @@ class ArchiveVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCon
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             if scrollView.contentInset.bottom == 0 {
                 scrollView.contentInset.bottom = keyboardSize.height
                 scrollView.contentOffset.y = keyboardSize.height
@@ -398,12 +401,13 @@ class ArchiveVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCon
 
 extension ArchiveVC: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
-        let webPageVC = self.storyboard?.instantiateViewController(withIdentifier: "WebPageVC") as! WebPageVC
-        webPageVC.url = URL.absoluteString
-        webPageVC.modalPresentationStyle = .fullScreen
-        dismiss(animated: true, completion: {
-            self.present(webPageVC, animated: true, completion: nil)
-        })
+        if let webPageVC = self.storyboard?.instantiateViewController(withIdentifier: "WebPageVC") as? WebPageVC {
+            webPageVC.url = URL.absoluteString
+            webPageVC.modalPresentationStyle = .fullScreen
+            dismiss(animated: true, completion: {
+                self.present(webPageVC, animated: true, completion: nil)
+            })
+        }
         return false
     }
     

@@ -51,6 +51,7 @@ class WMGlobal: NSObject {
     static func adjustNavBarHeight(constraint: NSLayoutConstraint) {
         let screenHeight = UIScreen.main.nativeBounds.height
         
+        // FIXME: you can tell this ain't future-proof!
         if screenHeight != 2436,
             screenHeight != 2688,
             screenHeight != 1792 {

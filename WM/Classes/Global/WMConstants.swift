@@ -14,7 +14,7 @@ class WMConstants {
         100: "Success",
         101: "Cannot connect to server",
         102: "Cannot find an archived page",
-        103: "JSON Serialization Erro",
+        103: "JSON Serialization Error",
         //-- Codes for URL validation
         201: "The URL is invalid",
         //-- Codes for Authenticate
@@ -24,4 +24,5 @@ class WMConstants {
         303: "account_not_verified"
         //-- Codes for Register
     ]
+    static let unknown = "Unknown Error"
 }

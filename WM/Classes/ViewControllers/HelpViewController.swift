@@ -11,57 +11,45 @@ class HelpViewController: UIViewController, UIPageViewControllerDataSource, UIPa
     
     @IBOutlet weak var controlView: UIView!
     @IBOutlet weak var pageControl: UIPageControl!
-    
+    private var pageViewController: UIPageViewController?
+    private var priorPage: Int = 0
+
     private(set) lazy var contentViewControllers: [UIViewController] = {
         return [self.getContentViewController(identifier: "FirstContentViewController"),
                 self.getContentViewController(identifier: "SecondContentViewController"),
                 self.getContentViewController(identifier: "ThirdContentViewController")]
     }()
-    private var pageViewController: UIPageViewController?
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        createPageViewController()
     }
-    
-    private func createPageViewController() {
-        let pageController = self.storyboard!.instantiateViewController(withIdentifier: "RootViewController") as! UIPageViewController
-        
-        pageController.dataSource = self
-        pageController.delegate = self
-        
-        if let firstViewController = contentViewControllers.first {
-            pageController.setViewControllers([firstViewController], direction: .forward, animated: true, completion: nil)
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "pageViewSegueId") {
+            pageViewController = segue.destination as? UIPageViewController
+            pageViewController?.dataSource = self
+            pageViewController?.delegate = self
+            if let firstVC = contentViewControllers.first {
+                pageViewController?.setViewControllers([firstVC], direction: .forward, animated: true, completion: nil)
+            }
         }
-        
-        pageViewController = pageController
-        addChildViewController(pageViewController!)
-        
-        self.view.insertSubview(pageController.view, belowSubview: self.controlView)
-        pageViewController!.didMove(toParentViewController: self)
     }
-    
+
     private func getContentViewController(identifier : String) -> UIViewController {
         return UIStoryboard(name : "Main", bundle : nil).instantiateViewController(withIdentifier: identifier)
     }
-    
+
+    // MARK: - UIPageViewControllerDataSource
+
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        guard let viewControllerIndex = contentViewControllers.index(of: viewController) else {
+        guard let index = contentViewControllers.firstIndex(of: viewController) else {
             return nil
         }
-        let nextIndex = viewControllerIndex + 1
-        guard contentViewControllers.count != nextIndex else {
-            return nil
-        }
-        guard contentViewControllers.count > nextIndex else {
-            return nil
-        }
-        return contentViewControllers[nextIndex]
+        return (contentViewControllers.count > index + 1) ? contentViewControllers[index + 1] : nil
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        guard let viewControllerIndex = contentViewControllers.index(of: viewController) else {
+        guard let viewControllerIndex = contentViewControllers.firstIndex(of: viewController) else {
             return nil
         }
         let previousIndex = viewControllerIndex - 1
@@ -73,19 +61,21 @@ class HelpViewController: UIViewController, UIPageViewControllerDataSource, UIPa
         }
         return contentViewControllers[previousIndex]
     }
-    
+
+    // keep these two functions commented out to hide the built-in page control. (Apple's dumb design...)
+    /*
     func presentationCount(for pageViewController: UIPageViewController) -> Int {
         return contentViewControllers.count
     }
     
     func presentationIndex(for pageViewController: UIPageViewController) -> Int {
-        guard let firstPageControllerView = pageViewController.viewControllers?.first, let firstPageControllerViewIndex = contentViewControllers.index(of: firstPageControllerView) else {
+        guard let firstPageControllerView = pageViewController.viewControllers?.first, let firstPageControllerViewIndex = contentViewControllers.firstIndex(of: firstPageControllerView) else {
             return 0;
         }
-        
         return firstPageControllerViewIndex
     }
-    
+    */
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -93,11 +83,22 @@ class HelpViewController: UIViewController, UIPageViewControllerDataSource, UIPa
     // MARK: - PageViewController Delegate
     
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
-        if (!completed)
-        {
-            return
+        if completed, let currentPageIndex = self.contentViewControllers.firstIndex(of: pageViewController.viewControllers![0]) {
+            pageControl.currentPage = currentPageIndex
+            priorPage = currentPageIndex
         }
-        let currentPageIndex = self.contentViewControllers.index(of: pageViewController.viewControllers![0])!
-        pageControl.currentPage = currentPageIndex
     }
+
+    // MARK: - Actions
+
+    @IBAction func onValueChanged(_ sender: Any) {
+        // change the page
+        let cvc = contentViewControllers[pageControl.currentPage]
+        //self.pageViewController?.setViewControllers([cvc], direction: .forward, animated: true, completion: nil)
+        self.pageViewController?.setViewControllers([cvc], direction: ( pageControl.currentPage < priorPage ? .reverse : .forward ), animated: true) { _ in
+            self.pageControl.updateCurrentPageDisplay()
+            self.priorPage = self.pageControl.currentPage
+        }
+    }
+
 }

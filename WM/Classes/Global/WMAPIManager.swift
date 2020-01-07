@@ -59,8 +59,8 @@ class WMAPIManager: NSObject {
 
             switch response.result {
             case .success:
-                if let json = response.result.value {
-                    completion(json as? [String: Any])
+                if let json = response.result.value as? [String: Any] {
+                    completion(json)
                 }
             case .failure:
                 completion(nil)
@@ -81,7 +81,12 @@ class WMAPIManager: NSObject {
             "password"  : password
         ], operation: API_LOGIN, completion: completion)
     }
-    
+
+    // Clear cookies on Logout
+    func logout() {
+        Alamofire.SessionManager.default.session.configuration.httpCookieStorage?.removeCookies(since: Date.distantPast)
+    }
+
     func resetPassword(email: String, completion: @escaping (Bool) -> Void) {
         let params = [
             "email": email,
@@ -177,13 +182,13 @@ class WMAPIManager: NSObject {
         let cookiePropsLoggedInSig: [HTTPCookiePropertyKey: Any] = [
             HTTPCookiePropertyKey.name: "logged-in-sig",
             HTTPCookiePropertyKey.path: "/",
-            HTTPCookiePropertyKey.value: params["logged-in-sig"]!,
+            HTTPCookiePropertyKey.value: params["logged-in-sig"] ?? "",
             HTTPCookiePropertyKey.domain: ".archive.org"
         ]
         let cookiePropsLoggedInUser: [HTTPCookiePropertyKey: Any] = [
             HTTPCookiePropertyKey.name: "logged-in-user",
             HTTPCookiePropertyKey.path: "/",
-            HTTPCookiePropertyKey.value: params["logged-in-user"]!,
+            HTTPCookiePropertyKey.value: params["logged-in-user"] ?? "",
             HTTPCookiePropertyKey.domain: ".archive.org"
         ]
 
@@ -245,14 +250,14 @@ class WMAPIManager: NSObject {
     }
     
     func SendDataToBucket(params: [String: Any?], completion: @escaping (Bool, Int64) -> Void) {
-        let identifier = params["identifier"] as! String
-        let title      = params["title"] as! String
-        let description = params["description"] as! String
-        let subjectTags = params["tags"] as! String
-        let filename   = params["filename"] as! String
-        let mediatype  = params["mediatype"] as! String
-        let s3accesskey = params["s3accesskey"] as! String
-        let s3secretkey = params["s3secretkey"] as! String
+        let identifier  = params["identifier"]  as? String ?? ""
+        let title       = params["title"]       as? String ?? ""
+        let description = params["description"] as? String ?? ""
+        let subjectTags = params["tags"]        as? String ?? ""
+        let filename    = params["filename"]    as? String ?? ""
+        let mediatype   = params["mediatype"]   as? String ?? ""
+        let s3accesskey = params["s3accesskey"] as? String ?? ""
+        let s3secretkey = params["s3secretkey"] as? String ?? ""
         var uploaded: Int64 = 0
         
         var headers = [
@@ -284,7 +289,7 @@ class WMAPIManager: NSObject {
             completion(false, uploaded)
         }
 
-        uploadRequest!
+        uploadRequest?
             .uploadProgress {(progress) in
                 uploaded = progress.completedUnitCount
                 let total = progress.totalUnitCount
@@ -325,7 +330,7 @@ class WMAPIManager: NSObject {
             .responseJSON{ (response) in
                             
                 switch response.result {
-                case .success(let data):
+                case .success:
                     if let json = response.result.value as? [String: Any],
                         let job_id = json["job_id"] as? String {
                         completion(job_id)
@@ -357,7 +362,7 @@ class WMAPIManager: NSObject {
             .responseJSON{ (response) in
                 
                 switch response.result {
-                case .success(let data):
+                case .success:
                     if let json = response.result.value as? [String: Any],
                         let status = json["status"] as? String {
                         

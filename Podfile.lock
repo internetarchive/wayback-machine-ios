@@ -13,7 +13,7 @@ DEPENDENCIES:
   - "UITextView+Placeholder (~> 1.2)"
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - Alamofire
     - FRHyperLabel
     - IQKeyboardManagerSwift
@@ -27,6 +27,6 @@ SPEC CHECKSUMS:
   MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
   "UITextView+Placeholder": 0c3efd97f37ea64bde7f34cc6e90fe02e87b3909
 
-PODFILE CHECKSUM: 778c581d4e5496173455f6ee6780d6d586869ace
+PODFILE CHECKSUM: 06387588e3b954439fa3170c163177ce9021ea33
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.8.4

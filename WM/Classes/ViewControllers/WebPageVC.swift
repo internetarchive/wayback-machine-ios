@@ -12,7 +12,6 @@ import WebKit
 import MBProgressHUD
 
 open class WebPageVC: UIViewController, WKUIDelegate, WKNavigationDelegate, MBProgressHUDDelegate {
-
     
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var navBarHeight: NSLayoutConstraint!
@@ -35,7 +34,9 @@ open class WebPageVC: UIViewController, WKUIDelegate, WKNavigationDelegate, MBPr
     
     override open func viewDidAppear(_ animated: Bool) {
         webView?.frame = containerView.bounds
-        self.containerView.addSubview(webView!)
+        if let webView = webView {
+            self.containerView.addSubview(webView)
+        }
     }
     
     override open func viewDidLoad() {
@@ -63,7 +64,7 @@ open class WebPageVC: UIViewController, WKUIDelegate, WKNavigationDelegate, MBPr
             (activityType, completed, returnedItems, err) -> Void in
             
             if (completed) {
-                self.displayShareSheet(url: url)
+                // don't do anything
             }
         }
         

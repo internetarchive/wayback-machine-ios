@@ -14,20 +14,22 @@ class HomeViewController: UIViewController, UITextFieldDelegate, MBProgressHUDDe
     @IBOutlet weak var txtURL: UITextField!
     @IBOutlet weak var scrollView: UIScrollView!
     var progressHUD: MBProgressHUD?
-    let version = Bundle.main.infoDictionary!["CFBundleShortVersionString"]
-    
+    let version = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as? String ?? ""
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
         txtURL.delegate = self
         
         self.progressHUD = MBProgressHUD(view: self.view)
-        self.progressHUD!.bezelView.color = UIColor.clear
-        self.view.addSubview(progressHUD!)
-        self.progressHUD!.delegate = self
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        if let pHUD = self.progressHUD {
+            pHUD.bezelView.color = UIColor.clear
+            self.view.addSubview(pHUD)
+            pHUD.delegate = self
+        }
+
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
         // TapGestureRecognizer
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
@@ -39,26 +41,27 @@ class HomeViewController: UIViewController, UITextFieldDelegate, MBProgressHUDDe
             return
         }
         
-        let webPageViewController = self.storyboard?.instantiateViewController(withIdentifier: "WebPageVC") as! WebPageVC
-        webPageViewController.modalPresentationStyle = .fullScreen
-        webPageViewController.url = url
-        
-        DispatchQueue.main.async {
-            self.present(webPageViewController, animated: true, completion: nil)
+        if let webPageViewController = self.storyboard?.instantiateViewController(withIdentifier: "WebPageVC") as? WebPageVC {
+            webPageViewController.modalPresentationStyle = .fullScreen
+            webPageViewController.url = url
+            DispatchQueue.main.async {
+                self.present(webPageViewController, animated: true, completion: nil)
+            }
         }
     }
 
     @IBAction func _onSave(_ sender: Any) {
-        if self.txtURL.text!.isEmpty {
+        let tURL = self.txtURL.text ?? ""
+        if tURL.isEmpty {
             WMGlobal.showAlert(title: "", message: "Please type a URL", target: self)
             return
         }
         
-        if (!verifyURL(url: getURL(url: self.txtURL.text!))) {
+        if (!verifyURL(url: getURL(url: tURL))) {
             WMGlobal.showAlert(title: "", message: "The URL is invalid", target: self)
         } else {
             showProgress()
-            WMAPIManager.sharedManager.checkURLBlocked(url: getURL(url: self.txtURL.text!), completion: { (isBlocked) in
+            WMAPIManager.sharedManager.checkURLBlocked(url: getURL(url: tURL), completion: { (isBlocked) in
                 
                 if isBlocked {
                     WMGlobal.showAlert(title: "Error", message: "That site's robots.txt policy requests we not archive it.", target: self)
@@ -70,46 +73,46 @@ class HomeViewController: UIViewController, UITextFieldDelegate, MBProgressHUDDe
                     
                     WMAPIManager
                         .sharedManager
-                        .getCookieData(email: userData["email"] as! String,
-                                       password: userData["password"] as! String,
+                        .getCookieData(email: userData["email"] as? String ?? "",
+                                       password: userData["password"] as? String ?? "",
                                        completion: { (cookieData) in
-                                        
-                        let loggedInSig = cookieData["logged-in-sig"] as! HTTPCookie
-                        let loggedInUser = cookieData["logged-in-user"] as! HTTPCookie
+
+                        guard let loggedInSig = cookieData["logged-in-sig"] as? HTTPCookie else { return }
+                        guard let loggedInUser = cookieData["logged-in-user"] as? HTTPCookie else { return }
                         var tmpData = userData
-                        
                         tmpData["logged-in-sig"] = loggedInSig
                         tmpData["logged-in-user"] = loggedInUser
                         WMGlobal.saveUserData(userData: tmpData)
                                         
                         WMAPIManager
                             .sharedManager
-                            .request_capture(url: self.getURL(url: self.txtURL.text!),
+                            .request_capture(url: self.getURL(url: tURL),
                                              logged_in_user: loggedInUser,
                                              logged_in_sig: loggedInSig,
                                              completion: { (job_id) in
                                 
-                            if job_id == nil {
+                            guard let job_id = job_id else {
                                 self.hideProgress(isBlocked)
                                 return
                             }
-                            
+
                             WMAPIManager
                                 .sharedManager
-                                .request_capture_status(job_id: job_id!,
+                                .request_capture_status(job_id: job_id,
                                                         logged_in_user: loggedInUser,
                                                         logged_in_sig: loggedInSig,
                                                         completion: { (url, error) in
                                 if url == nil || url?.isEmpty ?? false {
                                     self.hideProgress(isBlocked)
-                                    WMGlobal.showAlert(title: "Error", message: "\(error!)", target: self)
+                                    WMGlobal.showAlert(title: "Error", message: (error ?? ""), target: self)
                                 } else {
                                     self.hideProgress(isBlocked)
-                                    let shaveVC = self.storyboard?.instantiateViewController(withIdentifier: "ShareVC") as! ShareVC
-                                    shaveVC.modalPresentationStyle = .fullScreen
-                                    shaveVC.url = url!
-                                    DispatchQueue.main.async {
-                                        self.present(shaveVC, animated: true, completion: nil)
+                                    if let shareVC = self.storyboard?.instantiateViewController(withIdentifier: "ShareVC") as? ShareVC {
+                                        shareVC.modalPresentationStyle = .fullScreen
+                                        shareVC.url = url!
+                                        DispatchQueue.main.async {
+                                            self.present(shareVC, animated: true, completion: nil)
+                                        }
                                     }
                                 }
                             })
@@ -120,28 +123,29 @@ class HomeViewController: UIViewController, UITextFieldDelegate, MBProgressHUDDe
             
         }
     }
-    
+
     @IBAction func _onRecent(_ sender: Any) {
-        if self.txtURL.text!.isEmpty {
+        let tURL = self.txtURL.text ?? ""
+        if tURL.isEmpty {
             WMGlobal.showAlert(title: "", message: "Please type a URL", target: self)
             return
         }
         
-        if (!verifyURL(url: getURL(url: self.txtURL.text!))) {
-            WMGlobal.showAlert(title: "", message: WMConstants.errors[201]!, target: self)
+        if (!verifyURL(url: getURL(url: tURL))) {
+            WMGlobal.showAlert(title: "", message: WMConstants.errors[201] ?? WMConstants.unknown, target: self)
         } else {
             showProgress()
             
-            WMAPIManager.sharedManager.checkURLBlocked(url: self.getURL(url: self.txtURL.text!), completion: { (isBlocked) in
+            WMAPIManager.sharedManager.checkURLBlocked(url: self.getURL(url: tURL), completion: { (isBlocked) in
                 if isBlocked {
                     self.hideProgress(isBlocked)
                     WMGlobal.showAlert(title: "", message: "That site's robots.txt policy requests we not play back archives", target: self)
                     return
                 } else {
-                    self.wmAvailabilityCheck(url: self.getOriginalURL(url: self.txtURL.text!) , timestamp: nil) { (wayback_url, errorCode) in
+                    self.wmAvailabilityCheck(url: self.getOriginalURL(url: tURL) , timestamp: nil) { (wayback_url, errorCode) in
                         self.performSelector(onMainThread: #selector(self.hideProgress(_:)), with: wayback_url, waitUntilDone: false)
                         if wayback_url == nil {
-                            self.performSelector(onMainThread: #selector(self.showErrorMessage(message:)), with: WMConstants.errors[errorCode]!, waitUntilDone: false)
+                            self.performSelector(onMainThread: #selector(self.showErrorMessage(message:)), with: WMConstants.errors[errorCode] ?? WMConstants.unknown, waitUntilDone: false)
                         } else {
                             self.showWebPage(url: wayback_url!)
                         }
@@ -152,26 +156,27 @@ class HomeViewController: UIViewController, UITextFieldDelegate, MBProgressHUDDe
     }
     
     @IBAction func _onFirst(_ sender: Any) {
-        if self.txtURL.text!.isEmpty {
+        let tURL = self.txtURL.text ?? ""
+        if tURL.isEmpty {
             showErrorMessage(message: "Please type a URL")
             return
         }
         
-        if (!verifyURL(url: getURL(url: self.txtURL.text!))) {
+        if (!verifyURL(url: getURL(url: tURL))) {
             showErrorMessage(message: "The URL is invalid")
         } else {
             showProgress()
             
-            WMAPIManager.sharedManager.checkURLBlocked(url: self.getURL(url: self.txtURL.text!), completion: { (isBlocked) in
+            WMAPIManager.sharedManager.checkURLBlocked(url: self.getURL(url: tURL), completion: { (isBlocked) in
                 if isBlocked {
                     self.hideProgress(isBlocked)
                     self.showErrorMessage(message: "That site's robots.txt policy requests we not play back archives")
                     return
                 } else {
-                    self.wmAvailabilityCheck(url: self.getOriginalURL(url: self.txtURL.text!) , timestamp: "00000000000000") { (wayback_url, errorCode) in
+                    self.wmAvailabilityCheck(url: self.getOriginalURL(url: tURL) , timestamp: "00000000000000") { (wayback_url, errorCode) in
                         self.performSelector(onMainThread: #selector(self.hideProgress(_:)), with: wayback_url, waitUntilDone: false)
                         if wayback_url == nil {
-                            self.performSelector(onMainThread: #selector(self.showErrorMessage(message:)), with: WMConstants.errors[errorCode]!, waitUntilDone: false)
+                            self.performSelector(onMainThread: #selector(self.showErrorMessage(message:)), with: WMConstants.errors[errorCode] ?? WMConstants.unknown, waitUntilDone: false)
                         } else {
                             self.showWebPage(url: wayback_url!)
                         }
@@ -182,22 +187,23 @@ class HomeViewController: UIViewController, UITextFieldDelegate, MBProgressHUDDe
     }
     
     @IBAction func _onAll(_ sender: Any) {
-        if self.txtURL.text!.isEmpty {
+        let tURL = self.txtURL.text ?? ""
+        if tURL.isEmpty {
             showErrorMessage(message: "Please type a URL")
             return
         }
 
-        if !verifyURL(url: getURL(url: self.txtURL.text!)) {
+        if !verifyURL(url: getURL(url: tURL)) {
             showErrorMessage(message: "The URL is invalid")
         } else {
             showProgress()
-            WMAPIManager.sharedManager.checkURLBlocked(url: self.getURL(url: self.txtURL.text!), completion: { (isBlocked) in
+            WMAPIManager.sharedManager.checkURLBlocked(url: self.getURL(url: tURL), completion: { (isBlocked) in
                 if isBlocked {
                     self.hideProgress(isBlocked)
                     self.showErrorMessage(message: "That site's robots.txt policy requests we not play back archives")
                     return
                 } else {
-                    self.getAllArchives(url: self.getOriginalURL(url: self.txtURL.text!), completion: { (response) in
+                    self.getAllArchives(url: self.getOriginalURL(url: tURL), completion: { (response) in
                         self.performSelector(onMainThread: #selector(self.hideProgress(_:)), with: nil, waitUntilDone: false)
                         if (response == nil) {
                             return
@@ -224,73 +230,76 @@ class HomeViewController: UIViewController, UITextFieldDelegate, MBProgressHUDDe
     @objc func showCalendarVC(archives: [Dictionary<String, Any>]) {
         var events = [SSEvent]()
         var years = [Int]()
+        if archives.isEmpty { return }
         for archive in archives {
-            events.append(generateCapture(year: archive["year"] as! Int, month: archive["month"] as! Int, day: archive["day"] as! Int, hour: archive["hour"] as! String, minute: archive["minute"] as! String, archivedURL: archive["archivedURL"] as! String))
+            if let year = archive["year"] as? Int, let month = archive["month"] as? Int,
+              let day = archive["day"] as? Int, let hour = archive["hour"] as? Int,
+              let minute = archive["minute"] as? Int, let archivedURL = archive["archivedURL"] as? String {
+                events.append(generateCapture(year: year, month: month, day: day, hour: hour, minute: minute, archivedURL: archivedURL))
+            }
         }
-        for year in (archives[0]["year"] as! Int)...(archives[archives.count-1]["year"] as! Int) {
-            years.append(year)
+        if let firstYear = archives.first!["year"] as? Int,
+            let lastYear = archives.last!["year"] as? Int {
+            for year in firstYear...lastYear {
+                years.append(year)
+            }
         }
-        
         SSStyles.applyNavigationBarStyles()
-        let annualViewController = SSCalendarAnnualViewController(events: events, years:years)
-        let navigationController = UINavigationController(rootViewController: annualViewController!)
-        navigationController.navigationBar.isTranslucent = false
-        navigationController.modalPresentationStyle = .fullScreen
-        self.present(navigationController, animated: true, completion: nil)
+        if let annualViewController = SSCalendarAnnualViewController(events: events, years:years) {
+            let navigationController = UINavigationController(rootViewController: annualViewController)
+            navigationController.navigationBar.isTranslucent = false
+            navigationController.modalPresentationStyle = .fullScreen
+            self.present(navigationController, animated: true, completion: nil)
+        }
     }
     
     func getAllArchives(url: String, completion: @escaping ([Any]?) -> Void) {
         let param = "?url=" + url + "&fl=timestamp,original&output=json"
         var request = URLRequest(url: URL(string: "http://web.archive.org/cdx/search/cdx" + param)!)
         request.httpMethod = "GET"
-        request.setValue("Wayback_Machine_iOS/\(version!)", forHTTPHeaderField: "User-Agent")
-        request.setValue("Wayback_Machine_iOS/\(version!)", forHTTPHeaderField: "Wayback-Extension-Version")
+        request.setValue("Wayback_Machine_iOS/\(version)", forHTTPHeaderField: "User-Agent")
+        request.setValue("Wayback_Machine_iOS/\(version)", forHTTPHeaderField: "Wayback-Extension-Version")
         request.setValue("2", forHTTPHeaderField: "Wayback-Api-Version")
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            
             guard let data = data, error == nil else {
                 return
             }
-            
             if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {
                 completion(nil)
             }
-            
             do {
                 if let archives = try JSONSerialization.jsonObject(with: data, options: []) as? [[Any]] {
                     var ret = [Dictionary<String, Any>]()
                     for i in 1...archives.count-1 {
-                        let timestamp = archives[i][0] as! String
+                      if let timestamp = archives[i][0] as? String, let originalURL = archives[i][1] as? String {
                         let archive = [
-                            "originalURL" : archives[i][1] as! String,
-                            "archivedURL" : "https://web.archive.org/web/" + timestamp + "/" + (archives[i][1] as! String),
-                            "year" : Int(timestamp.substring(with: timestamp.startIndex..<timestamp.index(timestamp.startIndex, offsetBy: 4)))!,
-                            "month" : Int(timestamp.substring(with: timestamp.index(timestamp.startIndex, offsetBy: 4)..<timestamp.index(timestamp.startIndex, offsetBy: 6)))!,
-                            "day" : Int(timestamp.substring(with: timestamp.index(timestamp.startIndex, offsetBy: 6)..<timestamp.index(timestamp.startIndex, offsetBy: 8)))!,
-                            "hour" : timestamp.substring(with: timestamp.index(timestamp.startIndex, offsetBy: 8)..<timestamp.index(timestamp.startIndex, offsetBy: 10)),
-                            "minute" : timestamp.substring(with: timestamp.index(timestamp.startIndex, offsetBy: 10)..<timestamp.index(timestamp.startIndex, offsetBy: 12))
+                            "originalURL" : originalURL,
+                            "archivedURL" : "https://web.archive.org/web/" + timestamp + "/" + originalURL,
+                            "year"   : Int(timestamp.slicing(from: 0, length: 4) ?? "1900") ?? 1900,
+                            "month"  : Int(timestamp.slicing(from: 4, length: 2) ?? "01") ?? 1,
+                            "day"    : Int(timestamp.slicing(from: 6, length: 2) ?? "01") ?? 1,
+                            "hour"   : Int(timestamp.slicing(from: 8, length: 2) ?? "00") ?? 0,
+                            "minute" : Int(timestamp.slicing(from:10, length: 2) ?? "00") ?? 0
                         ] as [String : Any]
                         ret.append(archive)
+                      }
                     }
                     completion(ret)
                 } else {
                     completion(nil)
                 }
-                
             } catch _ {
                 completion(nil)
             }
-            
         }
-        
         task.resume()
     }
     
-    func generateCapture(year: Int, month: Int, day: Int, hour: String, minute: String, archivedURL: String) -> SSEvent {
+    func generateCapture(year: Int, month: Int, day: Int, hour: Int, minute: Int, archivedURL: String) -> SSEvent {
         let event = SSEvent()
         event.startDate = SSCalendarUtils.date(withYear: year, month: month, day: day)
-        event.startTime = hour + ":" + minute
+        event.startTime = String(format: "%2d:%2d", hour, minute)
         event.name = "Archive"
         event.desc = archivedURL
         
@@ -316,8 +325,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate, MBProgressHUDDe
         
         var request = URLRequest(url: URL(string: "https://archive.org/wayback/available")!)
         request.httpMethod = "POST"
-        request.setValue("Wayback_Machine_iOS/\(version!)", forHTTPHeaderField: "User-Agent")
-        request.setValue("Wayback_Machine_iOS/\(version!)", forHTTPHeaderField: "Wayback-Extension-Version")
+        request.setValue("Wayback_Machine_iOS/\(version)", forHTTPHeaderField: "User-Agent")
+        request.setValue("Wayback_Machine_iOS/\(version)", forHTTPHeaderField: "Wayback-Extension-Version")
         request.setValue("2", forHTTPHeaderField: "Wayback-Api-Version")
         request.httpBody = postString.data(using: .utf8)
         
@@ -352,27 +361,25 @@ class HomeViewController: UIViewController, UITextFieldDelegate, MBProgressHUDDe
     }
     
     func getWaybackUrlFromResponse(response: [String: Any], completionHandler: @escaping (String?, Int) -> Void) {
-        let results = response["results"] as Any
-        let results_first = ((response["results"] as? [Any])?[0])
-        let archived_snapshots = (results_first as? [String: Any])?["archived_snapshots"]
-        let closest = (archived_snapshots as? [String: Any])?["closest"]
-        let available = (closest as? [String: Any])? ["available"] as? Bool
-        let status = (closest as? [String: Any])? ["status"] as? String
-        let url = (closest as? [String: Any])? ["url"] as? String
-        
-        if (results != nil &&
-            results_first != nil &&
-            archived_snapshots != nil &&
-            closest != nil &&
-            available != nil &&
-            available == true &&
-            status == "200" &&
-            isValidSnapshotUrl(url: url)) {
-            completionHandler(url, 100)
-        }  else {
-            completionHandler(url, 102)
+
+        // JSON format:
+        // "results" : [ { "archived_snapshots": { "closest": { "available": true, "status": "200", "url": "http:..." } } } ]
+
+        if let results = response["results"] as? [[String: Any]],
+           let archivedSnapshots = results.first?["archived_snapshots"] as? [String: Any],
+           let closest = archivedSnapshots["closest"] as? [String: Any],
+           let available = closest["available"] as? Bool,
+           let status = closest["status"] as? String,
+           let url = closest["url"] as? String
+        {
+            if (available == true) && (status == "200") && isValidSnapshotUrl(url: url) {
+                completionHandler(url, 100)  // success
+            } else {
+                completionHandler(url, 102)  // cannot find archived page
+            }
+        } else {
+            completionHandler(nil, 102)  // cannot find archived page
         }
-        
     }
     
     func isValidSnapshotUrl(url: String?) -> Bool {
@@ -388,37 +395,32 @@ class HomeViewController: UIViewController, UITextFieldDelegate, MBProgressHUDDe
     }
     
     func getOriginalURL(url: String) -> String {
-        var originalURL:String? = nil
+        var originalURL = url
         let tempArray = url.components(separatedBy: "http")
         if (tempArray.count > 2) {
             originalURL = "http" + tempArray[2]
-        } else {
-            originalURL = url
         }
-        
-        return originalURL!
+        return originalURL
     }
     
     func getURL(url: String) -> String {
-        var url = self.txtURL.text!
-        
+        var retUrl = url
         if ((url.range(of: "http:") == nil) && (url.range(of: "https:") == nil)) {
-            url = "https://" + url
+            retUrl = "https://" + url
         }
-        
-        return url
+        return retUrl
     }
     
     func showProgress() -> Void {
-        self.progressHUD!.show(animated: true)
+        self.progressHUD?.show(animated: true)
     }
     
     @objc func hideProgress(_ result: Any) -> Void {
-        self.progressHUD!.hide(animated: true)
+        self.progressHUD?.hide(animated: true)
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             if scrollView.contentInset.bottom == 0 {
                 scrollView.contentInset.bottom = keyboardSize.height
                 scrollView.contentOffset.y = keyboardSize.height

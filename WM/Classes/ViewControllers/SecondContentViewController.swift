@@ -15,9 +15,10 @@ class SecondContentViewController: UIViewController {
     }
 
     @IBAction func _onEnable(_ sender: Any) {
-        let enableExtensionViewController = self.storyboard?.instantiateViewController(withIdentifier: "EnableExtensionViewController")
-        enableExtensionViewController?.modalPresentationStyle = .fullScreen
-        self.present(enableExtensionViewController!, animated: true, completion: nil)
+        if let enableExtensionViewController = self.storyboard?.instantiateViewController(withIdentifier: "EnableExtensionViewController") {
+            enableExtensionViewController.modalPresentationStyle = .fullScreen
+            self.present(enableExtensionViewController, animated: true, completion: nil)
+        }
     }
     
     override func didReceiveMemoryWarning() {
