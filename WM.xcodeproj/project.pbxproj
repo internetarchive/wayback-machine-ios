@@ -89,6 +89,7 @@
 		84B78D63216E9C1C0064555C /* WMButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B78D28216E9C1C0064555C /* WMButton.swift */; };
 		84B78D64216E9C1C0064555C /* WMImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B78D29216E9C1C0064555C /* WMImageView.swift */; };
 		84B78D6C216E9C350064555C /* ArchiveVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B78D69216E9C350064555C /* ArchiveVC.swift */; };
+		C37947F923FD3EF0005208AC /* WMConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B78CB3216E9C1C0064555C /* WMConstants.swift */; };
 		D9E695041EF10099007E7551 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D9E695031EF10099007E7551 /* Assets.xcassets */; };
 		D9E695051EF10237007E7551 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D9E695031EF10099007E7551 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
@@ -991,6 +992,7 @@
 				84B78D6C216E9C350064555C /* ArchiveVC.swift in Sources */,
 				849DFA9023222CA90084CDD0 /* ShareVC.swift in Sources */,
 				846658A1216EA939009EB3AD /* WMGlobal.swift in Sources */,
+				C37947F923FD3EF0005208AC /* WMConstants.swift in Sources */,
 				846658A2216EA950009EB3AD /* WMAPIManager.swift in Sources */,
 				849DFA8923215F140084CDD0 /* WebPageVC.swift in Sources */,
 			);
@@ -1158,7 +1160,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 81;
+				CURRENT_PROJECT_VERSION = 83;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = ZSFX78H3ZT;
 				INFOPLIST_FILE = WM/Info.plist;
@@ -1185,7 +1187,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 81;
+				CURRENT_PROJECT_VERSION = 83;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = ZSFX78H3ZT;
 				INFOPLIST_FILE = WM/Info.plist;
@@ -1209,7 +1211,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 81;
+				CURRENT_PROJECT_VERSION = 83;
 				DEVELOPMENT_TEAM = ZSFX78H3ZT;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"COCOAPODS=1",
@@ -1238,7 +1240,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 81;
+				CURRENT_PROJECT_VERSION = 83;
 				DEVELOPMENT_TEAM = ZSFX78H3ZT;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",

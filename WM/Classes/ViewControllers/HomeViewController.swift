@@ -14,7 +14,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate, MBProgressHUDDe
     @IBOutlet weak var txtURL: UITextField!
     @IBOutlet weak var scrollView: UIScrollView!
     var progressHUD: MBProgressHUD?
-    let version = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as? String ?? ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -257,8 +256,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate, MBProgressHUDDe
         let param = "?url=" + url + "&fl=timestamp,original&output=json"
         var request = URLRequest(url: URL(string: "http://web.archive.org/cdx/search/cdx" + param)!)
         request.httpMethod = "GET"
-        request.setValue("Wayback_Machine_iOS/\(version)", forHTTPHeaderField: "User-Agent")
-        request.setValue("Wayback_Machine_iOS/\(version)", forHTTPHeaderField: "Wayback-Extension-Version")
+        request.setValue("Wayback_Machine_iOS/\(APP_VERSION)", forHTTPHeaderField: "User-Agent")
+        request.setValue("Wayback_Machine_iOS/\(APP_VERSION)", forHTTPHeaderField: "Wayback-Extension-Version")
         request.setValue("2", forHTTPHeaderField: "Wayback-Api-Version")
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
@@ -314,6 +313,10 @@ class HomeViewController: UIViewController, UITextFieldDelegate, MBProgressHUDDe
         }
         return false
     }
+
+    // TODO: move func to cross-platform APIManager version
+    // [ ] instead of returning an error code Int, return an error enum (to define)
+    // [ ] move all API URLs to central location
     
     public func wmAvailabilityCheck(url: String, timestamp: String?, completion: @escaping (String?, Int) -> Void) {
         
@@ -325,8 +328,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate, MBProgressHUDDe
         
         var request = URLRequest(url: URL(string: "https://archive.org/wayback/available")!)
         request.httpMethod = "POST"
-        request.setValue("Wayback_Machine_iOS/\(version)", forHTTPHeaderField: "User-Agent")
-        request.setValue("Wayback_Machine_iOS/\(version)", forHTTPHeaderField: "Wayback-Extension-Version")
+        request.setValue("Wayback_Machine_iOS/\(APP_VERSION)", forHTTPHeaderField: "User-Agent")
+        request.setValue("Wayback_Machine_iOS/\(APP_VERSION)", forHTTPHeaderField: "Wayback-Extension-Version")
         request.setValue("2", forHTTPHeaderField: "Wayback-Api-Version")
         request.httpBody = postString.data(using: .utf8)
         
@@ -359,7 +362,10 @@ class HomeViewController: UIViewController, UITextFieldDelegate, MBProgressHUDDe
         
         task.resume()
     }
-    
+
+    // TODO: move func to cross-platform APIManager version
+    // [ ] async not needed, convert to sync
+
     func getWaybackUrlFromResponse(response: [String: Any], completionHandler: @escaping (String?, Int) -> Void) {
 
         // JSON format:

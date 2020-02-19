@@ -8,6 +8,10 @@
 
 import Foundation
 
+let APP_VERSION = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0"
+let APP_BUILD = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "0"
+let DEBUG_LOG = false
+
 class WMConstants {
     static let errors :[Int: String] = [
         //-- Codes for Availability API

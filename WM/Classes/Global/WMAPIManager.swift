@@ -17,7 +17,7 @@ class WMAPIManager: NSObject {
     let MY_WEB_ARCHIVE_URL      = "https://web.archive.org/__wb/web-archive/"
     let WEB_BASE_URL            = "https://archive.org"
     let UPLOAD_BASE_URL         = "https://s3.us.archive.org"
-    let SPN2_URL                = "https://web-beta.archive.org/save/"
+    let SPN2_URL                = "https://web.archive.org/save/"
     let API_CREATE              = "?op=create"
     let API_LOGIN               = "?op=authenticate"
     let API_INFO                = "?op=info"
@@ -26,8 +26,8 @@ class WMAPIManager: NSObject {
     let SECRET                  = "ICXDO78cnzUlPAt1"
     let VERSION                 = 1
     let HEADERS                 = [
-        "User-Agent": "Wayback_Machine_iOS/\(Bundle.main.infoDictionary!["CFBundleShortVersionString"]!)",
-        "Wayback-Extension-Version": "Wayback_Machine_iOS/\(Bundle.main.infoDictionary!["CFBundleShortVersionString"]!)"
+        "User-Agent": "Wayback_Machine_iOS/\(APP_VERSION)",
+        "Wayback-Extension-Version": "Wayback_Machine_iOS/\(APP_VERSION)"
     ]
     
     // GET
