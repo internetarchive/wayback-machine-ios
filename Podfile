@@ -6,11 +6,10 @@ target 'WayBackMachine' do
   use_frameworks!
 
   # Pods for WayBackMachine
-  pod 'Alamofire', '~> 4.3.0'
-  pod 'MBProgressHUD'
+  pod 'Alamofire', '~> 4.3'
+  pod 'MBProgressHUD', '1.1.0'
   pod 'FRHyperLabel'
   pod 'UITextView+Placeholder', '~> 1.2'
-  pod 'IQKeyboardManagerSwift', '~> 5.0.0'
 
 end
 
@@ -19,6 +18,11 @@ target 'WM' do
   use_frameworks!
 
   # Pods for WM
+  pod 'Alamofire', '~> 4.3'
+  pod 'MBProgressHUD', '1.1.0'
+  pod 'FRHyperLabel'
+  pod 'UITextView+Placeholder', '~> 1.2'
+  pod 'IQKeyboardManagerSwift'
 
 #  target 'WMTests' do
 #    inherit! :search_paths
