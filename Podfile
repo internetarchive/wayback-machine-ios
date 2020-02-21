@@ -6,7 +6,7 @@ target 'WayBackMachine' do
   use_frameworks!
 
   # Pods for WayBackMachine
-  pod 'Alamofire', '~> 4.3'
+  pod 'Alamofire', '~> 4.9'
   pod 'MBProgressHUD', '1.1.0'
   pod 'FRHyperLabel'
   pod 'UITextView+Placeholder', '~> 1.2'
@@ -18,7 +18,7 @@ target 'WM' do
   use_frameworks!
 
   # Pods for WM
-  pod 'Alamofire', '~> 4.3'
+  pod 'Alamofire', '~> 4.9'
   pod 'MBProgressHUD', '1.1.0'
   pod 'FRHyperLabel'
   pod 'UITextView+Placeholder', '~> 1.2'
