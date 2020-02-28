@@ -345,7 +345,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, MBProgressHUDDe
             
             do {
                 if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String : Any] {
-                    print("Data-", json)
+                    if (DEBUG_LOG) { print("DATA: ", json) }
                     self.getWaybackUrlFromResponse(response: json, completionHandler: { (wayback_url, errorCode) in
                         completion(wayback_url, errorCode)
                     })

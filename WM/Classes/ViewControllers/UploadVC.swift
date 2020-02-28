@@ -80,7 +80,7 @@ class UploadVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCont
         if !validateFields() {
             return
         }
-        guard let userData = WMGlobal.getUserData(), let fileUrl = fileURL else {
+        guard let userData = WMGlobal.getUserData() else {
             return
         }
         let identifier = (userData["screenname"] as? String ?? "") + "_" + String(format: "%d", Int(NSDate().timeIntervalSince1970))
@@ -89,7 +89,7 @@ class UploadVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCont
         let title = txtTitle.text ?? ""
         let description = txtDescription.text ?? ""
         let subjectTags = txtSubjectTags.text ?? ""
-        let filename = "\(identifier).\(fileUrl.pathExtension)"
+        let filename = "\(identifier)." + (fileURL?.pathExtension ?? "jpg")
         let startTime = Date()
         MBProgressHUD.showAdded(to: self.view, animated: true)
         
@@ -102,7 +102,7 @@ class UploadVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCont
             "mediatype" : mediaType,
             "s3accesskey" : s3accesskey,
             "s3secretkey" : s3secretkey,
-            "data" : (fileData != nil) ? fileData! : fileUrl
+            "data" : (fileData != nil) ? fileData! : (fileURL ?? "")
         ]) { (success, uploadedFileSize) in
             let endTime = Date()
             let interval = endTime.timeIntervalSince(startTime)
@@ -172,7 +172,8 @@ class UploadVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCont
         } else if txtSubjectTags.text == "" {
             WMGlobal.showAlert(title: "Subject Tags are required", message: "", target: self)
             return false
-        } else if fileURL == nil {
+        } else if (fileData == nil) && (fileURL == nil) {
+            // FIXME: This alert incorrectly displays after using the Camera to take photo.
             WMGlobal.showAlert(title: "Please attach a photo or video", message: "", target: self)
             return false
         }
