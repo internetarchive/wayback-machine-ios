@@ -248,27 +248,36 @@ class WMAPIManager: NSObject {
             }
         }
     }
-    
+
+    /// Return percent-encoded string for any character that is not allowed in a URL path or is non-alphanumeric.
+    /// Also trims whitespace from both ends.
+    func uriEncode(_ text: String?) -> String? {
+        let trimmed = text?.trimmingCharacters(in: .whitespacesAndNewlines)
+        let cs = CharacterSet.urlPathAllowed.intersection(.alphanumerics)
+        return trimmed?.addingPercentEncoding(withAllowedCharacters: cs)
+    }
+
     func SendDataToBucket(params: [String: Any?], completion: @escaping (Bool, Int64) -> Void) {
+
         let identifier  = params["identifier"]  as? String ?? ""
-        let title       = params["title"]       as? String ?? ""
-        let description = params["description"] as? String ?? ""
-        let subjectTags = params["tags"]        as? String ?? ""
-        let filename    = params["filename"]    as? String ?? ""
+        let title       = params["title"]       as? String ?? "", uriTitle = uriEncode(title) ?? ""
+        let description = params["description"] as? String ?? "", uriDescription = uriEncode(description) ?? ""
+        let subjectTags = params["tags"]        as? String ?? "", uriSubjectTags = uriEncode(subjectTags) ?? ""
+        let filename    = params["filename"]    as? String ?? "", uriFilename = uriEncode(filename) ?? ""
         let mediatype   = params["mediatype"]   as? String ?? ""
         let s3accesskey = params["s3accesskey"] as? String ?? ""
         let s3secretkey = params["s3secretkey"] as? String ?? ""
         var uploaded: Int64 = 0
         
         var headers = [
-            "X-File-Name": filename,
+            "X-File-Name": "uri(\(uriFilename))",
             "x-amz-acl": "bucket-owner-full-control",
             "x-amz-auto-make-bucket": "1",
             "x-archive-meta-collection": "opensource_media",
             "x-archive-meta-mediatype": mediatype,
-            "x-archive-meta-title": title,
-            "x-archive-meta-description": description,
-            "x-archive-meta-subject": subjectTags,
+            "x-archive-meta-title": "uri(\(uriTitle))",
+            "x-archive-meta-description": "uri(\(uriDescription))",
+            "x-archive-meta-subject": "uri(\(uriSubjectTags))",
             "authorization": String(format: "LOW %@:%@", s3accesskey, s3secretkey)
         ]
         
@@ -277,7 +286,6 @@ class WMAPIManager: NSObject {
         }
         
         let url = String(format: "%@/%@/%@", self.UPLOAD_BASE_URL, identifier, filename)
-        
         var uploadRequest: UploadRequest?
         
         if let fileData = params["data"] as? Data {
