@@ -19,7 +19,7 @@ class ProfileVC: WMBaseVC {
         if let userData = WMGlobal.getUserData(),
             let screenname = userData["screenname"] as? String,
             let addToMyWebArchive = userData["add-to-my-web-archive"] as? Bool {
-            self.lblDescription.text = self.lblDescription.text! + screenname
+            self.lblDescription.text = (self.lblDescription.text ?? "") + screenname
             self.switchMyWebArchive.isOn = addToMyWebArchive
         }
         
@@ -28,9 +28,10 @@ class ProfileVC: WMBaseVC {
     
     @IBAction func onSwitchChanged(_ sender: Any) {
         let addToMyWebArchive = switchMyWebArchive.isOn
-        var userData = WMGlobal.getUserData()
-        userData!["add-to-my-web-archive"] = addToMyWebArchive
-        WMGlobal.saveUserData(userData: userData!)
+        if var userData = WMGlobal.getUserData() {
+            userData["add-to-my-web-archive"] = addToMyWebArchive
+            WMGlobal.saveUserData(userData: userData)
+        }
     }
     
     @IBAction func onLogoutPressed(_ sender: Any) {
@@ -45,7 +46,7 @@ class ProfileVC: WMBaseVC {
             "s3secretkey"       : nil,
             "add-to-my-web-archive" : false
         ])
-        
+        WMAPIManager.sharedManager.logout()
         self.tabBarController?.dismiss(animated: false, completion: nil)
     }
     

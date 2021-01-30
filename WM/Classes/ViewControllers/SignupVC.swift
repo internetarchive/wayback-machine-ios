@@ -61,9 +61,9 @@ class SignupVC: WMBaseVC, UITextFieldDelegate {
             .registerAccount(
                 params: [
                 "verified"      : false,
-                "email"         : self.txtEmail.text!,
-                "password"      : self.txtPassword.text!,
-                "screenname"    : self.txtUsername.text!,
+                "email"         : self.txtEmail.text ?? "",
+                "password"      : self.txtPassword.text ?? "",
+                "screenname"    : self.txtUsername.text ?? "",
                 ],
                 completion: {(data)in
                 
@@ -72,13 +72,11 @@ class SignupVC: WMBaseVC, UITextFieldDelegate {
                 if data == nil {
                     WMGlobal.showAlert(title: "", message: "Server error", target: self)
                 } else {
-                    let success = data!["success"] as! Bool
-                    
-                    if (success) {
+                    if let success = data!["success"] as? Bool, success == true {
                         WMGlobal.saveUserData(userData: [
-                            "username"  : self.txtUsername.text!,
-                            "email"     : self.txtEmail.text!,
-                            "password"  : self.txtPassword.text!
+                            "username"  : self.txtUsername.text ?? "",
+                            "email"     : self.txtEmail.text ?? "",
+                            "password"  : self.txtPassword.text ?? ""
                             ])
                         let alertController = UIAlertController(title: "Action Required", message: "We just sent verification email. Please try to verify your account and login.", preferredStyle: .alert)
                         alertController.addAction(UIAlertAction(title: "OK", style: .default) {action in
@@ -89,7 +87,7 @@ class SignupVC: WMBaseVC, UITextFieldDelegate {
                         WMGlobal.showAlert(title: "", message: "Username is already in use", target: self)
                     }
                 }
-        }
+            }
         )
     }
     

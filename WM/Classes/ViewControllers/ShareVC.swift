@@ -1,5 +1,5 @@
 //
-//  WebPageVC.swift
+//  ShareVC.swift
 //  WM
 //
 //  Created by mac-admin on 8/10/17.
@@ -12,7 +12,6 @@ import MBProgressHUD
 
 open class ShareVC: UIViewController {
 
-    
     @IBOutlet weak var btnAdd: WMButton!
     @IBOutlet weak var navBarHeight: NSLayoutConstraint!
     @objc open var url: String = ""
@@ -36,11 +35,12 @@ open class ShareVC: UIViewController {
     
     @IBAction func _onViewPage(_ sender: Any) {
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-        let webPageVC = storyBoard.instantiateViewController(withIdentifier: "WebPageVC") as! WebPageVC
-        webPageVC.modalPresentationStyle = .fullScreen
-        webPageVC.url = url
-        DispatchQueue.main.async {
-            self.present(webPageVC, animated: true, completion: nil)
+        if let webPageVC = storyBoard.instantiateViewController(withIdentifier: "WebPageVC") as? WebPageVC {
+            webPageVC.modalPresentationStyle = .fullScreen
+            webPageVC.url = url
+            DispatchQueue.main.async {
+                self.present(webPageVC, animated: true, completion: nil)
+            }
         }
     }
     
