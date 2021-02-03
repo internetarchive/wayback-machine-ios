@@ -39,11 +39,10 @@ class HomeViewController: UIViewController, UITextFieldDelegate, MBProgressHUDDe
         if url.isEmpty {
             return
         }
-        
-        if let webPageViewController = self.storyboard?.instantiateViewController(withIdentifier: "WebPageVC") as? WebPageVC {
-            webPageViewController.modalPresentationStyle = .fullScreen
-            webPageViewController.url = url
-            DispatchQueue.main.async {
+        DispatchQueue.main.async {
+            if let webPageViewController = self.storyboard?.instantiateViewController(withIdentifier: "WebPageVC") as? WebPageVC {
+                webPageViewController.modalPresentationStyle = .fullScreen
+                webPageViewController.url = url
                 self.present(webPageViewController, animated: true, completion: nil)
             }
         }
@@ -79,8 +78,9 @@ class HomeViewController: UIViewController, UITextFieldDelegate, MBProgressHUDDe
                         guard let loggedInSig = cookieData["logged-in-sig"] as? HTTPCookie else { return }
                         guard let loggedInUser = cookieData["logged-in-user"] as? HTTPCookie else { return }
                         var tmpData = userData
-                        tmpData["logged-in-sig"] = loggedInSig
-                        tmpData["logged-in-user"] = loggedInUser
+                        // can't save HTTPCookie in userData directly
+                        tmpData["logged-in-sig"] = loggedInSig.properties
+                        tmpData["logged-in-user"] = loggedInUser.properties
                         WMGlobal.saveUserData(userData: tmpData)
                                         
                         WMAPIManager

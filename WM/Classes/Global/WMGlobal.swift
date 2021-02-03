@@ -23,20 +23,27 @@ class WMGlobal: NSObject {
     // Save UserData
     static func saveUserData(userData: [String: Any?]) {
         let userDefault = UserDefaults(suiteName: "group.com.mobile.waybackmachine")
-        let encodedObject = NSKeyedArchiver.archivedData(withRootObject: userData)
-        userDefault?.set(encodedObject, forKey: "UserData")
-        userDefault?.synchronize()
+        do {
+            let encodedObject = try NSKeyedArchiver.archivedData(withRootObject: userData, requiringSecureCoding: true)
+            userDefault?.set(encodedObject, forKey: "UserData")
+            userDefault?.synchronize()
+        } catch {
+            NSLog("*** saveUserData ERROR: \(error)") // DEBUG
+        }
     }
     
-    //Get UserData
+    // Get UserData
     static func getUserData() -> [String: Any?]? {
         let userDefault = UserDefaults(suiteName: "group.com.mobile.waybackmachine")
         if let encodedData = userDefault?.data(forKey: "UserData") {
-            let obj = NSKeyedUnarchiver.unarchiveObject(with: encodedData)
-            return obj as? [String: Any?]
-        } else {
-            return nil
+            do {
+                let obj = try NSKeyedUnarchiver.unarchivedObject(ofClasses: [NSDictionary.self, NSDate.self, NSNull.self], from: encodedData) as? [String: Any?]
+                return obj
+            } catch {
+                NSLog("*** getUserData ERROR: \(error)") // DEBUG
+            }
         }
+        return nil
     }
     
     static func isLoggedIn() -> Bool {

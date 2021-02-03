@@ -6,7 +6,7 @@ PODS:
   - "UITextView+Placeholder (1.4.0)"
 
 DEPENDENCIES:
-  - Alamofire (~> 4.3)
+  - Alamofire (~> 4.9)
   - FRHyperLabel
   - IQKeyboardManagerSwift
   - MBProgressHUD (= 1.1.0)
@@ -27,6 +27,6 @@ SPEC CHECKSUMS:
   MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
   "UITextView+Placeholder": d7b0c400921f66523f3a85d74f774512e14f6502
 
-PODFILE CHECKSUM: 937c46d61f6243e626eb942d791d92416064af2c
+PODFILE CHECKSUM: ca0d24d2a4b96a2cb1a686dff0a8e73e2a04fc60
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.10.1

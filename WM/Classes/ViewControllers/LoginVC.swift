@@ -73,8 +73,8 @@ class LoginVC: WMBaseVC, UITextFieldDelegate {
                                         "password"          : password,
                                         "screenname"        : screenname,
                                         "logged-in"         : true,
-                                        "logged-in-user"    : loggedInUser,
-                                        "logged-in-sig"     : loggedInSig,
+                                        "logged-in-user"    : loggedInUser.properties,
+                                        "logged-in-sig"     : loggedInSig.properties,
                                         "s3accesskey"       : key["s3accesskey"],
                                         "s3secretkey"       : key["s3secretkey"],
                                         "add-to-my-web-archive" : self.btnCheck.isSelected

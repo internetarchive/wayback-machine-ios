@@ -63,9 +63,11 @@ open class ShareVC: UIViewController {
     
     func saveToMyWebArchive(showAlert: Bool) {
         if let userData = WMGlobal.getUserData(),
-            let logged_in_user = userData["logged-in-user"] as? HTTPCookie,
-            let logged_in_sig = userData["logged-in-sig"] as? HTTPCookie {
-            
+           let userProps = userData["logged-in-user"] as? [HTTPCookiePropertyKey : Any],
+           let sigProps = userData["logged-in-sig"] as? [HTTPCookiePropertyKey : Any],
+           let loggedInUser = HTTPCookie.init(properties: userProps),
+           let loggedInSig = HTTPCookie.init(properties: sigProps)
+        {
             do {
                 let regex = try NSRegularExpression(pattern: "http[s]?:\\/\\/web.archive.org\\/web\\/(.*?)\\/(.*)", options: [])
                 let results = regex.matches(in: url, range: NSRange(url.startIndex..., in: url))
@@ -84,7 +86,7 @@ open class ShareVC: UIViewController {
                 }
                 
                 MBProgressHUD.showAdded(to: self.view, animated: true)
-                WMAPIManager.sharedManager.saveToMyWebArchive(url: snapshotUrl, snapshot: snapshot, logged_in_user: logged_in_user, logged_in_sig: logged_in_sig) { (success) in
+                WMAPIManager.sharedManager.saveToMyWebArchive(url: snapshotUrl, snapshot: snapshot, logged_in_user: loggedInUser, logged_in_sig: loggedInSig) { (success) in
                     MBProgressHUD.hide(for: self.view, animated: true)
                     if (success && showAlert) {
                         WMGlobal.showAlert(title: "Success", message: "The page has been saved to your web archive successfully.", target: self)

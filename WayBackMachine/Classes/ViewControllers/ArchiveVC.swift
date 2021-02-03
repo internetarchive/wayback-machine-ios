@@ -200,72 +200,44 @@ class ArchiveVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCon
     
     //- MARK: Actions
     @IBAction func _onOK(_ sender: Any) {
-        if let userData = WMGlobal.getUserData(),
-            let email = userData["email"] as? String,
-            let password = userData["password"] as? String {
-            
-            MBProgressHUD.showAdded(to: self.view, animated: true)
-            
-            WMAPIManager.sharedManager.login(email: email, password: password) { (data) in
-                guard let data = data, let success = data["success"] as? Bool, success == true else {
-                    WMGlobal.showAlert(title: "", message: "You need to login through Wayback Machine app.", target: self)
+        let userData = WMGlobal.getUserData()
+        if let userData = userData,
+           let userProps = userData["logged-in-user"] as? [HTTPCookiePropertyKey : Any],
+           let sigProps = userData["logged-in-sig"] as? [HTTPCookiePropertyKey : Any],
+           let loggedInUser = HTTPCookie.init(properties: userProps),
+           let loggedInSig = HTTPCookie.init(properties: sigProps)
+        {
+            let hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+            WMAPIManager.sharedManager.checkURLBlocked(url: self.urlTextField.text!, completion: { (isBlocked) in
+                if isBlocked {
                     MBProgressHUD.hide(for: self.view, animated: true)
-                    return
-                }
-                
-                WMAPIManager
-                    .sharedManager
-                    .getCookieData(email: email,
-                                   password: password,
-                                   completion: { (cookieData) in
-                                    
-                    guard let loggedInSig = cookieData["logged-in-sig"] as? HTTPCookie else { return }
-                    guard let loggedInUser = cookieData["logged-in-user"] as? HTTPCookie else { return }
-                    var tmpData = userData
-                    
-                    tmpData["logged-in-sig"] = loggedInSig
-                    tmpData["logged-in-user"] = loggedInUser
-                    WMGlobal.saveUserData(userData: tmpData)
-                    
-                    WMAPIManager.sharedManager.checkURLBlocked(url: self.urlTextField.text!, completion: { (isBlocked) in
-                        
-                        if isBlocked {
-                            WMGlobal.showAlert(title: "Error", message: "That site's robots.txt policy requests we not archive it.", target: self)
+                    WMGlobal.showAlert(title: "Error", message: "That site's robots.txt policy requests we not archive it.", target: self)
+                } else {
+                    hud.label.text = "Archiving..."
+                    hud.detailsLabel.text = "May take a while."
+                    WMAPIManager.sharedManager.request_capture(url: self.urlTextField.text!, logged_in_user: loggedInUser, logged_in_sig: loggedInSig, completion: { (job_id) in
+                        if job_id == nil {
                             MBProgressHUD.hide(for: self.view, animated: true)
-                            return
-                        }
-                        
-                        if let userData = WMGlobal.getUserData(),
-                            let loggedInUser = userData["logged-in-user"] as? HTTPCookie,
-                            let loggedInSig = userData["logged-in-sig"] as? HTTPCookie {
-                            WMAPIManager.sharedManager.request_capture(url: self.urlTextField.text!, logged_in_user: loggedInUser, logged_in_sig: loggedInSig, completion: { (job_id) in
-                                if job_id == nil {
-                                    MBProgressHUD.hide(for: self.view, animated: true)
-                                    return
-                                }
-                                
-                                WMAPIManager.sharedManager.request_capture_status(job_id: job_id!, logged_in_user: loggedInUser, logged_in_sig: loggedInSig, completion: { (url, error) in
-                                    if url == nil {
-                                        MBProgressHUD.hide(for: self.view, animated: true)
-                                        WMGlobal.showAlert(title: "Error", message: (error ?? ""), target: self)
-                                    } else {
-                                        MBProgressHUD.hide(for: self.view, animated: true)
-                                        let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-                                        if let shareVC = storyBoard.instantiateViewController(withIdentifier: "ShareVC") as? ShareVC {
-                                            shareVC.modalPresentationStyle = .fullScreen
-                                            shareVC.url = url ?? ""
-                                            DispatchQueue.main.async {
-                                                self.present(shareVC, animated: true, completion: nil)
-                                            }
+                        } else {
+                            WMAPIManager.sharedManager.request_capture_status(job_id: job_id!, logged_in_user: loggedInUser, logged_in_sig: loggedInSig, completion: { (url, error) in
+                                MBProgressHUD.hide(for: self.view, animated: true)
+                                if url == nil {
+                                    WMGlobal.showAlert(title: "Error", message: (error ?? ""), target: self)
+                                } else {
+                                    let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+                                    if let shareVC = storyBoard.instantiateViewController(withIdentifier: "ShareVC") as? ShareVC {
+                                        shareVC.modalPresentationStyle = .fullScreen
+                                        shareVC.url = url ?? ""
+                                        DispatchQueue.main.async {
+                                            self.present(shareVC, animated: true, completion: nil)
                                         }
                                     }
-                                })
+                                }
                             })
                         }
                     })
-                })
-            }
-            
+                }
+            })
         } else {
             WMGlobal.showAlert(title: "", message: "You need to login through Wayback Machine app.", target: self)
         }
