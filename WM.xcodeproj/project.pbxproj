@@ -89,6 +89,8 @@
 		84B78D63216E9C1C0064555C /* WMButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B78D28216E9C1C0064555C /* WMButton.swift */; };
 		84B78D64216E9C1C0064555C /* WMImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B78D29216E9C1C0064555C /* WMImageView.swift */; };
 		84B78D6C216E9C350064555C /* ArchiveVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B78D69216E9C350064555C /* ArchiveVC.swift */; };
+		C324598A267060490062FAF6 /* WMSAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3245989267060490062FAF6 /* WMSAPIManager.swift */; };
+		C324598B267060490062FAF6 /* WMSAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3245989267060490062FAF6 /* WMSAPIManager.swift */; };
 		C37947F923FD3EF0005208AC /* WMConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B78CB3216E9C1C0064555C /* WMConstants.swift */; };
 		D9E695041EF10099007E7551 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D9E695031EF10099007E7551 /* Assets.xcassets */; };
 		D9E695051EF10237007E7551 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D9E695031EF10099007E7551 /* Assets.xcassets */; };
@@ -240,6 +242,7 @@
 		84B78D69216E9C350064555C /* ArchiveVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArchiveVC.swift; sourceTree = "<group>"; };
 		89D88856FD532D6BFF913203 /* Pods-WayBackMachine.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WayBackMachine.release.xcconfig"; path = "Pods/Target Support Files/Pods-WayBackMachine/Pods-WayBackMachine.release.xcconfig"; sourceTree = "<group>"; };
 		A3F078DE272FCBC36C039CE2 /* Pods-WM.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WM.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WM/Pods-WM.debug.xcconfig"; sourceTree = "<group>"; };
+		C3245989267060490062FAF6 /* WMSAPIManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WMSAPIManager.swift; sourceTree = "<group>"; };
 		C3D439EE1F8FEC7500B50A33 /* WM-Swift.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WM-Swift.h"; sourceTree = "<group>"; };
 		C3F8A7D41F8F60D8003DEC35 /* WM-BridgingHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WM-BridgingHeader.h"; sourceTree = "<group>"; };
 		D92DEBE31EE644570052DB4F /* WayBackMachine.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WayBackMachine.entitlements; sourceTree = "<group>"; };
@@ -367,6 +370,7 @@
 			children = (
 				84B78CB0216E9C1C0064555C /* Extension */,
 				84B78CB2216E9C1C0064555C /* WMAPIManager.swift */,
+				C3245989267060490062FAF6 /* WMSAPIManager.swift */,
 				84B78CB3216E9C1C0064555C /* WMConstants.swift */,
 				84B78CB4216E9C1C0064555C /* WMGlobal.swift */,
 			);
@@ -931,6 +935,7 @@
 				84B78D3D216E9C1C0064555C /* SSCalendarWeekViewController.m in Sources */,
 				84B78D55216E9C1C0064555C /* SSMonthNode.m in Sources */,
 				84B78D61216E9C1C0064555C /* UploadVC.swift in Sources */,
+				C324598A267060490062FAF6 /* WMSAPIManager.swift in Sources */,
 				84B78D5B216E9C1C0064555C /* HelpViewController.swift in Sources */,
 				84B78D62216E9C1C0064555C /* WebPageVC.swift in Sources */,
 				849DFA88232156EF0084CDD0 /* ShareVC.swift in Sources */,
@@ -991,6 +996,7 @@
 				8422298623224C500008CCBB /* WMButton.swift in Sources */,
 				84B78D6C216E9C350064555C /* ArchiveVC.swift in Sources */,
 				849DFA9023222CA90084CDD0 /* ShareVC.swift in Sources */,
+				C324598B267060490062FAF6 /* WMSAPIManager.swift in Sources */,
 				846658A1216EA939009EB3AD /* WMGlobal.swift in Sources */,
 				C37947F923FD3EF0005208AC /* WMConstants.swift in Sources */,
 				846658A2216EA950009EB3AD /* WMAPIManager.swift in Sources */,
@@ -1162,13 +1168,13 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 85;
+				CURRENT_PROJECT_VERSION = 87;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = ZSFX78H3ZT;
 				INFOPLIST_FILE = WM/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.9.4;
+				MARKETING_VERSION = 2.9.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mobile.waybackmachine;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1188,13 +1194,13 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 85;
+				CURRENT_PROJECT_VERSION = 87;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = ZSFX78H3ZT;
 				INFOPLIST_FILE = WM/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.9.4;
+				MARKETING_VERSION = 2.9.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mobile.waybackmachine;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1211,7 +1217,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 85;
+				CURRENT_PROJECT_VERSION = 87;
 				DEVELOPMENT_TEAM = ZSFX78H3ZT;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"COCOAPODS=1",
@@ -1220,7 +1226,7 @@
 				INFOPLIST_FILE = WayBackMachine/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				MARKETING_VERSION = 2.9.4;
+				MARKETING_VERSION = 2.9.5;
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" -DEXTENSION";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mobile.waybackmachine.extension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1239,7 +1245,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 85;
+				CURRENT_PROJECT_VERSION = 87;
 				DEVELOPMENT_TEAM = ZSFX78H3ZT;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -1248,7 +1254,7 @@
 				INFOPLIST_FILE = WayBackMachine/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				MARKETING_VERSION = 2.9.4;
+				MARKETING_VERSION = 2.9.5;
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" -DEXTENSION";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mobile.waybackmachine.extension;
 				PRODUCT_NAME = "$(TARGET_NAME)";

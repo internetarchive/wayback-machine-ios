@@ -14,24 +14,14 @@ class WelcomeVC: WMBaseVC {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if let userData = WMGlobal.getUserData(),
-            let email = userData["email"] as? String,
-            let password = userData["password"] as? String {
-            
-            MBProgressHUD.showAdded(to: self.view, animated: true)
-            WMAPIManager.sharedManager.login(email: email, password: password) { (data) in
-                MBProgressHUD.hide(for: self.view, animated: true)
-                guard let data = data, let success = data["success"] as? Bool, success == true else {
-                    //self.gotoLoginVC()
-                    return
-                }
-                
-                if let tabbarVC = self.storyboard?.instantiateViewController(withIdentifier: "TabbarVC") as? UITabBarController {
-                    tabbarVC.modalPresentationStyle = .fullScreen
-                    self.present(tabbarVC, animated: true, completion: nil)
-                }
+        if let userData = WMGlobal.getUserData(), let loggedIn = userData["logged-in"] as? Bool, loggedIn == true {
+            // already logged in
+            if let tabbarVC = self.storyboard?.instantiateViewController(withIdentifier: "TabbarVC") as? UITabBarController {
+                tabbarVC.modalPresentationStyle = .fullScreen
+                self.present(tabbarVC, animated: true, completion: nil)
             }
         } else {
+            // stay on Welcome VC to signup or login
             //gotoLoginVC()
         }
     }

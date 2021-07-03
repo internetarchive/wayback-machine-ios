@@ -72,7 +72,9 @@ open class WebPageVC: UIViewController, WKUIDelegate, WKNavigationDelegate, MBPr
     }
     
     // MARK: - WKWebView Delegates
-    public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+
+    //public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+    public func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         MBProgressHUD.hide(for: self.view, animated: true)
     }
 

@@ -22,6 +22,7 @@ class WMGlobal: NSObject {
     
     // Save UserData
     static func saveUserData(userData: [String: Any?]) {
+        if (DEBUG_LOG) { NSLog("*** saveUserData: \(userData)") } // TEST TO REMOVE
         let userDefault = UserDefaults(suiteName: "group.com.mobile.waybackmachine")
         do {
             let encodedObject = try NSKeyedArchiver.archivedData(withRootObject: userData, requiringSecureCoding: true)
@@ -38,6 +39,7 @@ class WMGlobal: NSObject {
         if let encodedData = userDefault?.data(forKey: "UserData") {
             do {
                 let obj = try NSKeyedUnarchiver.unarchivedObject(ofClasses: [NSDictionary.self, NSDate.self, NSNull.self], from: encodedData) as? [String: Any?]
+                if (DEBUG_LOG) { NSLog("*** getUserData: \(String(describing: obj))") } // TEST TO REMOVE
                 return obj
             } catch {
                 NSLog("*** getUserData ERROR: \(error)") // DEBUG

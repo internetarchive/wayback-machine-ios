@@ -27,7 +27,8 @@ class UploadVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCont
     var fileData: Data?
     var mediaType: String?
     var placeholderLabel: UILabel!
-    
+    var progressHUD: MBProgressHUD?
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -91,9 +92,10 @@ class UploadVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCont
         let subjectTags = txtSubjectTags.text ?? ""
         let filename = "\(identifier)." + (fileURL?.pathExtension ?? "jpg")
         let startTime = Date()
-        MBProgressHUD.showAdded(to: self.view, animated: true)
-        
-        WMAPIManager.sharedManager.SendDataToBucket(params: [
+        self.progressHUD = MBProgressHUD.showAdded(to: self.view, animated: true)
+        self.progressHUD?.label.text = "Uploading..."
+
+        WMSAPIManager.shared.SendDataToBucket(params: [
             "identifier" : identifier,
             "title": title,
             "description": description,
@@ -103,7 +105,18 @@ class UploadVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCont
             "s3accesskey" : s3accesskey,
             "s3secretkey" : s3secretkey,
             "data" : (fileData != nil) ? fileData! : (fileURL ?? "")
-        ]) { (success, uploadedFileSize) in
+        ]) { (progress) in
+            // pending
+            if (progress.completedUnitCount == progress.totalUnitCount) {
+                // finished uploading, now processing
+                self.progressHUD?.label.text = "Upload Complete"
+                self.progressHUD?.detailsLabel.text = "Please wait..."
+            }
+            else {
+                self.progressHUD?.detailsLabel.text = progress.localizedAdditionalDescription
+            }
+        }
+        completion: { (success, uploadedFileSize) in
             let endTime = Date()
             let interval = endTime.timeIntervalSince(startTime)
 
@@ -123,7 +136,7 @@ class UploadVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCont
             if success {
                 self.showSuccessAlert(filesize: filesize, duration: duration, uploadedURL: "https://archive.org/details/\(identifier)")
             } else {
-                WMGlobal.showAlert(title: "Uploading failed", message: "", target: self)
+                WMGlobal.showAlert(title: "Uploading Failed", message: "", target: self)
             }
         }
     }
@@ -206,12 +219,12 @@ class UploadVC: UIViewController, UIImagePickerControllerDelegate, UIPopoverCont
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 0
         titleLabel.font = UIFont.boldSystemFont(ofSize: 17.0)
-        titleLabel.text = "Upload successful"
+        titleLabel.text = "Upload Successful"
         titleLabel.sizeToFit()
         titleLabel.center = CGPoint(x: customViewWidth/2, y: titleLabel.frame.size.height/2 + 17.0)
         customView.addSubview(titleLabel)
 
-        let message = "Uploaded \(filesize) \nIn \(duration) \n\nAvailable here \(uploadedURL)"
+        let message = "Uploaded \(filesize) \nIn \(duration) \n\nAvailable at \(uploadedURL)"
         var txtMessageRect = CGRect(x: 13.0, y: 67, width: customViewWidth - 26, height: 200)
         
         let txtMessageContent = UITextView(frame: txtMessageRect)

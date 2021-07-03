@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="1Td-pu-lDX">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="1Td-pu-lDX">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -734,11 +734,11 @@
             <objects>
                 <viewController id="bJ3-6A-t0B" customClass="SignupVC" customModule="WM" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="BHo-4s-Swx">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="o36-y8-rLQ">
-                                <rect key="frame" x="0.0" y="75" width="414" height="733"/>
+                                <rect key="frame" x="0.0" y="75" width="414" height="787"/>
                                 <subviews>
                                     <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pk6-aY-8oA">
                                         <rect key="frame" x="0.0" y="293" width="414" height="1"/>
@@ -1000,7 +1000,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3EI-5N-AC6">
-                                <rect key="frame" x="0.0" y="75" width="414" height="733"/>
+                                <rect key="frame" x="0.0" y="75" width="414" height="787"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_wayback_machine" translatesAutoresizingMaskIntoConstraints="NO" id="wZO-3t-PAq">
                                         <rect key="frame" x="20" y="50" width="374" height="116"/>
@@ -1069,7 +1069,7 @@
                                             <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9g2-0y-b7U">
                                                 <rect key="frame" x="0.0" y="0.0" width="25" height="20"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="23" id="Aht-ki-6Ow"/>
+                                                    <constraint firstAttribute="width" secondItem="9g2-0y-b7U" secondAttribute="height" multiplier="5:4" id="f4E-7p-u35"/>
                                                 </constraints>
                                                 <state key="normal" title="Button" image="unchecked"/>
                                                 <state key="selected" image="checked"/>
@@ -1077,7 +1077,7 @@
                                                     <action selector="onCheckPressed:" destination="DQC-LZ-deR" eventType="touchUpInside" id="Lni-D5-GzK"/>
                                                 </connections>
                                             </button>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enable to Add to My Web Archive" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wDO-lK-AK3">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add to My Web Archive" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wDO-lK-AK3">
                                                 <rect key="frame" x="35" y="0.0" width="215" height="20"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1217,11 +1217,11 @@
             <objects>
                 <viewController id="k3f-Ok-iTs" customClass="ForgotVC" customModule="WM" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="sYH-Dn-ew2">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vd4-RY-HFO">
-                                <rect key="frame" x="0.0" y="75" width="414" height="733"/>
+                                <rect key="frame" x="0.0" y="75" width="414" height="787"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="afq-Wj-5aa">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="1"/>
@@ -2088,9 +2088,8 @@
         </designable>
     </designables>
     <inferredMetricsTieBreakers>
-        <segue reference="jhz-6n-DDk"/>
-        <segue reference="8go-FS-mgu"/>
-        <segue reference="Jhz-ia-Cmp"/>
+        <segue reference="G8q-5C-SWp"/>
+        <segue reference="ZvR-2B-m2y"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
     <resources>

@@ -14,16 +14,18 @@ open class ShareVC: UIViewController {
 
     @IBOutlet weak var btnAdd: WMButton!
     @IBOutlet weak var navBarHeight: NSLayoutConstraint!
-    @objc open var url: String = ""
+    @objc open var shareUrl: String = ""
     
     open override func viewDidLoad() {
         super.viewDidLoad()
         
+        // auto-saves to My Archive if switch turned on
         if let userData = WMGlobal.getUserData(),
             let addToMyWebArchive = userData["add-to-my-web-archive"] as? Bool,
-            addToMyWebArchive == true {
+            addToMyWebArchive == true
+        {
             btnAdd.isHidden = true
-            self.saveToMyWebArchive(showAlert: false)
+            self.saveToMyArchive(showAlert: false)
         }
     }
     
@@ -37,7 +39,7 @@ open class ShareVC: UIViewController {
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
         if let webPageVC = storyBoard.instantiateViewController(withIdentifier: "WebPageVC") as? WebPageVC {
             webPageVC.modalPresentationStyle = .fullScreen
-            webPageVC.url = url
+            webPageVC.url = self.shareUrl
             DispatchQueue.main.async {
                 self.present(webPageVC, animated: true, completion: nil)
             }
@@ -45,11 +47,11 @@ open class ShareVC: UIViewController {
     }
     
     @IBAction func _onSaveToMyArchive(_ sender: Any) {
-        self.saveToMyWebArchive(showAlert: true)
+        self.saveToMyArchive(showAlert: true)
     }
     
     @IBAction func _onShare(_ sender: Any) {
-        displayShareSheet(url: url)
+        displayShareSheet(url: self.shareUrl)
     }
     
     @IBAction func _onBack(_ sender: Any) {
@@ -61,16 +63,12 @@ open class ShareVC: UIViewController {
 #endif
     }
     
-    func saveToMyWebArchive(showAlert: Bool) {
-        if let userData = WMGlobal.getUserData(),
-           let userProps = userData["logged-in-user"] as? [HTTPCookiePropertyKey : Any],
-           let sigProps = userData["logged-in-sig"] as? [HTTPCookiePropertyKey : Any],
-           let loggedInUser = HTTPCookie.init(properties: userProps),
-           let loggedInSig = HTTPCookie.init(properties: sigProps)
-        {
+    func saveToMyArchive(showAlert: Bool) {
+
+        if let userData = WMGlobal.getUserData(), userData["logged-in"] as? Bool ?? false {
             do {
                 let regex = try NSRegularExpression(pattern: "http[s]?:\\/\\/web.archive.org\\/web\\/(.*?)\\/(.*)", options: [])
-                let results = regex.matches(in: url, range: NSRange(url.startIndex..., in: url))
+                let results = regex.matches(in: self.shareUrl, range: NSRange(self.shareUrl.startIndex..., in: self.shareUrl))
                 
                 guard results.count != 0 else {
                     return
@@ -80,20 +78,31 @@ open class ShareVC: UIViewController {
                 let snapshotRange = results[0].range(at: 1)
                 
                 guard
-                    let snapshotUrl = url.slicing(from: snapshotUrlRange.location, length: snapshotUrlRange.length),
-                    let snapshot = url.slicing(from: snapshotRange.location, length: snapshotRange.length) else {
+                    let snapshotUrl = self.shareUrl.slicing(from: snapshotUrlRange.location, length: snapshotUrlRange.length),
+                    let snapshot = self.shareUrl.slicing(from: snapshotRange.location, length: snapshotRange.length) else {
                         return
                 }
                 
-                MBProgressHUD.showAdded(to: self.view, animated: true)
-                WMAPIManager.sharedManager.saveToMyWebArchive(url: snapshotUrl, snapshot: snapshot, logged_in_user: loggedInUser, logged_in_sig: loggedInSig) { (success) in
+                let hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+                hud.label.text = "Saving..."
+
+                WMSAPIManager.shared.saveToMyWebArchive(url: snapshotUrl, snapshot: snapshot,
+                    loggedInUser: userData["logged-in-user"] as? String, // REMOVE or KEEP?
+                    loggedInSig: userData["logged-in-sig"] as? String, // REMOVE or KEEP?
+                    accessKey: userData["s3accesskey"] as? String,
+                    secretKey: userData["s3secretkey"] as? String)
+                { (success) in
                     MBProgressHUD.hide(for: self.view, animated: true)
-                    if (success && showAlert) {
-                        WMGlobal.showAlert(title: "Success", message: "The page has been saved to your web archive successfully.", target: self)
+                    if (showAlert) {
+                        if (success) {
+                            WMGlobal.showAlert(title: "Success", message: "The page has been saved to your web archive.", target: self)
+                        } else {
+                            WMGlobal.showAlert(title: "Failed", message: "The page was not saved to your web archive.", target: self)
+                        }
                     }
                 }
             } catch {
-                print("Invalid regex")
+                if (DEBUG_LOG) { NSLog("*** saveToWebArchive() Invalid regex for shareUrl: \(self.shareUrl)") }
             }
         }
     }

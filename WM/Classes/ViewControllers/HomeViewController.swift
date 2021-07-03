@@ -49,79 +49,74 @@ class HomeViewController: UIViewController, UITextFieldDelegate, MBProgressHUDDe
     }
 
     @IBAction func _onSave(_ sender: Any) {
+
         let tURL = self.txtURL.text ?? ""
         if tURL.isEmpty {
             WMGlobal.showAlert(title: "", message: "Please type a URL", target: self)
             return
         }
-        
-        if (!verifyURL(url: getURL(url: tURL))) {
+        let saveURL = self.getURL(url: tURL)
+
+        if (!verifyURL(url: saveURL)) {
             WMGlobal.showAlert(title: "", message: "The URL is invalid", target: self)
         } else {
             showProgress()
-            WMAPIManager.sharedManager.checkURLBlocked(url: getURL(url: tURL), completion: { (isBlocked) in
+            self.progressHUD?.label.text = "Archiving..."
+            self.progressHUD?.detailsLabel.text = "May take a while."
+
+            WMSAPIManager.shared.checkURLBlocked(url: saveURL) {
+                (isBlocked) in
                 
                 if isBlocked {
                     WMGlobal.showAlert(title: "Error", message: "That site's robots.txt policy requests we not archive it.", target: self)
                     self.hideProgress(isBlocked)
                     return
                 }
-                
-                if let userData = WMGlobal.getUserData() {
-                    
-                    WMAPIManager
-                        .sharedManager
-                        .getCookieData(email: userData["email"] as? String ?? "",
-                                       password: userData["password"] as? String ?? "",
-                                       completion: { (cookieData) in
 
-                        guard let loggedInSig = cookieData["logged-in-sig"] as? HTTPCookie else { return }
-                        guard let loggedInUser = cookieData["logged-in-user"] as? HTTPCookie else { return }
-                        var tmpData = userData
-                        // can't save HTTPCookie in userData directly
-                        tmpData["logged-in-sig"] = loggedInSig.properties
-                        tmpData["logged-in-user"] = loggedInUser.properties
-                        WMGlobal.saveUserData(userData: tmpData)
-                                        
-                        WMAPIManager
-                            .sharedManager
-                            .request_capture(url: self.getURL(url: tURL),
-                                             logged_in_user: loggedInUser,
-                                             logged_in_sig: loggedInSig,
-                                             completion: { (job_id) in
-                                
-                            guard let job_id = job_id else {
-                                self.hideProgress(isBlocked)
+                if let userData = WMGlobal.getUserData(), let loggedIn = userData["logged-in"] as? Bool, loggedIn == true {
+                    // Save Page Now
+                    let accessKey = userData["s3accesskey"] as? String,
+                        secretKey = userData["s3secretkey"] as? String
+
+                    WMSAPIManager.shared.capturePage(url: saveURL, accessKey: accessKey, secretKey: secretKey, options: []) {
+                        (jobId, error) in
+
+                        guard let jobId = jobId else {
+                            // exit if SPN fails
+                            self.hideProgress(isBlocked)
+                            WMGlobal.showAlert(title: "Error", message: "Save Failed!", target: self)
+                            if (DEBUG_LOG) { NSLog("*** HomeVC capturePage() FAILED: \(String(describing: error))") }
+                            return
+                        }
+
+                        WMSAPIManager.shared.getPageStatus(jobId: jobId, accessKey: accessKey, secretKey: secretKey, options: []) {
+                            (resources) in
+                            // pending
+                            if let resources = resources, resources.count > 0 {
+                                // update HUD with count of URLs archived
+                                self.progressHUD?.detailsLabel.text = "\(resources.count) URLs Saved."
+                            }
+                        } completion: {
+                            (archiveURL, errMsg, resultJSON) in
+
+                            self.hideProgress(isBlocked)
+                            guard let archiveURL = archiveURL else {
+                                WMGlobal.showAlert(title: "Error", message: (errMsg ?? ""), target: self)
                                 return
                             }
-
-                            WMAPIManager
-                                .sharedManager
-                                .request_capture_status(job_id: job_id,
-                                                        logged_in_user: loggedInUser,
-                                                        logged_in_sig: loggedInSig,
-                                                        completion: { (url, error) in
-                                if url == nil || url?.isEmpty ?? false {
-                                    self.hideProgress(isBlocked)
-                                    WMGlobal.showAlert(title: "Error", message: (error ?? ""), target: self)
-                                } else {
-                                    self.hideProgress(isBlocked)
-                                    if let shareVC = self.storyboard?.instantiateViewController(withIdentifier: "ShareVC") as? ShareVC {
-                                        shareVC.modalPresentationStyle = .fullScreen
-                                        shareVC.url = url!
-                                        DispatchQueue.main.async {
-                                            self.present(shareVC, animated: true, completion: nil)
-                                        }
-                                    }
+                            if let shareVC = self.storyboard?.instantiateViewController(withIdentifier: "ShareVC") as? ShareVC {
+                                shareVC.modalPresentationStyle = .fullScreen
+                                shareVC.shareUrl = archiveURL
+                                DispatchQueue.main.async {
+                                    self.present(shareVC, animated: true, completion: nil)
                                 }
-                            })
-                        })
-                    })
-                }
-            })
-            
-        }
-    }
+                            }
+                        } // getPageStatus
+                    } // capturePage
+                } // userData
+            } // checkURLBlocked
+        } // verifyURL
+    } // func _onSave
 
     @IBAction func _onRecent(_ sender: Any) {
         let tURL = self.txtURL.text ?? ""
@@ -134,8 +129,9 @@ class HomeViewController: UIViewController, UITextFieldDelegate, MBProgressHUDDe
             WMGlobal.showAlert(title: "", message: WMConstants.errors[201] ?? WMConstants.unknown, target: self)
         } else {
             showProgress()
-            
-            WMAPIManager.sharedManager.checkURLBlocked(url: self.getURL(url: tURL), completion: { (isBlocked) in
+            self.progressHUD?.label.text = "Retrieving Page..."
+
+            WMSAPIManager.shared.checkURLBlocked(url: self.getURL(url: tURL), completion: { (isBlocked) in
                 if isBlocked {
                     self.hideProgress(isBlocked)
                     WMGlobal.showAlert(title: "", message: "That site's robots.txt policy requests we not play back archives", target: self)
@@ -157,7 +153,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, MBProgressHUDDe
     @IBAction func _onFirst(_ sender: Any) {
         let tURL = self.txtURL.text ?? ""
         if tURL.isEmpty {
-            showErrorMessage(message: "Please type a URL")
+            WMGlobal.showAlert(title: "", message: "Please type a URL", target: self)
             return
         }
         
@@ -165,8 +161,9 @@ class HomeViewController: UIViewController, UITextFieldDelegate, MBProgressHUDDe
             showErrorMessage(message: "The URL is invalid")
         } else {
             showProgress()
-            
-            WMAPIManager.sharedManager.checkURLBlocked(url: self.getURL(url: tURL), completion: { (isBlocked) in
+            self.progressHUD?.label.text = "Retrieving Page..."
+
+            WMSAPIManager.shared.checkURLBlocked(url: self.getURL(url: tURL), completion: { (isBlocked) in
                 if isBlocked {
                     self.hideProgress(isBlocked)
                     self.showErrorMessage(message: "That site's robots.txt policy requests we not play back archives")
@@ -188,7 +185,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, MBProgressHUDDe
     @IBAction func _onAll(_ sender: Any) {
         let tURL = self.txtURL.text ?? ""
         if tURL.isEmpty {
-            showErrorMessage(message: "Please type a URL")
+            WMGlobal.showAlert(title: "", message: "Please type a URL", target: self)
             return
         }
 
@@ -196,7 +193,9 @@ class HomeViewController: UIViewController, UITextFieldDelegate, MBProgressHUDDe
             showErrorMessage(message: "The URL is invalid")
         } else {
             showProgress()
-            WMAPIManager.sharedManager.checkURLBlocked(url: self.getURL(url: tURL), completion: { (isBlocked) in
+            self.progressHUD?.label.text = "Retrieving Overview..."
+
+            WMSAPIManager.shared.checkURLBlocked(url: self.getURL(url: tURL), completion: { (isBlocked) in
                 if isBlocked {
                     self.hideProgress(isBlocked)
                     self.showErrorMessage(message: "That site's robots.txt policy requests we not play back archives")
@@ -252,9 +251,10 @@ class HomeViewController: UIViewController, UITextFieldDelegate, MBProgressHUDDe
         }
     }
     
+    // TODO: MOVE to API Manager!
     func getAllArchives(url: String, completion: @escaping ([Any]?) -> Void) {
         let param = "?url=" + url + "&fl=timestamp,original&output=json"
-        var request = URLRequest(url: URL(string: "http://web.archive.org/cdx/search/cdx" + param)!)
+        var request = URLRequest(url: URL(string: "https://web.archive.org/cdx/search/cdx" + param)!)
         request.httpMethod = "GET"
         request.setValue("Wayback_Machine_iOS/\(APP_VERSION)", forHTTPHeaderField: "User-Agent")
         request.setValue("Wayback_Machine_iOS/\(APP_VERSION)", forHTTPHeaderField: "Wayback-Extension-Version")
@@ -418,6 +418,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate, MBProgressHUDDe
     }
     
     func showProgress() -> Void {
+        self.progressHUD?.label.text = nil
+        self.progressHUD?.detailsLabel.text = nil
         self.progressHUD?.show(animated: true)
     }
     

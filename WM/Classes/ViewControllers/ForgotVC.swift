@@ -25,12 +25,15 @@ class ForgotVC: WMBaseVC {
     }
     
     @IBAction func onSubmitPressed(_ sender: Any) {
-        if txtEmail.text!.isEmpty {
+        guard let email = txtEmail.text, !email.isEmpty else {
             WMGlobal.showAlert(title: "", message: "Please type your email", target: self)
+            return
         }
         
-        MBProgressHUD.showAdded(to: self.view, animated: true)
-        WMAPIManager.sharedManager.resetPassword(email: txtEmail.text!) { (success) in
+        let hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+        hud.label.text = "Resetting..."
+
+        WMSAPIManager.shared.resetPassword(email: email) { (success) in
             MBProgressHUD.hide(for: self.view, animated: true)
             self.txtEmail.text = ""
             

@@ -54,18 +54,17 @@ class SignupVC: WMBaseVC, UITextFieldDelegate {
             return
         }
         
-        MBProgressHUD.showAdded(to: self.view, animated: true)
+        let hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+        hud.label.text = "Creating New Account"
         
-        WMAPIManager
-            .sharedManager
-            .registerAccount(
-                params: [
+        WMSAPIManager.shared.registerAccount(
+            params: [
                 "verified"      : false,
                 "email"         : self.txtEmail.text ?? "",
                 "password"      : self.txtPassword.text ?? "",
                 "screenname"    : self.txtUsername.text ?? "",
-                ],
-                completion: {(data)in
+            ],
+            completion: { (data) in
                 
                 MBProgressHUD.hide(for: self.view, animated: true)
                 
@@ -73,6 +72,7 @@ class SignupVC: WMBaseVC, UITextFieldDelegate {
                     WMGlobal.showAlert(title: "", message: "Server error", target: self)
                 } else {
                     if let success = data!["success"] as? Bool, success == true {
+                        // TODO: don't save password here?
                         WMGlobal.saveUserData(userData: [
                             "username"  : self.txtUsername.text ?? "",
                             "email"     : self.txtEmail.text ?? "",
