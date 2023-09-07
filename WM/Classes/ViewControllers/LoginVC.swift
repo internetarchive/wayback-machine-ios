@@ -51,30 +51,19 @@ class LoginVC: WMBaseVC, UITextFieldDelegate {
         hud.label.text = "Logging in..."
 
         //WMSAPIManager.shared.login(email: email, password: password) { (userData) in // this gets the cookies
-        WMSAPIManager.shared.authLogin(email: email, password: password) { (userData) in // doesn't get cookies
+        WMSAPIManager.shared.login(email: email, password: password) { (userData) in // doesn't get cookies
 
             if var userData = userData {
                 // success
                 userData["add-to-my-web-archive"] = self.btnCheck.isSelected
-
-                WMSAPIManager.shared.getScreenName(email: email,
-                    accessKey: userData["s3accesskey"] as? String,
-                    secretKey: userData["s3secretkey"] as? String)
-                {
-                    (screenname) in
-                    MBProgressHUD.hide(for: self.view, animated: true)
-                    if let screenname = screenname {
-                        userData["screenname"] = screenname
-                    }
-                    WMGlobal.saveUserData(userData: userData)
-
-                    // display tabbar VC
-                    if let tabbarVC = self.storyboard?.instantiateViewController(withIdentifier: "TabbarVC") as? UITabBarController {
-                      tabbarVC.modalPresentationStyle = .fullScreen
-                      self.present(tabbarVC, animated: true, completion: {
-                        self.navigationController?.popToRootViewController(animated: false)
-                      })
-                    }
+                MBProgressHUD.hide(for: self.view, animated: true)
+                WMGlobal.saveUserData(userData: userData)
+                // display tabbar VC
+                if let tabbarVC = self.storyboard?.instantiateViewController(withIdentifier: "TabbarVC") as? UITabBarController {
+                    tabbarVC.modalPresentationStyle = .fullScreen
+                    self.present(tabbarVC, animated: true, completion: {
+                    self.navigationController?.popToRootViewController(animated: false)
+                    })
                 }
             } else {
                 // failure

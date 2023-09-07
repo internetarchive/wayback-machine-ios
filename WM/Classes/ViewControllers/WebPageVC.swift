@@ -43,7 +43,11 @@ open class WebPageVC: UIViewController, WKUIDelegate, WKNavigationDelegate, MBPr
         super.viewDidLoad()
         
         MBProgressHUD.showAdded(to: self.view, animated: true)
-        webView?.load(URLRequest(url: URL(string: url)!))
+        if let webView = webView {
+            webView.customUserAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Mobile/15E148 Safari/604.1"
+            // Load the web page
+            webView.load(URLRequest(url: URL(string: url)!))
+        }
     }
     
     @IBAction func _onBack(_ sender: Any) {

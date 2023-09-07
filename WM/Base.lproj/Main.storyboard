@@ -667,7 +667,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <segue destination="bJ3-6A-t0B" kind="show" id="ZvR-2B-m2y"/>
+                                    <action selector="onSignup:"  destination="iJs-Mw-pQa" eventType="touchUpInside" id="ZvR-2B-m2y"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pIw-Zy-FeQ">
@@ -2089,7 +2089,6 @@
     </designables>
     <inferredMetricsTieBreakers>
         <segue reference="G8q-5C-SWp"/>
-        <segue reference="ZvR-2B-m2y"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
     <resources>

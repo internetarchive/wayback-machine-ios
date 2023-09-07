@@ -31,10 +31,21 @@ class WelcomeVC: WMBaseVC {
             self.navigationController?.pushViewController(loginVC, animated: true)
         }
     }
+    func showWebPage(url: String) -> Void {
+        if let webPageViewController = self.storyboard?.instantiateViewController(withIdentifier: "WebPageVC") as? WebPageVC {
+            webPageViewController.modalPresentationStyle = .fullScreen
+            webPageViewController.url = url
+            self.present(webPageViewController, animated: true, completion: nil)
+        }
+    }
 
     // MARK: - Actions
     
-    
+    @IBAction func onSignup(_ sender: Any) {
+        let signup_url = "https://archive.org/account/signup"
+        self.showWebPage(url: signup_url)
+    }
+        
     @IBAction func onSupportPressed(_ sender: Any) {
         if let aboutVC = self.storyboard?.instantiateViewController(withIdentifier: "AboutVC") as? AboutViewController {
             aboutVC.shouldShowNavbar = true
