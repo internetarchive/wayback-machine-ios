@@ -19,12 +19,7 @@ class WMAPIManager: NSObject {
     let WEB_BASE_URL            = "https://archive.org"
     let UPLOAD_BASE_URL         = "https://s3.us.archive.org"
     let SPN2_URL                = "https://web.archive.org/save/"
-    let API_CREATE              = "?op=create"
-    let API_LOGIN               = "?op=authenticate"
-    let API_INFO                = "?op=info"
-    
-    let ACCESS                  = "trS8dVjP8dzaE296"
-    let SECRET                  = "ICXDO78cnzUlPAt1"
+    let API_LOGIN               = "?op=login"
     let VERSION                 = 1
     let HEADERS                 = [
         "User-Agent": "Wayback_Machine_iOS/\(APP_VERSION)",
@@ -52,8 +47,8 @@ class WMAPIManager: NSObject {
     private func SendDataToService(params: [String: Any], operation: String, completion: @escaping ([String: Any]?) -> Void) {
         
         var parameters          = params
-        parameters["access"]    = ACCESS
-        parameters["secret"]    = SECRET
+        // parameters["access"]    = ACCESS
+        // parameters["secret"]    = SECRET
         parameters["version"]   = VERSION
         
         let req = Alamofire.request(BASE_URL + operation, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: HEADERS).responseJSON { (response) in
@@ -72,9 +67,9 @@ class WMAPIManager: NSObject {
     }
     
     // Register new Account
-    func registerAccount(params: [String: Any], completion: @escaping ([String: Any]?) -> Void) {
-        SendDataToService(params: params, operation: API_CREATE, completion: completion)
-    }
+    // func registerAccount(params: [String: Any], completion: @escaping ([String: Any]?) -> Void) {
+    //     SendDataToService(params: params, operation: API_CREATE, completion: completion)
+    // }
     
     // Login
     func login(email: String, password: String, completion: @escaping ([String: Any]?) -> Void) {
@@ -107,9 +102,9 @@ class WMAPIManager: NSObject {
     }
     
     // Get Account Info
-    func getAccountInfo(email: String, completion: @escaping ([String: Any]?) -> Void) {
-        SendDataToService(params: ["email": email], operation: API_INFO, completion: completion)
-    }
+    // func getAccountInfo(email: String, completion: @escaping ([String: Any]?) -> Void) {
+    //     SendDataToService(params: ["email": email], operation: API_INFO, completion: completion)
+    // }
     
     func getCookieData(email: String, password: String, completion: @escaping([String: Any]) -> Void) {
         

@@ -49,7 +49,7 @@ class WMSAPIManager {
     static let WM_OVERVIEW         = "/web/*/"
 
     static var IA_BASE_URL         = "https://archive.org" // WEB_BASE_URL
-    static let IA_LOGIN            = "/account/login"
+    static let IA_LOGIN            = "?op=login"
     static let IA_S3KEYS           = "/account/s3.php?output_json=1"
     static let IA_RESET_PW         = "/account/forgot-password"
 
@@ -58,18 +58,12 @@ class WMSAPIManager {
     // Xauthn Authentication Service
     // these ACCESS & SECRET keys still required
     static var XA_BASE_URL         = "https://archive.org/services/xauthn/" // BASE_URL
-    static let XA_ACCESS           = "trS8dVjP8dzaE296"
-    static let XA_SECRET           = "ICXDO78cnzUlPAt1"
     static let XA_VERSION          = 1
     public enum XAuthOperation {
-        case info, authenticate, identify, create, chkprivs, login
+        case info, login
     }
     static let XA_OPS: [XAuthOperation: String] = [
         .info: "?op=info",
-        .authenticate: "?op=authenticate",
-        .identify: "?op=identify",
-        .create: "?op=create",
-        .chkprivs: "?op=chkprivs",
         .login: "?op=login"
     ]
 
@@ -180,8 +174,6 @@ class WMSAPIManager {
         // prepare request
         var parameters = params
         parameters["version"]   = WMSAPIManager.XA_VERSION
-        parameters["access"] = WMSAPIManager.XA_ACCESS // accessKey
-        parameters["secret"] = WMSAPIManager.XA_SECRET // secretKey
         var headers = WMSAPIManager.HEADERS
         headers["Accept"] = "application/json"
         if let accessKey = accessKey, let secretKey = secretKey {
@@ -213,47 +205,56 @@ class WMSAPIManager {
     ///////////////////////////////////////////////////////////////////////////////////
     // MARK: - User Account API
 
-    /// Main Login that uses a 2-step API call to retrieve the S3 keys given a user's email and password.
+    /// Main Login that uses a single API call to retrieve all the given a user's information.
     /// - parameter email: User's email.
     /// - parameter password: User's password.
     /// - parameter completion: Returns a Dictionary to pass to saveUserData(), else nil if failed.
     /// - returns: *Keys*:
-    ///   email, logged-in-user, logged-in-sig, s3accesskey, s3secretkey
+    ///   email, logged-in-user, logged-in-sig, s3accesskey, s3secretkey, screenname
     ///
     // TODO: needs to return a better error response instead of just nil.
     func login(email: String, password: String, completion: @escaping ([String: Any?]?) -> Void) {
+        let url = WMSAPIManager.XA_BASE_URL + WMSAPIManager.IA_LOGIN
+        let parameters: Parameters = ["email": email, "password": password]
 
-        webLogin(email: email, password: password) {
-            (loggedInUser, loggedInSig) in
+        let headers: HTTPHeaders = ["Content-Type": "application/x-www-form-urlencoded"]
 
-            if let loggedInUser = loggedInUser, let loggedInSig = loggedInSig {
-                self.getIAS3Keys(loggedInUser: loggedInUser, loggedInSig: loggedInSig) {
-                    (accessKey, secretKey) in
+        Alamofire.request(url, method: .post, parameters: parameters, encoding: URLEncoding.default, headers: headers)
+            .responseJSON { response in
+                switch response.result {
+                case .success(let ans):
+                    if let ans = ans as? [String: Any],
+                        let success = ans["success"] as? Int,
+                        let values = ans["values"] as? [String: Any],
+                        let cookies = values["cookies"] as? [String: String],
+                        let loggedInSig = cookies["logged-in-sig"],
+                        let loggedInUser = cookies["logged-in-user"],
+                        let email = values["email"] as? String,
+                        let itemname = values["itemname"] as? String,
+                        let s3 = values["s3"] as? [String: String],
+                        let s3Access = s3["access"],
+                        let s3Secret = s3["secret"],
+                        let screenname = values["screenname"] as? String {
 
-                    if let accessKey = accessKey, let secretKey = secretKey {
-                        // success
-                        let data: [String: Any?] = [
-                            // password not stored
-                            "email"          : email,
-                            "logged-in-user" : loggedInUser,
-                            "logged-in-sig"  : loggedInSig,
-                            "s3accesskey"    : accessKey,
-                            "s3secretkey"    : secretKey,
-                            "logged-in"      : true
-                        ]
-                        completion(data)
-                    } else {
-                        // failed to get the S3 keys
-                        if (DEBUG_LOG) { NSLog("*** login() FAILED 1: failed to get S3 keys") }
+                            // Now you can use these variables as needed
+                             let userData: [String: Any?] = [
+                                // password not stored
+                                "email"          : email,
+                                "s3accesskey"    : s3Access,
+                                "s3secretkey"    : s3Secret,
+                                "screenname"     : screenname,
+                                "logged-in"      : true
+                            ]
+                            completion(userData)
+                        } else {
+                        if (DEBUG_LOG) { NSLog("*** login() FAILED 1") }
                         completion(nil)
                     }
+                case .failure:
+                    if (DEBUG_LOG) { NSLog("*** login() FAILED 2") }
+                    completion(nil)
                 }
-            } else {
-                // couldn't log in
-                if (DEBUG_LOG) { NSLog("*** login() FAILED 2: couldn't log in") }
-                completion(nil)
             }
-        }
     }
 
     /// Logout returns userData[] with key fields cleared, and `logged-in` set to false. Also clears cookies.
@@ -284,85 +285,89 @@ class WMSAPIManager {
     /// - returns: *Keys*:
     ///   email, s3accesskey, s3secretkey, logged-in
     ///
-    func authLogin(email: String, password: String, completion: @escaping ([String: Any?]?) -> Void) {
+    
+    //Not Required Anymore
+    // func authLogin(email: String, password: String, completion: @escaping ([String: Any?]?) -> Void) {
 
-        let params: Parameters = [
-            "email"     : email,
-            "password"  : password
-        ]
+    //     let params: Parameters = [
+    //         "email"     : email,
+    //         "password"  : password
+    //     ]
 
-        SendDataToService(params: params, operation: .authenticate) {
-            (json) in
-            // success as Bool, values as dict, error as String, version as Int
+    //     SendDataToService(params: params, operation: .authenticate) {
+    //         (json) in
+    //         // success as Bool, values as dict, error as String, version as Int
 
-            if let json = json {
-                if (DEBUG_LOG) { NSLog("*** authLogin() json: \(json)") } // TEST
-                if json["success"] as? Bool ?? false,
-                   let values = json["values"] as? [String: Any],
-                   let accessKey = values["access"] as? String,
-                   let secretKey = values["secret"] as? String
-                {
-                    // success
-                    let userData: [String: Any?] = [
-                        // password not stored
-                        "email"          : email,
-                        "s3accesskey"    : accessKey,
-                        "s3secretkey"    : secretKey,
-                        "logged-in"      : true
-                    ]
-                    completion(userData)
-                } else {
-                    let errMsg = json["error"] as? String ?? "null"
-                    if (DEBUG_LOG) { NSLog("*** authLogin() FAILED 1: \(errMsg)") }
-                    completion(nil)
-                    // TODO: return error msg
-                }
-            } else {
-                // unknown error
-                if (DEBUG_LOG) { NSLog("*** authLogin() FAILED 2: Unknown Error") }
-                completion(nil)
-            }
-        }
-    }
+    //         if let json = json {
+    //             if (DEBUG_LOG) { NSLog("*** authLogin() json: \(json)") } // TEST
+    //             if json["success"] as? Bool ?? false,
+    //                let values = json["values"] as? [String: Any],
+    //                let accessKey = values["access"] as? String,
+    //                let secretKey = values["secret"] as? String
+    //             {
+    //                 // success
+    //                 let userData: [String: Any?] = [
+    //                     // password not stored
+    //                     "email"          : email,
+    //                     "s3accesskey"    : accessKey,
+    //                     "s3secretkey"    : secretKey,
+    //                     "logged-in"      : true
+    //                 ]
+    //                 completion(userData)
+    //             } else {
+    //                 let errMsg = json["error"] as? String ?? "null"
+    //                 if (DEBUG_LOG) { NSLog("*** authLogin() FAILED 1: \(errMsg)") }
+    //                 completion(nil)
+    //                 // TODO: return error msg
+    //             }
+    //         } else {
+    //             // unknown error
+    //             if (DEBUG_LOG) { NSLog("*** authLogin() FAILED 2: Unknown Error") }
+    //             completion(nil)
+    //         }
+    //     }
+    // }
     
     /// Login using the web login form, which returns cookie strings that may be used
     /// for short-term auth. For longer-term, retrieve the A3 keys using getIAS3Keys().
     /// See login().
     ///
-    func webLogin(email: String, password: String,
-                  completion: @escaping (_ loggedInUser: String?, _ loggedInSig: String?) -> Void) {
 
-        // prepare cookie to avoid glitch where login doesn't work half the time.
-        setArchiveCookie(name: "test-cookie", value: "1")
+    //Not Required Anymore
+    // func webLogin(email: String, password: String,
+    //               completion: @escaping (_ loggedInUser: String?, _ loggedInSig: String?) -> Void) {
 
-        // prepare request
-        var headers = WMSAPIManager.HEADERS
-        headers["Content-Type"] = "application/x-www-form-urlencoded"
-        var params = Parameters()
-        params["username"] = email
-        params["password"] = password
-        params["action"] = "login"
+    //     // prepare cookie to avoid glitch where login doesn't work half the time.
+    //     setArchiveCookie(name: "test-cookie", value: "1")
 
-        // make login request
-        Alamofire.request(WMSAPIManager.IA_BASE_URL + WMSAPIManager.IA_LOGIN,
-                          method: .post, parameters: params, headers: headers)
-        .responseString { (response) in
+    //     // prepare request
+    //     var headers = WMSAPIManager.HEADERS
+    //     headers["Content-Type"] = "application/x-www-form-urlencoded"
+    //     var params = Parameters()
+    //     params["username"] = email
+    //     params["password"] = password
+    //     params["action"] = "login"
 
-            switch response.result {
-            case .success:
-                var ck = [String: String]()
-                if let cookies = HTTPCookieStorage.shared.cookies {
-                    for cookie in cookies {
-                        ck[cookie.name] = cookie.value
-                    }
-                }
-                completion(ck["logged-in-user"], ck["logged-in-sig"])
+    //     // make login request
+    //     Alamofire.request(WMSAPIManager.IA_BASE_URL + WMSAPIManager.IA_LOGIN,
+    //                       method: .post, parameters: params, headers: headers)
+    //     .responseString { (response) in
 
-            case .failure:
-                completion(nil, nil)
-            }
-        }
-    }
+    //         switch response.result {
+    //         case .success:
+    //             var ck = [String: String]()
+    //             if let cookies = HTTPCookieStorage.shared.cookies {
+    //                 for cookie in cookies {
+    //                     ck[cookie.name] = cookie.value
+    //                 }
+    //             }
+    //             completion(ck["logged-in-user"], ck["logged-in-sig"])
+
+    //         case .failure:
+    //             completion(nil, nil)
+    //         }
+    //     }
+    // }
 
     // TODO: convert any calls to this to what follows...
     // func getIAS3Keys(params: [String: String], completion: @escaping([String: String]?) -> Void) {
@@ -371,42 +376,46 @@ class WMSAPIManager {
 
     /// Get the S3 account keys for long-term API access. Pass in cookie strings returned by webLogin().
     ///
-    func getIAS3Keys(loggedInUser: String, loggedInSig: String,
-                     completion: @escaping (_ accessKey: String?, _ secretKey: String?) -> Void) {
 
-        // prepare cookies
-        setArchiveCookie(name: "logged-in-user", value: loggedInUser)
-        setArchiveCookie(name: "logged-in-sig", value: loggedInSig)
+    //Not Required Anymore
+    // func getIAS3Keys(loggedInUser: String, loggedInSig: String,
+    //                  completion: @escaping (_ accessKey: String?, _ secretKey: String?) -> Void) {
 
-        // make request
-        Alamofire.request(WMSAPIManager.IA_BASE_URL + WMSAPIManager.IA_S3KEYS,
-                          method: .get, parameters: nil, headers: WMSAPIManager.HEADERS)
-        .responseJSON { (response) in
+    //     // prepare cookies
+    //     setArchiveCookie(name: "logged-in-user", value: loggedInUser)
+    //     setArchiveCookie(name: "logged-in-sig", value: loggedInSig)
 
-            // API Response:
-            // {"success":1,"key":{"s3accesskey":"...","s3secretkey":"..."}}
-            switch response.result {
-            case .success:
-                if let json = response.result.value as? [String: Any],
-                    let key = json["key"] as? [String: String] {
-                    completion(key["s3accesskey"], key["s3secretkey"])
-                } else {
-                    completion(nil, nil)
-                }
-            case .failure:
-                completion(nil, nil)
-            }
-        }
-    }
+    //     // make request
+    //     Alamofire.request(WMSAPIManager.IA_BASE_URL + WMSAPIManager.IA_S3KEYS,
+    //                       method: .get, parameters: nil, headers: WMSAPIManager.HEADERS)
+    //     .responseJSON { (response) in
+
+    //         // API Response:
+    //         // {"success":1,"key":{"s3accesskey":"...","s3secretkey":"..."}}
+    //         switch response.result {
+    //         case .success:
+    //             if let json = response.result.value as? [String: Any],
+    //                 let key = json["key"] as? [String: String] {
+    //                 completion(key["s3accesskey"], key["s3secretkey"])
+    //             } else {
+    //                 completion(nil, nil)
+    //             }
+    //         case .failure:
+    //             completion(nil, nil)
+    //         }
+    //     }
+    // }
 
     // TODO: REDO
     /// Register new Account.
     /// - parameter params: Requires keys "verified" (should be set false), "email", "password", and "screenname".
     /// - parameter completion: Callback returns dictionary of json results, or nil if failed.
     ///
-    func registerAccount(params: Parameters, completion: @escaping ([String: Any]?) -> Void) {
-        SendDataToService(params: params, operation: .create, completion: completion)
-    }
+
+    //Not Required Anymore
+    // func registerAccount(params: Parameters, completion: @escaping ([String: Any]?) -> Void) {
+    //     SendDataToService(params: params, operation: .create, completion: completion)
+    // }
 
     // TODO: REDO?
     func resetPassword(email: String, completion: @escaping (Bool) -> Void) {
@@ -428,50 +437,52 @@ class WMSAPIManager {
     
     // Get Account Info
     // Get additional info such as user's screenname.
-    func getAccountInfo(email: String,
-                        loggedInUser: String? = nil, loggedInSig: String? = nil,
-                        accessKey: String? = nil, secretKey: String? = nil,
-                        completion: @escaping ([String: Any]?) -> Void) {
+    //Not Required Anymore
+    // func getAccountInfo(email: String,
+    //                     loggedInUser: String? = nil, loggedInSig: String? = nil,
+    //                     accessKey: String? = nil, secretKey: String? = nil,
+    //                     completion: @escaping ([String: Any]?) -> Void) {
 
-        let params: Parameters = ["email": email]
+    //     let params: Parameters = ["email": email]
 
-        SendDataToService(params: params, operation: .info, loggedInUser: loggedInUser, loggedInSig: loggedInSig, accessKey: accessKey, secretKey: secretKey) {
-            (json) in
-            if let json = json {
-                if (DEBUG_LOG) { NSLog("*** getAccountInfo() json: \(json)") } // TEST
-                if json["success"] as? Bool ?? false, let values = json["values"] as? [String: Any] {
-                    // success
-                    completion(values)
-                } else {
-                    let errMsg = json["error"] as? String ?? "null"
-                    if (DEBUG_LOG) { NSLog("*** getAccountInfo() FAILED 1: \(errMsg)") }
-                    completion(nil)
-                    // TODO: return error msg
-                }
-            } else {
-                // unknown error
-                if (DEBUG_LOG) { NSLog("*** getAccountInfo() FAILED 2") }
-                completion(nil)
-            }
-        }
-    }
+    //     SendDataToService(params: params, operation: .info, loggedInUser: loggedInUser, loggedInSig: loggedInSig, accessKey: accessKey, secretKey: secretKey) {
+    //         (json) in
+    //         if let json = json {
+    //             if (DEBUG_LOG) { NSLog("*** getAccountInfo() json: \(json)") } // TEST
+    //             if json["success"] as? Bool ?? false, let values = json["values"] as? [String: Any] {
+    //                 // success
+    //                 completion(values)
+    //             } else {
+    //                 let errMsg = json["error"] as? String ?? "null"
+    //                 if (DEBUG_LOG) { NSLog("*** getAccountInfo() FAILED 1: \(errMsg)") }
+    //                 completion(nil)
+    //                 // TODO: return error msg
+    //             }
+    //         } else {
+    //             // unknown error
+    //             if (DEBUG_LOG) { NSLog("*** getAccountInfo() FAILED 2") }
+    //             completion(nil)
+    //         }
+    //     }
+    // }
 
-    func getScreenName(email: String,
-                       loggedInUser: String? = nil, loggedInSig: String? = nil,
-                       accessKey: String? = nil, secretKey: String? = nil,
-                       completion: @escaping (String?) -> Void) {
+    //Not Required Anymore
+    // func getScreenName(email: String,
+    //                    loggedInUser: String? = nil, loggedInSig: String? = nil,
+    //                    accessKey: String? = nil, secretKey: String? = nil,
+    //                    completion: @escaping (String?) -> Void) {
 
-        getAccountInfo(email: email, loggedInUser: loggedInUser, loggedInSig: loggedInSig,
-                       accessKey: accessKey, secretKey: secretKey) { (values) in
-            if let values = values, let screenname = values["screenname"] as? String {
-                if (DEBUG_LOG) { NSLog("*** getScreenName() returns: \(screenname)") }
-                completion(screenname)
-            } else {
-                if (DEBUG_LOG) { NSLog("*** getScreenName() FAILED") }
-                completion(nil)
-            }
-        }
-    }
+    //     getAccountInfo(email: email, loggedInUser: loggedInUser, loggedInSig: loggedInSig,
+    //                    accessKey: accessKey, secretKey: secretKey) { (values) in
+    //         if let values = values, let screenname = values["screenname"] as? String {
+    //             if (DEBUG_LOG) { NSLog("*** getScreenName() returns: \(screenname)") }
+    //             completion(screenname)
+    //         } else {
+    //             if (DEBUG_LOG) { NSLog("*** getScreenName() FAILED") }
+    //             completion(nil)
+    //         }
+    //     }
+    // }
 
 
     ///////////////////////////////////////////////////////////////////////////////////
